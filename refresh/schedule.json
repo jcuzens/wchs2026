@@ -1,0 +1,994 @@
+[
+ {
+  "weekday": "Saturday",
+  "period": "Morning",
+  "date": "August 22",
+  "time": "11:00 a.m.",
+  "classes": [
+   {
+    "num": "1",
+    "name": "Bill Wise Sweepstakes Two-Year-Old Fine Harness"
+   },
+   {
+    "num": "2",
+    "name": "Equitation Open, Rider 15 Years Old"
+   },
+   {
+    "num": "3",
+    "name": "ASB Hunter Country Pleasure"
+   },
+   {
+    "num": "4",
+    "name": "ASB Junior Exhibitor Show Pleasure Driving, Driver 17 Years Old & Under"
+   },
+   {
+    "num": "5",
+    "name": "ASB Junior Park Three-Gaited"
+   },
+   {
+    "num": "6",
+    "name": "Four-Year Old Harness Pony"
+   },
+   {
+    "num": "7",
+    "name": "Bill Wise Sweepstakes Two-Year-Old -Park"
+   },
+   {
+    "num": "8",
+    "name": "Equitation Open, Rider 16 Years Old"
+   },
+   {
+    "num": "9",
+    "name": "Adult Amateur Junior Hackney/Harness Pony Pleasure Driving"
+   },
+   {
+    "num": "10",
+    "name": "Open Roadster Under Saddle"
+   },
+   {
+    "num": "11",
+    "name": "Four-Year-Old Roadster Pony to Bike"
+   }
+  ]
+ },
+ {
+  "weekday": "Saturday",
+  "period": "Night",
+  "date": "August 22",
+  "time": "7:00 p.m.",
+  "classes": [
+   {
+    "num": "12",
+    "name": "WCHS Futurity Weanlings"
+   },
+   {
+    "num": "13",
+    "name": "Kentucky County Fair Harness Pony Championship"
+   },
+   {
+    "num": "14",
+    "name": "Equitation -Kentucky Rider, 17 Years Old & Under"
+   },
+   {
+    "num": "15",
+    "name": "Kentucky Country Fair Fine Harness Championship"
+   },
+   {
+    "num": "16",
+    "name": "WCHS Futurity Yearlings"
+   },
+   {
+    "num": "17",
+    "name": "Kentucky County Fair Roadster Pony Championship"
+   },
+   {
+    "num": "18",
+    "name": "Kentucky County Fair Three-Gaited Championship"
+   },
+   {
+    "num": "19",
+    "name": "Kentucky County Fair Roadster Championship"
+   },
+   {
+    "num": "20",
+    "name": "Kentucky County Fair Hackney Pony Championship"
+   },
+   {
+    "num": "21",
+    "name": "Kentucky County Fair Five-Gaited Championship"
+   }
+  ]
+ },
+ {
+  "weekday": "Sunday",
+  "period": "Afternoon",
+  "date": "August 23",
+  "time": "12:00 Noon",
+  "classes": [
+   {
+    "num": "22",
+    "name": "Bill Wise Sweepstake Three-Year-Old Fine Harness"
+   },
+   {
+    "num": "23",
+    "name": "Amateur Harness Pony"
+   },
+   {
+    "num": "24",
+    "name": "Adult Three-Gaited Show Pleasure Division I"
+   },
+   {
+    "num": "25",
+    "name": "Equitation Open, Rider 14 Years Old"
+   },
+   {
+    "num": "26",
+    "name": "Bill Wise Sweepstakes Three-Year-Old Three Gaited"
+   },
+   {
+    "num": "27",
+    "name": "Amateur Roadster Pony 50 Inches & Under"
+   },
+   {
+    "num": "28",
+    "name": "Adult Three-Gaited Show Pleasure Division II of Class 24"
+   },
+   {
+    "num": "29",
+    "name": "Equitation Open, Rider 17 Years Old"
+   },
+   {
+    "num": "30",
+    "name": "Bill Wise Sweepstakes Three-Year-Old Park Pleasure"
+   },
+   {
+    "num": "31",
+    "name": "Adult Three-Gaited Show Pleasure Division III of Class 24"
+   },
+   {
+    "num": "32",
+    "name": "ASB Park Horse Three-Gaited Division I"
+   },
+   {
+    "num": "33",
+    "name": "Amateur Roadster Pony Over 50 Inches to 52 Inches"
+   },
+   {
+    "num": "34",
+    "name": "ASB Five-Gaited Country Pleasure"
+   },
+   {
+    "num": "35",
+    "name": "ASB Park Horse -Three-Gaited -Division II of Class 32"
+   },
+   {
+    "num": "36",
+    "name": "Bill Wise Sweepstakes Three-Year-Old Five-Gaited"
+   }
+  ]
+ },
+ {
+  "weekday": "Sunday",
+  "period": "Night",
+  "date": "August 23",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "37",
+    "name": "Bill Wise Sweepstakes-Four-Year-Old -Fine Harness"
+   },
+   {
+    "num": "38",
+    "name": "Three-Gaited Pony, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "39",
+    "name": "Amateur Hackney Pony"
+   },
+   {
+    "num": "40",
+    "name": "Bill Wise Sweepstakes -Four-Year-Old -Three-Gaited -Park Pleasure"
+   },
+   {
+    "num": "41",
+    "name": "Five-Gaited Pony, Rider 17 Years & Under"
+   },
+   {
+    "num": "42",
+    "name": "Roadster to Bike Mare Stake"
+   },
+   {
+    "num": "43",
+    "name": "Junior Exhibitor Three-Gaited, Rider 14-17 Years Old -Division I"
+   },
+   {
+    "num": "44",
+    "name": "Bill Wise Sweepstakes -Four-Year-Old -Three-Gaited"
+   },
+   {
+    "num": "45",
+    "name": "ASB Junior Exhibitor Park Horse -Three-Gaited Rider 17 Years Old & Under"
+   },
+   {
+    "num": "46",
+    "name": "Junior Exhibitor Three-Gaited, Rider 14-17 Years Old -Division II of Class 43"
+   },
+   {
+    "num": "47",
+    "name": "Bill Wise Sweepstakes -Four-Year-Old -Five-Gaited"
+   }
+  ]
+ },
+ {
+  "weekday": "Monday",
+  "period": "Morning",
+  "date": "August 24",
+  "time": "9:00 a.m.",
+  "classes": [
+   {
+    "num": "48",
+    "name": "Equitation Open, Rider 11 Years Old & Under"
+   },
+   {
+    "num": "49",
+    "name": "ASB Junior Exhibitor Three-Gaited Country Pleasure, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "50",
+    "name": "Junior Exhibitor Hackney/Harness Pony Pleasure Driving"
+   },
+   {
+    "num": "51",
+    "name": "ASB Adult Five-Gaited Show Pleasure -Division I"
+   },
+   {
+    "num": "52",
+    "name": "Equitation Open, Rider 12 & 13 Years Old"
+   },
+   {
+    "num": "53",
+    "name": "Junior Exhibitor Roadster Pony, Driver 13 Years Old & Under"
+   },
+   {
+    "num": "54",
+    "name": "ASB Adult Five-Gaited Show Pleasure -Division II of Class 51"
+   },
+   {
+    "num": "55",
+    "name": ""
+   },
+   {
+    "num": "56",
+    "name": "WCHS Futurity Three-Year-Old Three-Gaited Park Pleasure"
+   },
+   {
+    "num": "57",
+    "name": "Adult Amateur Hackney/Harness Pony Pleasure Driving Division I"
+   },
+   {
+    "num": "58",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 13 Years Old & Under -Division I"
+   },
+   {
+    "num": "59",
+    "name": "ASB Junior Exhibitor Five-Gaited Show Pleasure, Rider 17 & Years Old & Under Division I"
+   },
+   {
+    "num": "60",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 13 Years Old & Under -Division II of Class 58"
+   },
+   {
+    "num": "61",
+    "name": "Adult Amateur Hackney/Harness Pony Pleasure Driving Division II of Class 57"
+   },
+   {
+    "num": "62",
+    "name": "ASB Junior Exhibitor Five-Gaited Show Pleasure, Rider 17 Years Old & Under Division II of Class 59"
+   },
+   {
+    "num": "63",
+    "name": "USTA Classic Elimination (if necessary)"
+   }
+  ]
+ },
+ {
+  "weekday": "Monday",
+  "period": "Night",
+  "date": "August 24",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "64",
+    "name": "Junior Fine Harness Stallion/Gelding"
+   },
+   {
+    "num": "65",
+    "name": "Junior Three-Gaited Over 15.2"
+   },
+   {
+    "num": "66",
+    "name": "Junior Five-Gaited Mare"
+   },
+   {
+    "num": "67",
+    "name": "Amateur Ladies Fine Harness"
+   },
+   {
+    "num": "68",
+    "name": "Junior Three-Gaited 15.2 Under"
+   },
+   {
+    "num": "69",
+    "name": "Roadster Pony Over 50 Inches to 52 Inches Stake"
+   },
+   {
+    "num": "70",
+    "name": "Ladies Amateur Five-Gaited Mare"
+   },
+   {
+    "num": "71",
+    "name": "Harness Pony Mare Stake"
+   },
+   {
+    "num": "72",
+    "name": "Amateur Three-Gaited 15.2 & Under"
+   },
+   {
+    "num": "73",
+    "name": "Junior Fine Harness Mare"
+   },
+   {
+    "num": "74",
+    "name": "Junior Five-Gaited Stallion/Gelding"
+   },
+   {
+    "num": "75",
+    "name": "Amateur Fine Harness"
+   },
+   {
+    "num": "76",
+    "name": "Ladies Amateur Five-Gaited Gelding"
+   },
+   {
+    "num": "77",
+    "name": "Hackney Pony Mare Stake"
+   },
+   {
+    "num": "78",
+    "name": "Amateur Three-Gaited Over 15.2"
+   },
+   {
+    "num": "79",
+    "name": "Ladies Fine Harness"
+   },
+   {
+    "num": "80",
+    "name": "Five-Gaited Stallion Stake"
+   }
+  ]
+ },
+ {
+  "weekday": "Tuesday",
+  "period": "Morning",
+  "date": "August 25",
+  "time": "9:00 a.m.",
+  "classes": [
+   {
+    "num": "81",
+    "name": "ASB Junior Exhibitor Three-Gaited Country Pleasure, Rider 14-17 Years Old Division I"
+   },
+   {
+    "num": "82",
+    "name": "ASB Amateur Park Three-Gaited -Division I"
+   },
+   {
+    "num": "83",
+    "name": "Four-Year-Old Hackney Pony"
+   },
+   {
+    "num": "84",
+    "name": "Junior Exhibitor Five-Gaited, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "85",
+    "name": "ASB Adult Three-Gaited Country Pleasure -Division I"
+   },
+   {
+    "num": "86",
+    "name": "ASB Junior Park Pleasure"
+   },
+   {
+    "num": "87",
+    "name": "Three-Year-Old Hackney Pony"
+   },
+   {
+    "num": "88",
+    "name": "ASB Junior Exhibitor Three-Gaited Country Pleasure, Rider 14-17 Years Old Division II of Class 81"
+   },
+   {
+    "num": "89",
+    "name": "Ladies Roadster to Bike"
+   },
+   {
+    "num": "90",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 14-17 Years Old Division I"
+   },
+   {
+    "num": "91",
+    "name": "Three-Year-Old Harness Pony"
+   },
+   {
+    "num": "92",
+    "name": "Junior Exhibitor Three-Gaited, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "93",
+    "name": "ASB Adult Three-Gaited Country Pleasure -Division II of Class 85"
+   },
+   {
+    "num": "94",
+    "name": "Three-Year-Old Roadster Pony"
+   },
+   {
+    "num": "95",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 14-17 Years Old Division II of Class 90"
+   },
+   {
+    "num": "96",
+    "name": "ASB Amateur Park Three-Gaited -Division II of Class 82"
+   },
+   {
+    "num": "97",
+    "name": "Youth Roadster to Bike, Driver 15-21 Years Old"
+   }
+  ]
+ },
+ {
+  "weekday": "Tuesday",
+  "period": "Night",
+  "date": "August 25",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "98",
+    "name": "WCHS Futurity -Two-Year-Old Fine Harness"
+   },
+   {
+    "num": "99",
+    "name": "Amateur Five-Gaited Mare"
+   },
+   {
+    "num": "100",
+    "name": "Junior Exhibitor Five-Gaited, Rider 14-17 Years Old Division I"
+   },
+   {
+    "num": "101",
+    "name": "Ladies Amateur Three-Gaited 15.2 & Under"
+   },
+   {
+    "num": "102",
+    "name": "WCHS Futurity -Three-Year-Old -Five Gaited"
+   },
+   {
+    "num": "103",
+    "name": "Amateur Three-Gaited"
+   },
+   {
+    "num": "104",
+    "name": "Amateur Five-Gaited Stallion/Gelding"
+   },
+   {
+    "num": "105",
+    "name": "WCHS Futurity -Three-Year-Old -Fine Harness"
+   },
+   {
+    "num": "106",
+    "name": "Amateur Ladies Harness Pony"
+   },
+   {
+    "num": "107",
+    "name": "Ladies Amateur Three-Gaited Over 15.2"
+   },
+   {
+    "num": "108",
+    "name": "WCHS Futurity -Three-Year-Old -Three Gaited"
+   },
+   {
+    "num": "109",
+    "name": "Junior Exhibitor Five-Gaited, Rider 14-17 Years Old -Division II of Class 100"
+   },
+   {
+    "num": "110",
+    "name": "Open Roadster to Wagon Stake"
+   },
+   {
+    "num": "111",
+    "name": "WCHS Futurity Two-Year-Old -Three-Gaited"
+   },
+   {
+    "num": "112",
+    "name": "Amateur Ladies Hackney Pony"
+   },
+   {
+    "num": "113",
+    "name": "Five-Gaited Mare Stake"
+   }
+  ]
+ },
+ {
+  "weekday": "Wednesday",
+  "period": "Morning",
+  "date": "August 26",
+  "time": "9:00 a.m.",
+  "classes": [
+   {
+    "num": "114",
+    "name": "Equitation Open Walk-Trot, Rider 8 Years Old & Under"
+   },
+   {
+    "num": "115",
+    "name": "ASB Country Pleasure Driving -Division I"
+   },
+   {
+    "num": "116",
+    "name": "Junior Exhibitor Roadster Pony, Driver 14-17 Years Old"
+   },
+   {
+    "num": "117",
+    "name": "Amateur Junior Hackney/Harness Pony Pleasure Driving"
+   },
+   {
+    "num": "118",
+    "name": "ASB Walk/Trot Show Pleasure, Rider 12 Years Old & Under"
+   },
+   {
+    "num": "119",
+    "name": "ASB Country Pleasure Driving -Division II of Class 115"
+   },
+   {
+    "num": "120",
+    "name": "Equitation Open Walk-Trot, Rider 10 Years Old"
+   },
+   {
+    "num": "121",
+    "name": "ASB Adult Show Pleasure Driving Division I"
+   },
+   {
+    "num": "122",
+    "name": "ASB Western Country Pleasure Horse"
+   },
+   {
+    "num": "123",
+    "name": "Equitation Open Walk-Trot, Rider 9 Years Old"
+   },
+   {
+    "num": "124",
+    "name": "WCHS Futurity Three-Year-Old Three-Gaited Park"
+   },
+   {
+    "num": "125",
+    "name": "Amateur Ladies Roadster to Bike"
+   },
+   {
+    "num": "126",
+    "name": "Junior Exhibitor Roadster Pony Under Saddle, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "127",
+    "name": "ASB Adult Show Pleasure Driving Division II of Class 121"
+   },
+   {
+    "num": "128",
+    "name": "ASB Hunter Country Pleasure"
+   }
+  ]
+ },
+ {
+  "weekday": "Wednesday",
+  "period": "Night",
+  "date": "August 26",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "129",
+    "name": "Fine Harness Mare Stake"
+   },
+   {
+    "num": "130",
+    "name": "Ladies Three-Gaited Over 15.2"
+   },
+   {
+    "num": "131",
+    "name": "Roadster Pony 50 Inches & Under Stake"
+   },
+   {
+    "num": "132",
+    "name": "Fine Harness Stallion/Gelding Stake"
+   },
+   {
+    "num": "133",
+    "name": "Ladies Five-Gaited Gelding"
+   },
+   {
+    "num": "134",
+    "name": "Hackney Pony Stallion/Gelding Stake"
+   },
+   {
+    "num": "135",
+    "name": "Three-Gaited Over 15.2 Stake"
+   },
+   {
+    "num": "136",
+    "name": "Amateur Roadster Under Saddle"
+   },
+   {
+    "num": "137",
+    "name": "Ladies Five-Gaited Mare"
+   },
+   {
+    "num": "138",
+    "name": "Three-Gaited 15.2 & Under Stake"
+   },
+   {
+    "num": "139",
+    "name": "Roadster to Bike -Stallion/Gelding Stake"
+   },
+   {
+    "num": "140",
+    "name": "W ASB Park Three-Gaited"
+   },
+   {
+    "num": "141",
+    "name": "Amateur Five-Gaited"
+   },
+   {
+    "num": "142",
+    "name": "Ladies Three-Gaited 15.2 & Under"
+   },
+   {
+    "num": "143",
+    "name": "Harness Pony Stallion/Gelding Stake"
+   },
+   {
+    "num": "144",
+    "name": "Five-Gaited Gelding Stake"
+   }
+  ]
+ },
+ {
+  "weekday": "Thursday",
+  "period": "Night",
+  "date": "August 27",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "145",
+    "name": "W Junior Fine Harness"
+   },
+   {
+    "num": "146",
+    "name": "W Kentucky State Fair Senior Equitation"
+   },
+   {
+    "num": "147",
+    "name": "Three-Year-Old Five-Gaited Stallion/Gelding"
+   },
+   {
+    "num": "148",
+    "name": "Fine Harness"
+   },
+   {
+    "num": "149",
+    "name": "Three-Year-Old Five-Gaited Mare"
+   },
+   {
+    "num": "150",
+    "name": "Fine Harness"
+   },
+   {
+    "num": "151",
+    "name": "Three-Year-Old Three-Gaited Stallion, Mare or Gelding"
+   },
+   {
+    "num": "152",
+    "name": "ASB Adult Five-Gaited Show Pleasure"
+   },
+   {
+    "num": "153",
+    "name": "USTA Roadster to Bike Classic"
+   },
+   {
+    "num": "154",
+    "name": "Junior Three-Gaited"
+   },
+   {
+    "num": "155",
+    "name": "Roadster to Wagon"
+   },
+   {
+    "num": "156",
+    "name": "Junior Five-Gaited"
+   }
+  ]
+ },
+ {
+  "weekday": "Friday",
+  "period": "Morning",
+  "date": "August 28",
+  "time": "9:00 a.m.",
+  "classes": [
+   {
+    "num": "157",
+    "name": "Two-Year-Old Fine Harness Mare"
+   },
+   {
+    "num": "158",
+    "name": "State Fair Junior Equitation"
+   },
+   {
+    "num": "159",
+    "name": "Walk-Trot, Rider 8 Years Old & Under"
+   },
+   {
+    "num": "160",
+    "name": "Exhibitor Hackney/Harness Pony Pleasure Driving, Driver 17 Years Old & Under"
+   },
+   {
+    "num": "161",
+    "name": "Two-Year-Old Three-Gaited -Stallion, Mare or Gelding"
+   },
+   {
+    "num": "162",
+    "name": "Junior Harness Pony"
+   },
+   {
+    "num": "163",
+    "name": "Walk-Trot, Rider 9-10 Years Old"
+   },
+   {
+    "num": "164",
+    "name": "s Champion of Champions ASB Junior Exhibitor Show Pleasure Driving, Driver 17 Years Old & Under"
+   },
+   {
+    "num": "165",
+    "name": "Exhibitor Five-Gaited, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "166",
+    "name": ""
+   },
+   {
+    "num": "167",
+    "name": "ASB Junior Park Three-Gaited"
+   },
+   {
+    "num": "168",
+    "name": "ASB Walk-Trot Show Pleasure, Rider 12 Years Old & Under"
+   },
+   {
+    "num": "169",
+    "name": "Junior Exhibitor Roadster Pony, Driver 13 Years Old & Under"
+   },
+   {
+    "num": "170",
+    "name": "Two-Year-Old Five-Gaited"
+   },
+   {
+    "num": "171",
+    "name": "Amateur Hackney/Harness Pony Pleasure Driving"
+   },
+   {
+    "num": "172",
+    "name": "ASB Adult Three-Gaited Show Pleasure"
+   },
+   {
+    "num": "173",
+    "name": "of Champions Junior Roadster Pony"
+   },
+   {
+    "num": "174",
+    "name": "ASB Junior Exhibitor Three-Gaited Country Pleasure, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "175",
+    "name": "Two-Year-Old Fine Harness Stallion/Gelding"
+   }
+  ]
+ },
+ {
+  "weekday": "Friday",
+  "period": "Night",
+  "date": "August 28",
+  "time": "6:30 p.m.",
+  "classes": [
+   {
+    "num": "176",
+    "name": "WCHS Futurity -Two-Year-Old Fine Harness Finals -Class 98 (if necessary)"
+   },
+   {
+    "num": "177",
+    "name": "Five-Gaited Pony, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "178",
+    "name": "Harness Pony"
+   },
+   {
+    "num": "179",
+    "name": "Horse Under Saddle"
+   },
+   {
+    "num": "180",
+    "name": "Amateur Three-Gaited"
+   },
+   {
+    "num": "181",
+    "name": "ASB Western County Pleasure"
+   },
+   {
+    "num": "182",
+    "name": "Amateur Ladies Roadster to Bike"
+   },
+   {
+    "num": "183",
+    "name": "Exhibitor Three-Gaited, Rider 14-17 Years Old"
+   },
+   {
+    "num": "184",
+    "name": ""
+   },
+   {
+    "num": "185",
+    "name": "Exhibitor Three-Gaited, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "186",
+    "name": "WCHS Futurity -Three-Year-Old -Fine Harness Finals -Class 104 (if necessary)"
+   },
+   {
+    "num": "187",
+    "name": "Exhibitor Five-Gaited, Rider 14-17 Years Old"
+   },
+   {
+    "num": "188",
+    "name": "mateur Hackney Pony"
+   },
+   {
+    "num": "189",
+    "name": "-Gaited Pony, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "190",
+    "name": "SB Amateur Park Three-Gaited"
+   },
+   {
+    "num": "191",
+    "name": "Roadster to Bike"
+   },
+   {
+    "num": "192",
+    "name": "Ladies Amateur Five-Gaited"
+   }
+  ]
+ },
+ {
+  "weekday": "Saturday",
+  "period": "Morning",
+  "date": "August 29",
+  "time": "9:00 a.m.",
+  "classes": [
+   {
+    "num": "193",
+    "name": "Three-Year-Old Fine Harness Mare"
+   },
+   {
+    "num": "194",
+    "name": "Hackney Pony"
+   },
+   {
+    "num": "195",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 14-17 Years Old"
+   },
+   {
+    "num": "196",
+    "name": "ASB Adult Show Pleasure Driving"
+   },
+   {
+    "num": "197",
+    "name": "ASB Junior Exhibitor Three-Gaited Show Pleasure, Rider 13 Years Old & Under"
+   },
+   {
+    "num": "198",
+    "name": "Park Pleasure"
+   },
+   {
+    "num": "199",
+    "name": "ASB Junior Exhibitor Three-Gaited Country Pleasure, Rider 14-17 Years Old"
+   },
+   {
+    "num": "200",
+    "name": "ASB Adult Three-Gaited Country Pleasure"
+   },
+   {
+    "num": "201",
+    "name": "ASB Junior Exhibitor Park Horse Three-Gaited, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "202",
+    "name": "Junior Exhibitor Roadster Pony Under Saddle, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "203",
+    "name": "ASB Country Pleasure Driving"
+   },
+   {
+    "num": "204",
+    "name": "ASB Junior Exhibitor Five-Gaited Show Pleasure, Rider 17 Years Old & Under"
+   },
+   {
+    "num": "205",
+    "name": "Three-Year-Old Fine Harness Stallion/Gelding"
+   },
+   {
+    "num": "206",
+    "name": "Exhibitor Roadster Pony, Driver 14-17 Years Old"
+   },
+   {
+    "num": "207",
+    "name": "ASB Five Gaited Country Pleasure"
+   }
+  ]
+ },
+ {
+  "weekday": "Saturday",
+  "period": "Night",
+  "date": "August 29",
+  "time": "7:00 p.m.",
+  "classes": [
+   {
+    "num": "208",
+    "name": "Champion of Champions Ladies Three-Gaited"
+   },
+   {
+    "num": "209",
+    "name": "Harness"
+   },
+   {
+    "num": "210",
+    "name": "Roadster to"
+   },
+   {
+    "num": "211",
+    "name": "Amateur Three-Gaited"
+   },
+   {
+    "num": "212",
+    "name": "Fine Harness"
+   },
+   {
+    "num": "213",
+    "name": "Five-Gaited"
+   },
+   {
+    "num": "214",
+    "name": "Three-"
+   },
+   {
+    "num": "215",
+    "name": "Roadster"
+   },
+   {
+    "num": "216",
+    "name": "Five-Gaited"
+   },
+   {
+    "num": "217",
+    "name": "Hackney Pony"
+   },
+   {
+    "num": "218",
+    "name": "Five-"
+   }
+  ]
+ }
+]
