@@ -55,9 +55,14 @@ story.
 Run from the repo root:
 
 ```bash
-refresh/fetch_entries.sh       # resumable; uses refresh/jar.txt session cookie
+refresh/fetch_entries.sh                    # resumable; uses refresh/jar.txt session cookie
 python3 refresh/parse_entries.py
-python3 refresh/build_page.py  # writes index.html at the repo root
+python3 refresh/build_page.py               # data -> index.html (asof only changes if the data changed)
+python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
+npm --prefix tests install                  # once; jsdom dev-only dependency
+npm --prefix tests test                     # page smoke suite (runs against the built index.html)
+python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
+python3 tests/test_asof.py                  # verifies the asof only changes when the data changes
 git add index.html && git commit -m "Refresh entries <date>" && git push
 ```
 
@@ -73,8 +78,13 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
   compact JSON: `{"asof":"<local time>","classes":[...]}`.
 - Data flow: `classes.json` + `schedule.json` + `entries/*.html`
   → `parse_entries.py` → `data.json` → `build_page.py` → `index.html`.
-- `data.json`, `entries/`, `jar.txt`, `fetchlist.txt` are git-ignored
-  intermediates. Never commit them.
+- **asof policy: the "Updated" stamp changes only when the data
+  actually changes.** The regular build compares the new `classes`
+  against the payload already embedded in `index.html` and keeps the old
+  `asof` when they're identical. `--ui-only` re-embeds that same payload,
+  so template/UI rebuilds never touch the stamp.
+- `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `tests/node_modules/`
+  are git-ignored intermediates. Never commit them.
 - **Class number is the join key** across all data sources. Sub-classes
   use `x.y` numbering (e.g. `45.1`) and inherit the parent's schedule
   slot. Some classes legitimately have zero entries — don't "fix" them.
@@ -114,9 +124,18 @@ print("asof:", re.search(r'"asof":"([^"]*)"', s).group(1))
 EOF
 ```
 
-The page was also verified during development with a 20-assertion jsdom
-smoke test (filters, lazy rendering, persistence, print view) that lived
-in /tmp and was not committed.
+The jsdom smoke suite (64 checks: filters, context/done toggles, day
+collapse, per-class show-all, persistence, mobile default) lives in
+`tests/test.js` and runs against the freshly built `index.html`:
+
+```bash
+npm --prefix tests test
+```
+
+`tests/test_ui_only.py` verifies the `--ui-only` rebuild preserves the
+embedded payload. The suite pins "now" to 2026-08-25 so day-collapse
+defaults are deterministic. jsdom is a dev-only test dependency — the
+page itself stays one dependency-free HTML file.
 
 ## Tips for AI Agents
 

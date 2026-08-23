@@ -1,4 +1,5 @@
 .aistack/
+tests/node_modules/
 refresh/entries/
 refresh/data.json
 refresh/jar.txt

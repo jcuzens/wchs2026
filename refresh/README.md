@@ -17,4 +17,21 @@ python3 build_page.py    # rebuilds ../index.html
   They only change if the show adds/removes classes or re-times the schedule.
 - `data.json` is the intermediate parsed entries file.
 
+### Changing the page without re-fetching data
+
+The template (markup/CSS/JS) lives in `build_page.py`. To rebuild the page
+around the data you already have — no fetch, no new "asof":
+
+```bash
+python3 build_page.py --ui-only   # re-embeds the payload from the current ../index.html
+```
+
+The "Updated" timestamp in the page header only changes when the data
+actually changes: a regular build keeps the existing asof when the parsed
+data is identical to what's already embedded, and `--ui-only` never touches
+it.
+
 Deploy: replace `index.html` at the repo root and push — GitHub Pages picks it up.
+
+After any rebuild, run the smoke tests: `npm --prefix ../tests test`
+(plus `python3 ../tests/test_ui_only.py` for `--ui-only`).

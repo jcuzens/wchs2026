@@ -1,25 +1,54 @@
 #!/usr/bin/env python3
-import json, datetime, os
+import json, datetime, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-data = json.load(open(os.path.join(HERE, 'data.json')))
-asof = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+ROOT = os.path.dirname(HERE)
 
-classes = []
-for c in data:
-    classes.append({
-        "n": c["num"],
-        "name": c["name"],
-        "div": c["division"],
-        "wk": c.get("weekday"),
-        "day": c.get("date"),
-        "per": c.get("period"),
-        "time": c.get("time"),
-        "e": [[e["entry"], e["horse"], e["rider"], e["trainer"], e["owner"], e.get("start"), e.get("place")]
-              for e in c["entries"]],
-    })
+if "--ui-only" in sys.argv[1:]:
+    # Rebuild the page from the payload already embedded in index.html,
+    # for template/UI changes that don't touch the data.
+    idx = os.path.join(ROOT, "index.html")
+    try:
+        s = open(idx).read()
+    except OSError:
+        sys.exit("build_page.py: --ui-only needs an existing index.html at the repo root")
+    m = re.search(r"^const DATA = (\{.*\});\s*$", s, re.M)
+    if not m:
+        sys.exit("build_page.py: no embedded payload found in index.html (is it a build of this template?)")
+    payload = m.group(1)
+else:
+    data = json.load(open(os.path.join(HERE, 'data.json')))
 
-payload = json.dumps({"asof": asof, "classes": classes}, separators=(',', ':'))
+    classes = []
+    for c in data:
+        classes.append({
+            "n": c["num"],
+            "name": c["name"],
+            "div": c["division"],
+            "wk": c.get("weekday"),
+            "day": c.get("date"),
+            "per": c.get("period"),
+            "time": c.get("time"),
+            "e": [[e["entry"], e["horse"], e["rider"], e["trainer"], e["owner"], e.get("start"), e.get("place")]
+                  for e in c["entries"]],
+        })
+
+    # The "Updated" timestamp only changes when the data actually changes:
+    # if index.html already embeds this exact data, keep its asof.
+    asof = None
+    idx = os.path.join(ROOT, "index.html")
+    try:
+        prev = re.search(r"^const DATA = (\{.*\});\s*$", open(idx).read(), re.M)
+        if prev:
+            prev_obj = json.loads(prev.group(1))
+            if json.dumps(prev_obj.get("classes"), separators=(',', ':')) == json.dumps(classes, separators=(',', ':')):
+                asof = prev_obj.get("asof")
+    except (OSError, ValueError):
+        pass
+    if not asof:
+        asof = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    payload = json.dumps({"asof": asof, "classes": classes}, separators=(',', ':'))
 
 html = r"""<!DOCTYPE html>
 <html lang="en">
@@ -39,12 +68,16 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 header { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid var(--line); padding: 10px 14px; }
 header h1 { font-size: 17px; margin: 0; }
 header .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+header .updated { color: var(--muted); font-size: 12px; margin-top: 2px; }
 .actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 .actions button { font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--line); background: #fff; border-radius: 8px; cursor: pointer; }
 .actions button:active { background: var(--accent-soft); }
+.actions button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.actions button:disabled { opacity: .45; cursor: default; }
 .actions .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 #layout { display: block; }
 aside { background: #fff; border-bottom: 1px solid var(--line); }
+body.nofilters aside { display: none; }
 .fgroup { border-bottom: 1px solid var(--line); padding: 10px 14px; }
 .fgroup h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px; color: var(--muted); display: flex; align-items: center; gap: 8px; cursor: pointer; }
 .fgroup h2 .selcount { background: var(--accent); color: #fff; border-radius: 9px; font-size: 11px; padding: 1px 7px; min-width: 18px; text-align: center; display: none; }
@@ -64,16 +97,23 @@ aside { background: #fff; border-bottom: 1px solid var(--line); }
 .chipx { cursor: pointer; margin-left: 5px; font-weight: 700; }
 main { padding: 12px 14px 60px; max-width: 900px; }
 .day { margin-bottom: 8px; }
-.day h2 { font-size: 16px; margin: 18px 0 4px; padding-bottom: 4px; border-bottom: 2px solid var(--ink); }
+.day h2 { font-size: 16px; margin: 18px 0 4px; padding-bottom: 4px; border-bottom: 2px solid var(--ink); cursor: pointer; }
 .day h2 .dsub { color: var(--muted); font-weight: normal; font-size: 13px; }
+.dchev { display: inline-block; color: var(--muted); font-size: 11px; margin-right: 5px; transition: transform .15s; transform: rotate(90deg); }
+.day.collapsed .dchev { transform: rotate(0deg); }
+.day.collapsed .day-body { display: none; }
 .session h3 { font-size: 13.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--gold); margin: 12px 0 6px; }
 .cls { background: #fff; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
-.cls-head { width: 100%; display: flex; align-items: baseline; gap: 8px; padding: 10px 12px; border: none; background: #fff; font: inherit; text-align: left; cursor: pointer; }
+.cls.muted { opacity: .55; border-style: dashed; }
+.cls-head { width: 100%; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border: none; background: #fff; font: inherit; text-align: left; cursor: pointer; }
 .cls-head:active { background: var(--accent-soft); }
 .cnum { font-weight: 700; color: var(--accent); flex: none; font-size: 13.5px; min-width: 34px; }
 .cname { flex: 1; font-weight: 600; }
+.cdone { color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
 .cdiv { color: var(--muted); font-size: 11.5px; border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; flex: none; }
 .ccount { color: var(--muted); font-size: 12.5px; flex: none; }
+.call { font-size: 12px; padding: 2px 8px; border: 1px solid #bfdbfe; background: var(--accent-soft); color: var(--accent); border-radius: 8px; cursor: pointer; flex: none; }
+.call:active { background: #dbeafe; }
 .chev { flex: none; color: var(--muted); font-size: 11px; transition: transform .15s; }
 .cls.open .chev { transform: rotate(90deg); }
 .cls-entries { display: none; border-top: 1px solid var(--line); }
@@ -96,7 +136,8 @@ main { padding: 12px 14px 60px; max-width: 900px; }
   main { flex: 1; padding: 4px 0 60px; }
 }
 @media print {
-  header .actions, aside, #toast, .chev { display: none !important; }
+  header .actions, aside, #toast, .chev, .dchev, .call { display: none !important; }
+  .day .day-body { display: block !important; }
   #printHead { display: block; margin-bottom: 14px; }
   #printHead h1 { font-size: 16pt; margin: 0 0 2px; }
   #printHead .phsub { font-size: 10pt; color: #333; }
@@ -119,7 +160,11 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 <header>
   <h1>WCHS 2026 — My Schedule</h1>
   <div class="sub">World's Championship Horse Show · Aug 22–29 · Kentucky State Fair, Louisville</div>
+  <div class="updated" id="updatedLine"></div>
   <div class="actions">
+    <button id="filtersBtn">Filters</button>
+    <button id="contextBtn" disabled>Context</button>
+    <button id="doneBtn">Hide done</button>
     <button class="primary" id="printBtn">Print</button>
     <button id="copyBtn">Copy link</button>
     <button id="clearBtn">Clear selection</button>
@@ -134,6 +179,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 "use strict";
 const DATA = __PAYLOAD__;
 const LS_KEY = "wchs2026.sel.v1";
+const VIEW_KEY = "wchs2026.view.v1";
 const FIELDS = [
   {key:"trainer", label:"Trainers", col:3},
   {key:"rider",   label:"Riders",   col:2},
@@ -143,8 +189,41 @@ const FIELDS = [
 const state = {trainer:new Set(), rider:new Set(), horse:new Set(), owner:new Set(), division:new Set()};
 const search = {trainer:"", rider:"", horse:"", owner:"", division:""};
 const openCls = new Set();
+const dayState = {};
+const view = { filtersOpen: null, context: false, doneHidden: false };
+(function loadView(){
+  try {
+    const v = JSON.parse(localStorage.getItem(VIEW_KEY) || "null");
+    if (v){
+      if (typeof v.filtersOpen === "boolean") view.filtersOpen = v.filtersOpen;
+      view.context = !!v.context;
+      view.doneHidden = !!v.doneHidden;
+    }
+  } catch(e){}
+})();
+function saveView(){ try { localStorage.setItem(VIEW_KEY, JSON.stringify(view)); } catch(e){} }
 
 function norm(s){ return (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
+
+// ---- pure helpers (unit-tested)
+function defaultFiltersOpen(w){ return w >= 900; }
+const MONTHS = {January:0, February:1, March:2, April:3, May:4, June:5, July:6, August:7, September:8, October:9, November:10, December:11};
+function isPastDay(dayStr, now){
+  now = now || new Date();
+  const m = String(dayStr).match(/^(\w+) (\d{1,2})$/);
+  if (!m || MONTHS[m[1]] == null) return false;
+  const d = new Date(2026, MONTHS[m[1]], +m[2]);
+  const t = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return d < t;
+}
+function isDone(c){ return c.e.some(e => e[6] != null); }
+function fmtAsof(s){
+  const m = String(s).match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if (!m) return s;
+  const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const h = +m[4];
+  return MON[+m[2]-1] + " " + (+m[3]) + ", " + m[1] + " · " + (h % 12 || 12) + ":" + m[5] + " " + (h < 12 ? "AM" : "PM");
+}
 
 // ---- build name indexes
 const NAMES = {trainer:{}, rider:{}, horse:{}, owner:{}};
@@ -305,31 +384,44 @@ function renderSchedule(){
   main.textContent = "";
   const days = buildSchedule();
   const on = active();
-  let shown = 0;
+  let rendered = 0;
   for (const d of days){
     const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
     const dEl = el("section","day");
+    const collapsed = dayState[d.day] != null ? dayState[d.day] : isPastDay(d.day);
+    if (collapsed) dEl.classList.add("collapsed");
     const h2 = el("h2");
+    h2.appendChild(el("span","dchev","▶"));
     h2.appendChild(el("span",null, d.wk + ", " + d.day));
+    h2.addEventListener("click", () => {
+      dayState[d.day] = !dEl.classList.contains("collapsed");
+      dEl.classList.toggle("collapsed");
+    });
     dEl.appendChild(h2);
-    let dShown = 0;
+    const body = el("div","day-body");
+    let dShown = 0, dRendered = 0;
     for (const [per, cls] of secs){
-      const vis = cls.filter(clsMatches);
+      const list = cls.filter(c => !view.doneHidden || !isDone(c));
+      const matched = on ? list.filter(clsMatches) : list;
+      const vis = (on && view.context) ? list : matched;
       if (!vis.length) continue;
-      dShown += vis.length;
+      dShown += matched.length;
+      dRendered += vis.length;
       const sEl = el("div","session");
       sEl.appendChild(el("h3",null, per + (cls[0].time ? " · " + cls[0].time : "")));
-      for (const c of vis.sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
-        shown++;
-        sEl.appendChild(makeClass(c, on));
+      for (const c of vis.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
+        const m = matched.includes(c);
+        rendered++;
+        sEl.appendChild(makeClass(c, m));
       }
-      dEl.appendChild(sEl);
+      body.appendChild(sEl);
     }
-    if (!dShown) continue;
+    dEl.appendChild(body);
+    if (!dRendered) continue;
     if (on) h2.appendChild(el("span","dsub", " — " + dShown + " of " + d.n + " classes"));
     main.appendChild(dEl);
   }
-  if (!shown){
+  if (!rendered){
     main.appendChild(el("div","fnote","Nothing matches your selection. Try removing a filter."));
   }
   const sub = $("#phSub");
@@ -341,8 +433,12 @@ function renderSchedule(){
 }
 function namesDisp(key,k){ const m = NAMES[key] && NAMES[key][k]; return m ? m.d : k; }
 
-function makeClass(c, on){
+function makeClass(c, isMatch){
+  const on = active();
   const visE = on ? c.e.filter(eMatches) : c.e;
+  const showFiltered = on && isMatch;
+  const canToggle = showFiltered && visE.length < c.e.length;
+  let showingAll = !showFiltered;
   const sortE = a => [...a].sort((x,y)=>{
     const sa = x[5]==null ? 9999 : parseInt(x[5])||0, sb = y[5]==null ? 9999 : parseInt(y[5])||0;
     return sa - sb;
@@ -361,23 +457,43 @@ function makeClass(c, on){
       box.appendChild(row);
     }
   };
-  const d = el("div","cls");
+  const d = el("div","cls" + (on && !isMatch ? " muted" : ""));
   const head = el("button","cls-head");
   head.appendChild(el("span","cnum", c.n));
   head.appendChild(el("span","cname", c.name));
+  if (isDone(c)) head.appendChild(el("span","cdone","done ✓"));
   head.appendChild(el("span","cdiv", c.div));
-  head.appendChild(el("span","ccount", on ? visE.length+" of "+c.e.length+" entries" : c.e.length+" entries"));
+  const call = canToggle ? el("span","call") : null;
+  if (call) head.appendChild(call);
+  const count = el("span","ccount");
+  head.appendChild(count);
   head.appendChild(el("span","chev","▶"));
   d.appendChild(head);
   const box = el("div","cls-entries");
   d.appendChild(box);
-  const shouldOpen = on || openCls.has(c.n);
-  if (shouldOpen){ d.classList.add("open"); buildRows(box, visE); }
-  head.addEventListener("click", ()=>{
-    if (!d.classList.contains("open") && !box.firstChild){ buildRows(box, on ? c.e.filter(eMatches) : c.e); }
+  const refreshHead = () => {
+    if (canToggle){
+      count.style.display = "none";
+      call.textContent = showingAll ? "Show mine " + visE.length : "Show all " + c.e.length;
+    } else {
+      count.textContent = c.e.length + " entries";
+    }
+  };
+  const build = () => { box.textContent = ""; buildRows(box, (showFiltered && !showingAll) ? visE : c.e); };
+  const shouldOpen = (on && isMatch) || openCls.has(c.n);
+  if (shouldOpen){ d.classList.add("open"); build(); }
+  head.addEventListener("click", () => {
+    if (!d.classList.contains("open") && !box.firstChild) build();
     d.classList.toggle("open");
     d.classList.contains("open") ? openCls.add(c.n) : openCls.delete(c.n);
   });
+  if (call) call.addEventListener("click", ev => {
+    ev.stopPropagation();
+    showingAll = !showingAll;
+    if (box.firstChild) build();
+    refreshHead();
+  });
+  refreshHead();
   return d;
 }
 function placeSuf(p){ p=String(p); return p.endsWith("1")&&!p.endsWith("11")?"st":p.endsWith("2")?"nd":p.endsWith("3")?"rd":"th"; }
@@ -385,8 +501,32 @@ function placeSuf(p){ p=String(p); return p.endsWith("1")&&!p.endsWith("11")?"st
 function onStateChange(){
   save();
   for (const g of document.querySelectorAll("#filters .fgroup")) g._update && g._update();
+  applyContextBtn();
   renderSchedule();
 }
+
+// ---- view options (filters panel / context / done)
+function applyFiltersOpen(){
+  const open = view.filtersOpen == null ? defaultFiltersOpen(window.innerWidth) : view.filtersOpen;
+  document.body.classList.toggle("nofilters", !open);
+  $("#filtersBtn").classList.toggle("on", open);
+}
+function applyDoneBtn(){
+  const b = $("#doneBtn");
+  b.textContent = view.doneHidden ? "Show done" : "Hide done";
+  b.classList.toggle("on", view.doneHidden);
+}
+function applyContextBtn(){
+  const b = $("#contextBtn");
+  b.classList.toggle("on", view.context);
+  b.disabled = !active();
+}
+$("#filtersBtn").addEventListener("click", () => {
+  view.filtersOpen = !(view.filtersOpen == null ? defaultFiltersOpen(window.innerWidth) : view.filtersOpen);
+  saveView(); applyFiltersOpen();
+});
+$("#doneBtn").addEventListener("click", () => { view.doneHidden = !view.doneHidden; saveView(); applyDoneBtn(); renderSchedule(); });
+$("#contextBtn").addEventListener("click", () => { view.context = !view.context; saveView(); applyContextBtn(); renderSchedule(); });
 
 // ---- buttons
 $("#printBtn").addEventListener("click", ()=>window.print());
@@ -409,6 +549,10 @@ function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("sh
 // ---- init
 const src = load();
 renderFilters();
+applyFiltersOpen();
+applyDoneBtn();
+applyContextBtn();
+$("#updatedLine").textContent = "Updated " + fmtAsof(DATA.asof);
 renderSchedule();
 if (src) toast("Restored your selection");
 </script>

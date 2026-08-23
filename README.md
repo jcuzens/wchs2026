@@ -38,9 +38,12 @@ page itself.
 | `refresh/schedule.json` | Session schedule (parsed from the 2026 Premium Book PDF) |
 | `refresh/fetch_entries.sh` | Downloads all class entry pages (resumable) |
 | `refresh/parse_entries.py` | Parses the entry pages → `refresh/data.json` |
+| `tests/` | Smoke tests for the built page (dev-only jsdom dependency) |
 
 `refresh/data.json`, `refresh/entries/`, `refresh/jar.txt` and
 `refresh/fetchlist.txt` are local build intermediates and are git-ignored.
+To rebuild the page UI without a data refresh:
+`python3 refresh/build_page.py --ui-only`.
 
 ## Refreshing the data during the show
 
