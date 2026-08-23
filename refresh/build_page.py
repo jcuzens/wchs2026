@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import json, datetime
+import json, datetime, os
 
-data = json.load(open('data.json'))
+HERE = os.path.dirname(os.path.abspath(__file__))
+data = json.load(open(os.path.join(HERE, 'data.json')))
 asof = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
 
 classes = []
@@ -416,6 +417,6 @@ if (src) toast("Restored your selection");
 """
 
 html = html.replace("__PAYLOAD__", payload)
-open('index.html', 'w').write(html)
-import os
-print(f"index.html: {os.path.getsize('index.html')/1024/1024:.2f} MB")
+out = os.path.join(os.path.dirname(HERE), 'index.html')
+open(out, 'w').write(html)
+print(f"index.html: {os.path.getsize(out)/1024/1024:.2f} MB")
