@@ -2,6 +2,46 @@
 
 Guidance for AI agents working in this repository.
 
+## Memory MCP
+
+If the memory MCP is available, use it to persist and retrieve project knowledge
+across sessions. Store key facts about architecture, conventions, tooling, and
+decisions. Query it before answering questions about the project to recall
+context from prior conversations.
+
+Discipline:
+- **Read before answering status/planning questions** (e.g. "where are the
+  milestones?") — search the graph first; do not re-derive state from the repo
+  alone.
+- **Write when state changes** — milestone done/deferred, decision made,
+  convention or architecture changed: update the graph in the same session.
+- **Prune stale entries** — delete superseded observations instead of
+  accumulating contradictions.
+- Example: the `milestone roadmap` entity records the roadmap location
+  (README.md) and per-version status.
+
+## Sequential Thinking MCP
+
+For complex, multi-step problems — architecture decisions, debugging intricate
+bugs, designing systems — use the sequential thinking tool to break reasoning
+into steps. It supports revision, branching, hypothesis generation, and
+verification. Use when the problem doesn't have an obvious linear solution or
+when you need to explore and refine your thinking iteratively.
+
+## Skill Discipline
+
+Before ANY action — exploring files, answering questions, writing code — check
+which skill applies from the available skills list. Invoke it and follow it
+exactly. Do not skip this step.
+
+| Task type | Skill |
+|---|---|
+| Building features, creating something new | `brainstorming` |
+| Fixing bugs, test failures, unexpected behavior | `systematic-debugging` |
+| Implementing features or bugfixes | `test-driven-development` |
+| Approved spec needs execution steps | `writing-plans` |
+| Plan ready with independent tasks | `subagent-driven-development` |
+
 ## What this is
 
 A static, personal schedule site for WCHS 2026 (Aug 22–29, 2026, Kentucky
