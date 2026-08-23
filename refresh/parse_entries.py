@@ -15,7 +15,7 @@ def cell_text(td):
     return h.unescape(t).replace('\xa0', ' ').strip()
 
 def parse_rows(page, grid):
-    pat = re.compile(r'<tr id="[^"]*_" + grid + r'_DXDataRow\d+"[^>]*>(.*?)</tr>', re.S)
+    pat = re.compile(r'<tr id="[^"]*_' + grid + r'_DXDataRow\d+"[^>]*>(.*?)</tr>', re.S)
     out = []
     for m in pat.finditer(page):
         row = m.group(1)

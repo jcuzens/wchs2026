@@ -1,0 +1,1762 @@
+[
+ {
+  "num": "1",
+  "name": "Bill Wise Sweepstakes Two Year Old Fine Harness",
+  "guid": "0912b6b0-7e35-4ba8-b031-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "2",
+  "name": "Equitation - Open Class Rider 15 Years Old",
+  "guid": "4247bac0-afec-416e-baac-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "15"
+ },
+ {
+  "num": "4",
+  "name": "ASB Junior Exhibitor Show Pleasure Driving",
+  "guid": "d38df180-d19c-4dc2-8263-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "7"
+ },
+ {
+  "num": "5",
+  "name": "ASB Junior Park Three Gaited",
+  "guid": "ff35ea62-da8a-4f07-9056-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "26"
+ },
+ {
+  "num": "6",
+  "name": "Four Year Old Harness Pony",
+  "guid": "fa87299b-1dc9-4972-9d08-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "7",
+  "name": "Bill Wise Sweepstakes Two Year Old Park",
+  "guid": "dab5dd1c-57bf-4521-b715-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "6"
+ },
+ {
+  "num": "8",
+  "name": "Equitation - Open Class 16 Years Old",
+  "guid": "b3d03830-ecd3-4614-bb63-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "9"
+ },
+ {
+  "num": "9",
+  "name": "Adult Am. Junior Hackney/Harness Pony Pl. Driving",
+  "guid": "77d6033b-296c-4fa4-bdaa-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "12"
+ },
+ {
+  "num": "12",
+  "name": "WCHS Futurity Weanling",
+  "guid": "69e266c9-5e56-46d5-962f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "38"
+ },
+ {
+  "num": "13",
+  "name": "Kentucky County Fair Harness Pony Championship",
+  "guid": "34e75329-74a4-4462-aca1-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "6"
+ },
+ {
+  "num": "14",
+  "name": "Equitation - Kentucky Class Rider 17 &amp; Under",
+  "guid": "6e6f5b29-1edc-4097-82c3-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "12"
+ },
+ {
+  "num": "15",
+  "name": "Kentucky County Fair Fine Harness Championship",
+  "guid": "bcbcf852-b6b8-4bdd-927c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "16",
+  "name": "WCHS Futurity Yearling",
+  "guid": "343f98a2-4bf3-4c45-a0e8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "23"
+ },
+ {
+  "num": "17",
+  "name": "Kentucky County Fair Roadster Pony Championship",
+  "guid": "c1a03499-39f4-439e-9b6c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "8"
+ },
+ {
+  "num": "18",
+  "name": "Kentucky County Fair Three Gaited Championship",
+  "guid": "06db8da8-0240-4acd-95e6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "19",
+  "name": "Kentucky County Fair Roadster to Bike Champion",
+  "guid": "67e3f6f6-6fd6-4452-9c68-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "6"
+ },
+ {
+  "num": "20",
+  "name": "Kentucky County Fair Hackney Pony Championship",
+  "guid": "c918e95c-860d-462b-b96b-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "7"
+ },
+ {
+  "num": "21",
+  "name": "Kentucky County Fair Five Gaited",
+  "guid": "288071b3-7e72-4ed5-9011-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "8"
+ },
+ {
+  "num": "22",
+  "name": "Bill Wise Sweepstakes Three Year Old Fine Harness",
+  "guid": "a2088fb6-be63-4889-98de-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "5"
+ },
+ {
+  "num": "23",
+  "name": "Amateur Gentlemen&#39;s Harness Pony",
+  "guid": "bcd799a3-84d7-481a-8d68-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "7"
+ },
+ {
+  "num": "24",
+  "name": "ASB Adult Three Gaited Show Pleasure - Div I",
+  "guid": "2ba3b197-3521-4e5d-8dbc-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "26"
+ },
+ {
+  "num": "25",
+  "name": "Equitation - Open Class Rider 14 Years Old",
+  "guid": "01165813-a41d-47e5-af05-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "11"
+ },
+ {
+  "num": "26",
+  "name": "Bill Wise Sweepstakes Three Year Old Three Gaited",
+  "guid": "13250f8a-6546-463b-a407-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "27",
+  "name": "Amateur Roadster Pony 50&quot; &amp; Under",
+  "guid": "f26b2f8a-4e10-4c9d-9eba-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "13"
+ },
+ {
+  "num": "28",
+  "name": "ASB Adult Three Gaited Show Pleasure - Div  II",
+  "guid": "f9f49edc-3a58-4451-afe6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "19"
+ },
+ {
+  "num": "29",
+  "name": "Equitation - Open Class Riders 17 Years Old",
+  "guid": "2b60a019-af60-46cf-9b0a-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "13"
+ },
+ {
+  "num": "30",
+  "name": "Bill Wise Sweepstakes Three Year Old Park Pleasure",
+  "guid": "e4e6f95e-cbd8-4eca-b3f2-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "31",
+  "name": "ASB Adult Three Gaited Show Pleasure - Div  III",
+  "guid": "4e3766fb-262d-4d7c-a163-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "19"
+ },
+ {
+  "num": "32",
+  "name": "ASB Park Three Gaited Div I",
+  "guid": "d108a34c-bb3f-4f42-bebb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "35",
+  "name": "ASB Park Three Gaited Div II",
+  "guid": "0807a844-5a05-48a6-abd6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "36",
+  "name": "Bill Wise Sweepstakes Three Year Old Five Gaited",
+  "guid": "486675df-7a92-471b-9220-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "9"
+ },
+ {
+  "num": "37",
+  "name": "Bill Wise Sweepstakes Four Year Old Fine Harness",
+  "guid": "63e6736d-c392-469a-9e1c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "6"
+ },
+ {
+  "num": "38",
+  "name": "Three Gaited Pony, Rider 17 Years &amp; Under",
+  "guid": "c7b250c6-09c7-49a8-9057-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "39",
+  "name": "Amateur Gentlemen&#39;s Hackney Pony",
+  "guid": "48b33a1b-8bb0-41ec-9e37-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "8"
+ },
+ {
+  "num": "40",
+  "name": "Bill Wise Sweepstakes Four Year Old Park Pleasure",
+  "guid": "7a8b8cfd-0195-44ab-9d38-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "41",
+  "name": "Five Gaited Pony, Rider 17 Years &amp; Under",
+  "guid": "86dc4eb3-012c-4a13-a634-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "19"
+ },
+ {
+  "num": "42",
+  "name": "Roadster to Bike Mare Stake",
+  "guid": "78588508-fec7-4b96-8908-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "12"
+ },
+ {
+  "num": "43",
+  "name": "Junior Exhibitor Three Gaited, Rider 14-17 Years",
+  "guid": "c90b2a6c-5b00-45cf-9dc9-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "14"
+ },
+ {
+  "num": "44",
+  "name": "Bill Wise Sweepstakes Four Year Old Three Gaited",
+  "guid": "37e40c23-1e9e-48cb-b5f7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "8"
+ },
+ {
+  "num": "46",
+  "name": "Junior Exhibitor Three Gaited, Rider 14-17 Years",
+  "guid": "ca021e4d-e4bf-4644-9ea7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "47",
+  "name": "Bill Wise Sweepstakes Four Year Old Five Gaited",
+  "guid": "2e5fa939-01ae-48b2-8b68-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "14"
+ },
+ {
+  "num": "48",
+  "name": "Equitation - Open Class Rider 11 Years Old",
+  "guid": "48f5cb27-5d07-48d5-b9b6-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "11"
+ },
+ {
+  "num": "49",
+  "name": "ASB Jr. Exhib. Three Gaited Country Pl. 13 &amp; Unde",
+  "guid": "1f7639bd-9ad1-4ba4-a92e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "13"
+ },
+ {
+  "num": "50",
+  "name": "Junior Exhibitor Hackney/Harness Pony Pl. Driving",
+  "guid": "0d9efb0d-d0b6-41f7-a54c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "12"
+ },
+ {
+  "num": "51",
+  "name": "ASB Adult Five Gaited Show Pleasure Div I",
+  "guid": "ed24034f-ecce-490a-afe8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "35"
+ },
+ {
+  "num": "52",
+  "name": "Equitation - Open Class Rider 12 &amp; 13 Years Old",
+  "guid": "31c5b6e3-33b2-4ac3-ad8d-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "14"
+ },
+ {
+  "num": "53",
+  "name": "Junior Exhibitor Roadster Pony Driver 13 &amp; Under",
+  "guid": "11ea54d6-b2d4-4b9f-8263-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "19"
+ },
+ {
+  "num": "54",
+  "name": "ASB Adult Five Gaited Show Pleasure Div II",
+  "guid": "a3b778b9-47a7-4e85-b816-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "55",
+  "name": "Amateur Gentlemen&#39;s Roadster to Bike",
+  "guid": "88f29ef2-8e09-40ba-b038-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "16"
+ },
+ {
+  "num": "56",
+  "name": "WCHS Futurity Three Year Old Park Pleasure",
+  "guid": "405f9a56-dd2e-45d4-9564-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "57",
+  "name": "Adult Amateur Hackney/Harness Pony Pl. Driving",
+  "guid": "203c101d-e63a-4ad5-a17d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "25"
+ },
+ {
+  "num": "58",
+  "name": "ASB Jr Exh Three Gaited Show Pleasure, Rider 13 &amp;I",
+  "guid": "bac463a2-9c17-4aa2-8cc2-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "28"
+ },
+ {
+  "num": "59",
+  "name": "ASB Junior Exhibitor Five Gaited Show Pl. Div I",
+  "guid": "dfa29f97-00ee-4ba8-acf4-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "31"
+ },
+ {
+  "num": "60",
+  "name": "ASB Jr Exh Three Gaited Show Pleasure - Rider 13 I",
+  "guid": "3a3162e6-8ceb-4093-aece-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "62",
+  "name": "ASB Junior Exhibitor Five Gaited Show Pl. Div II",
+  "guid": "bba8f603-d05f-41d4-9a5e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "64",
+  "name": "Junior Fine Harness Stallion/Gelding",
+  "guid": "70942c52-f260-447d-9188-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "13"
+ },
+ {
+  "num": "65",
+  "name": "Junior Three Gaited Over 15.2 Stallion/Mare/Geldig",
+  "guid": "340f2325-f09f-4a5e-b978-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "66",
+  "name": "Junior Five Gaited Mare",
+  "guid": "61bbcf24-fab4-462a-addf-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "67",
+  "name": "Amateur Ladies Fine Harness",
+  "guid": "26bc22f8-e827-423b-83c1-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "19"
+ },
+ {
+  "num": "68",
+  "name": "Junior Three Gaited 15.2 &amp; Under Stallion/Mare/Geg",
+  "guid": "592c1fd0-995a-4977-844f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "12"
+ },
+ {
+  "num": "69",
+  "name": "Roadster Pony over 50&quot; to 52&quot; Stake",
+  "guid": "cf68e9d3-02d6-4460-8739-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "13"
+ },
+ {
+  "num": "70",
+  "name": "Ladies Amateur Five Gaited Mare",
+  "guid": "12a60cab-ae34-4f28-ad1e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "71",
+  "name": "Harness Pony Mare Stake",
+  "guid": "70f5a1d5-fedc-446d-ab40-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "72",
+  "name": "Amateur Three Gaited 15.2 &amp; Under",
+  "guid": "5f82f1b9-9945-4e63-b0c5-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "73",
+  "name": "Junior Fine Harness Mare",
+  "guid": "51a2d534-ad5c-44a4-8a41-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "9"
+ },
+ {
+  "num": "74",
+  "name": "Junior Five Gaited Stallion/Gelding",
+  "guid": "23822c76-0cde-41ff-b59a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "75",
+  "name": "Amateur Gentleman&#39;s Fine Harness",
+  "guid": "b2810a3f-91a5-4e42-a71d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "8"
+ },
+ {
+  "num": "76",
+  "name": "Ladies Amateur Five Gaited Gelding",
+  "guid": "7ce4359f-c853-485f-b14f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "31"
+ },
+ {
+  "num": "77",
+  "name": "Hackney Pony Mare Stake",
+  "guid": "3581f712-0596-4bed-a88a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "5"
+ },
+ {
+  "num": "78",
+  "name": "Amateur Three Gaited",
+  "guid": "31312c1f-173e-43ac-9ba5-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "29"
+ },
+ {
+  "num": "79",
+  "name": "Ladies Fine Harness",
+  "guid": "9a2aba98-dc2e-42e6-b963-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "22"
+ },
+ {
+  "num": "80",
+  "name": "Five Gaited Stallion Stake",
+  "guid": "26011f81-a731-4641-9ae4-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "4"
+ },
+ {
+  "num": "81",
+  "name": "ASB Jr. Exhib. Three Gaited Country Pl. 14-17",
+  "guid": "d3a31c17-8499-4fa5-a7e7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "82",
+  "name": "ASB Amateur Park Three Gaited Div I",
+  "guid": "ddc0b680-8bec-488c-ab1d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "35"
+ },
+ {
+  "num": "83",
+  "name": "Four Year Old Hackney Pony",
+  "guid": "30d05c66-5599-4e61-ab92-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "5"
+ },
+ {
+  "num": "84",
+  "name": "Junior  Exhibitor Five Gaited, Rider 13 Years",
+  "guid": "b6d4cb18-a066-4b82-8cee-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "85",
+  "name": "ASB Adult Three Gaited Country Pleasure Div I",
+  "guid": "8612b413-b3bb-4116-b3f5-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "32"
+ },
+ {
+  "num": "86",
+  "name": "ASB Junior Park Pleasure",
+  "guid": "df00ce17-c8e5-4c39-8828-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "39"
+ },
+ {
+  "num": "87",
+  "name": "Three Year Old Hackney Pony",
+  "guid": "c236dcf5-beca-4cc6-a413-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "6"
+ },
+ {
+  "num": "89",
+  "name": "Ladies Roadster to Bike",
+  "guid": "968e62ad-79fa-473a-8efc-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "26"
+ },
+ {
+  "num": "90",
+  "name": "ASB Jr Exhibitor Three Gaited Show Pleasure - DivI",
+  "guid": "60380194-c9a3-45a5-9001-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "37"
+ },
+ {
+  "num": "91",
+  "name": "Three Year Old Harness Pony",
+  "guid": "f2e1d950-3634-4be4-8f03-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "8"
+ },
+ {
+  "num": "92",
+  "name": "Junior Exhibitor Three Gaited, Rider 13 &amp; Under",
+  "guid": "388ad31f-4ba2-49d8-8aee-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "93",
+  "name": "ASB Adult Three Gaited Country Pleasure Div II",
+  "guid": "440bf382-d69e-430d-92f6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "94",
+  "name": "Three Year Old Roadster Pony",
+  "guid": "5fa63f36-12bc-4673-98c8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "11"
+ },
+ {
+  "num": "95",
+  "name": "ASB Jr Exhibitor Three Gaited Show Pleasure - DivI",
+  "guid": "49cbc1a9-f1da-4ef9-81b6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "96",
+  "name": "ASB Amateur Park Three Gaited Div II",
+  "guid": "f963d674-7723-4ee8-91d5-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "97",
+  "name": "Youth Roadster to Bike 15-21 Years Old",
+  "guid": "ada55d37-d59b-4ce6-9575-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "13"
+ },
+ {
+  "num": "98",
+  "name": "WCHS Futurity Two Year Old Fine Harness",
+  "guid": "ad2867d5-08fb-472c-8bb7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "99",
+  "name": "Amateur Five Gaited Mare",
+  "guid": "a84815d7-bb36-4ac8-a37b-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "100",
+  "name": "Junior Exhibitor Five Gaited, Rider 14-17 Years",
+  "guid": "74554ae6-a4d5-467f-921f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "25"
+ },
+ {
+  "num": "101",
+  "name": "Ladies Amateur Three Gaited 15.2 &amp; Under",
+  "guid": "092a85a8-d92b-4c38-96af-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "102",
+  "name": "WCHS Futurity Three Year Old Five Gaited",
+  "guid": "956e5ea6-5ca6-4e8d-adb2-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "103",
+  "name": "Amateur Gentlemen&#39;s Three Gaited",
+  "guid": "8ae6c1a3-4847-4924-86cf-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "104",
+  "name": "Amateur Five Gaited Stallion/Gelding",
+  "guid": "0b53d8f5-378f-44a1-9dd7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "34"
+ },
+ {
+  "num": "105",
+  "name": "WCHS Futurity Three Year Old Fine Harness",
+  "guid": "08efbf09-0162-401e-9be8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "13"
+ },
+ {
+  "num": "106",
+  "name": "Amateur Ladies Harness Pony",
+  "guid": "c84c0635-9ed6-4f91-b296-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "14"
+ },
+ {
+  "num": "107",
+  "name": "Ladies Amateur Three Gaited Over 15.2",
+  "guid": "465d8099-c32a-496e-9bd4-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "108",
+  "name": "WCHS Futurity Three Year Old Three Gaited",
+  "guid": "8a4430bf-8679-40f5-9726-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "12"
+ },
+ {
+  "num": "109",
+  "name": "Junior  Exhibitor Five Gaited, Rider 14-17 Years",
+  "guid": "aeb9c3b7-6667-4dc4-ac72-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "110",
+  "name": "Open Roadster to Wagon Stake",
+  "guid": "48f3363a-20a8-4e0e-afcb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "9"
+ },
+ {
+  "num": "111",
+  "name": "WCHS Futurity Two Year Old Three Gaited",
+  "guid": "1a80b3a6-39ce-4004-8c3d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "112",
+  "name": "Amateur Ladies Hackney Pony",
+  "guid": "a744c563-e695-4578-ab8e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "113",
+  "name": "Five Gaited Mare Stake",
+  "guid": "8d74def1-207e-4b39-8f2f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "114",
+  "name": "Equitation - Open Walk Trot Rider 8 Years Old &amp; U",
+  "guid": "e4c8c796-6ea3-4eac-a859-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "15"
+ },
+ {
+  "num": "115",
+  "name": "ASB Country Pleasure Driving Div I",
+  "guid": "03f0613c-3384-46fe-9a5f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "116",
+  "name": "Junior Exhibitor Roadster Pony Driver 14-17",
+  "guid": "a850c38b-3085-4bf8-855e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "10"
+ },
+ {
+  "num": "117",
+  "name": "WCC Adult Am. Jr. Hackney/Harness Pony Pl. Driving",
+  "guid": "93631376-0c78-454a-a5f8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "118",
+  "name": "ASB Walk-Trot Show Pleasure, Rider 12 Years &amp; Undr",
+  "guid": "2da51481-64ff-444a-ab7c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "119",
+  "name": "ASB Country Pleasure Driving Div II",
+  "guid": "2611a6c1-7552-4618-ab3a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "120",
+  "name": "Equitation - Open Walk Trot Rider 10 Years Old",
+  "guid": "61afaa2a-de2d-41c6-88a6-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "8"
+ },
+ {
+  "num": "121",
+  "name": "ASB Adult Show Pleasure Driving Div I",
+  "guid": "5936110c-13f7-4775-80b1-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "122",
+  "name": "ASB Western Country Pleasure",
+  "guid": "a0ccf348-9e91-4ec2-818a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "123",
+  "name": "Equitation - Open Walk Trot Rider 9 Years Old",
+  "guid": "e4f466fd-f24f-49d4-ac0c-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "9"
+ },
+ {
+  "num": "124",
+  "name": "WCHS Futurity Three Yr Old Three Gaited Park",
+  "guid": "d4f28a0a-364b-47ff-9c7e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "125",
+  "name": "Amateur Ladies Roadster to Bike",
+  "guid": "81f95b1f-ffc1-4437-87ea-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "19"
+ },
+ {
+  "num": "126",
+  "name": "Junior Exhibitor Roadster Pony Under Saddle",
+  "guid": "90530a00-209b-4dd8-a93d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "17"
+ },
+ {
+  "num": "127",
+  "name": "ASB Adult Show Pleasure Driving Div II",
+  "guid": "d077dbb9-32c5-42b3-9d40-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "128",
+  "name": "WCC ASB Hunter Country Pleasure",
+  "guid": "52e578c6-bc00-479e-a328-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "31"
+ },
+ {
+  "num": "129",
+  "name": "Fine Harness Mare",
+  "guid": "84253a86-eca3-4e9f-831d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "130",
+  "name": "Ladies Three Gaited Over 15.2",
+  "guid": "3b9481d9-3795-4f22-b599-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "27"
+ },
+ {
+  "num": "131",
+  "name": "Roadster Pony 50&quot; &amp; Under Stake",
+  "guid": "356bf22e-dee0-4092-88f6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "15"
+ },
+ {
+  "num": "132",
+  "name": "Fine Harness Stallion/Gelding",
+  "guid": "53521551-ac77-4788-891c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "133",
+  "name": "Ladies Five Gaited Gelding",
+  "guid": "8cbebfec-20b7-4bf6-a8eb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "34"
+ },
+ {
+  "num": "134",
+  "name": "Hackney Pony Stallion Gelding Stake",
+  "guid": "5bfea84e-7bbc-4539-bcb2-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "135",
+  "name": "Three Gaited Over 15.2  Stake",
+  "guid": "171890ae-7aa6-4f39-8a8c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "9"
+ },
+ {
+  "num": "136",
+  "name": "Amateur Roadster Under Saddle",
+  "guid": "1bbf324e-d282-4af0-a4dd-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "28"
+ },
+ {
+  "num": "137",
+  "name": "Ladies Five Gaited Mare",
+  "guid": "2ed6497c-8ff3-4e16-bcdb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "23"
+ },
+ {
+  "num": "138",
+  "name": "Three Gaited 15.2 &amp; Under Stake",
+  "guid": "a3801c2a-f547-425a-8a6c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "14"
+ },
+ {
+  "num": "139",
+  "name": "Roadster to Bike Stallion or Gelding Stake",
+  "guid": "a0b8b3b7-528e-44e0-8161-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "23"
+ },
+ {
+  "num": "140",
+  "name": "World&#39;s Champion of Champions Three Gaited Park",
+  "guid": "53ecfa50-41e2-4dc4-8497-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "141",
+  "name": "Amateur Gentleman&#39;s Five Gaited",
+  "guid": "12e658ab-4956-4cb2-b0e2-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "142",
+  "name": "Ladies Three Gaited 15.2 &amp; Under",
+  "guid": "db4cfa9f-1579-45a3-86ce-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "32"
+ },
+ {
+  "num": "143",
+  "name": "Harness Pony Stallion or Gelding Stake",
+  "guid": "3b54fee3-d121-4afa-bd79-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "8"
+ },
+ {
+  "num": "144",
+  "name": "Five Gaited Gelding Stake",
+  "guid": "3ff82263-68ed-4aa6-926c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "22"
+ },
+ {
+  "num": "145",
+  "name": "WCC Junior Fine Harness",
+  "guid": "49692f28-0331-43f1-97a9-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "146",
+  "name": "WCC Kentucky State Fair Senior Equitation Champion",
+  "guid": "a7cf54a0-6e8d-4336-89a9-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "29"
+ },
+ {
+  "num": "147",
+  "name": "Three Year Old Five Gaited Stallion/Gelding",
+  "guid": "504fc944-53a8-4593-b849-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "148",
+  "name": "WCC Ladies Fine Harness",
+  "guid": "bf939708-41aa-4293-9ec1-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "149",
+  "name": "Three Year Old Five Gaited Mare",
+  "guid": "4a6729b8-31a9-4442-8994-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "150",
+  "name": "WCC Amateur Fine Harness",
+  "guid": "86be0364-4bef-4555-bb1a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "151",
+  "name": "Three Year Old Three Gaited Stallion/Mare/Gelding",
+  "guid": "c53d3601-c273-4ff9-a43a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "26"
+ },
+ {
+  "num": "152",
+  "name": "WCC ASB Adult Five Gaited Show Pleasure",
+  "guid": "c073353d-f8e6-473c-87a3-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "25"
+ },
+ {
+  "num": "153",
+  "name": "USTA Roadster to Bike Classic",
+  "guid": "42d5e353-ac4b-4590-8ef8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "20"
+ },
+ {
+  "num": "154",
+  "name": "WCC Junior Three Gaited",
+  "guid": "377dbc11-b4d2-430c-9385-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "155",
+  "name": "World&#39;s Champion of Champions Roadster to Wagon",
+  "guid": "11c4d4dd-65c8-4bae-8923-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "6"
+ },
+ {
+  "num": "156",
+  "name": "WCC Junior Five Gaited",
+  "guid": "0865bc9c-67d9-490d-aed9-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "157",
+  "name": "Two Year Old  Fine Harness Mare",
+  "guid": "f558a242-9cbc-47a6-acfa-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "16"
+ },
+ {
+  "num": "158",
+  "name": "WCC Kentucky State Fair Junior Equitation Champion",
+  "guid": "308a2854-1376-437e-97ea-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "16"
+ },
+ {
+  "num": "159",
+  "name": "WCC Equitation Walk Trot Rider 8 Years Old &amp; Under",
+  "guid": "09966a68-c406-4be1-a37d-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "14"
+ },
+ {
+  "num": "160",
+  "name": "WCC Jr. Exhib. Hackney/Harness Pony Pl. Driving",
+  "guid": "feb30c6e-8d9e-4722-b844-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "11"
+ },
+ {
+  "num": "161",
+  "name": "Two Year Old Three Gaited Stallion/Mare/Gelding",
+  "guid": "f31397a6-456e-435e-a770-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "27"
+ },
+ {
+  "num": "162",
+  "name": "World&#39;s Champion of Champions Junior Harness Pony",
+  "guid": "2623b669-9722-4553-b252-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "6"
+ },
+ {
+  "num": "163",
+  "name": "WCC Equitation Walk Trot Riders 9-10 Years Old",
+  "guid": "8d4abc5f-6b42-4973-bbd0-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "16"
+ },
+ {
+  "num": "164",
+  "name": "WCC Junior Exhibitor Show Pleasure Driving",
+  "guid": "40e65040-7cd8-4ff1-9dbd-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "7"
+ },
+ {
+  "num": "165",
+  "name": "WCC Junior  Exhibitor Five Gaited, Rider 13 Years",
+  "guid": "611debc0-4b04-4134-877e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "12"
+ },
+ {
+  "num": "166",
+  "name": "WCC Ladies Roadster to Bike",
+  "guid": "47d4550c-2bc8-415d-8989-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "8"
+ },
+ {
+  "num": "167",
+  "name": "World&#39;s Champion of Champions Junior Park",
+  "guid": "29957a1a-f4a9-49a6-97ed-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "168",
+  "name": "WCC Walk-Trot Show Pleasure, Rider 12 Years &amp; Undr",
+  "guid": "4635052c-cd4e-4ce3-a7a3-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "19"
+ },
+ {
+  "num": "169",
+  "name": "WCC Jr. Exhibitor Roadster Pony 13 &amp; Under",
+  "guid": "d96ea5b6-d255-45f1-a36d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "15"
+ },
+ {
+  "num": "170",
+  "name": "Two Year Old Five Gaited",
+  "guid": "26430351-20de-41b1-95f4-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "171",
+  "name": "WCC Adult Am. Hackney/Harness Pony Pl. Driving",
+  "guid": "78e380ee-e770-43e0-9ec7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "19"
+ },
+ {
+  "num": "172",
+  "name": "WCC Adult Three Gaited Show Pleasure",
+  "guid": "f3bf6de9-9b1e-40b6-a43e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "53"
+ },
+ {
+  "num": "173",
+  "name": "WCC Junior Roadster Pony",
+  "guid": "361b3231-b235-4295-a907-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "14"
+ },
+ {
+  "num": "174",
+  "name": "WCC Jr Exhib Three Gaited Country Pl. 13 &amp; Under",
+  "guid": "56a57a5a-d7e2-413b-9bcb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "13"
+ },
+ {
+  "num": "175",
+  "name": "Two Year Old  Fine Harness Stallion/Gelding",
+  "guid": "3a4bf287-95bb-4c1a-9e0a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "176",
+  "name": "WCHS Fut. 2 Yr Old Fine Harness Finals (If nec.)",
+  "guid": "d9b4b0b4-289d-4c77-b582-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": null
+ },
+ {
+  "num": "177",
+  "name": "WCC Five Gaited Pony, Rider 17 Years &amp; Under",
+  "guid": "71a76c32-d4b9-4bd5-8f27-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "178",
+  "name": "World&#39;s Champion of Champions Amateur Harness Pony",
+  "guid": "560d3a2d-e4a9-4480-a6fc-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "11"
+ },
+ {
+  "num": "179",
+  "name": "WCC Roadster Under Saddle",
+  "guid": "6eba7f98-8f06-4a57-98e8-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "19"
+ },
+ {
+  "num": "180",
+  "name": "WCC Ladies Amateur Three Gaited",
+  "guid": "722677d4-44dd-4c57-ae13-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "23"
+ },
+ {
+  "num": "181",
+  "name": "WCC ASB Western Country Pleasure",
+  "guid": "449f0fd7-240a-4ba3-9828-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "182",
+  "name": "WCC Amateur Ladies Roadster to Bike",
+  "guid": "433a464a-0518-4b9f-b2bf-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "5"
+ },
+ {
+  "num": "183",
+  "name": "WCC Jr. Exhibitor Three Gaited, Rider 14-17 Years",
+  "guid": "5d26bbd4-25cb-4bf3-98bb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "22"
+ },
+ {
+  "num": "184",
+  "name": "World&#39;s Champion of Champions Am. Roadster Pony",
+  "guid": "1b8a06b8-eb8d-45a2-a6bf-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "12"
+ },
+ {
+  "num": "185",
+  "name": "WCC Jr. Exhibitor Three Gaited, Rider 13 &amp; Under",
+  "guid": "e303f02f-8f9c-449e-a665-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "13"
+ },
+ {
+  "num": "187",
+  "name": "WCC Jr. Exhibitor Five Gaited, Rider 14-17 Years",
+  "guid": "9df6476b-7111-4c05-bb92-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "23"
+ },
+ {
+  "num": "188",
+  "name": "World&#39;s Champion of Champions Amateur Hackney Pony",
+  "guid": "f8e9aa13-5c4e-4eab-b780-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "189",
+  "name": "WCC Three Gaited Pony, Rider 17 Years &amp; Under",
+  "guid": "ae8bdeaf-3ef3-4977-9fe0-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "190",
+  "name": "WCC Amateur Park Three Gaited",
+  "guid": "2a19e3da-fde6-44c2-9995-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "26"
+ },
+ {
+  "num": "191",
+  "name": "WCC Amateur Gentlemen&#39;s Roadster to Bike",
+  "guid": "ae4d38e7-44f3-4330-bdf7-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "7"
+ },
+ {
+  "num": "192",
+  "name": "WCC Ladies Amateur Five Gaited",
+  "guid": "26ee2b42-bde4-4feb-978e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "30"
+ },
+ {
+  "num": "193",
+  "name": "Three  Year Old  Fine Harness Mare",
+  "guid": "13c87ed5-282d-47b0-a902-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "194",
+  "name": "World&#39;s Champion of Champions Junior Hackney Pony",
+  "guid": "0bd4c68e-acc6-4d8a-b562-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "6"
+ },
+ {
+  "num": "195",
+  "name": "WCC Junior Exhibitor Three Gaited Show Pleasure",
+  "guid": "3acfd038-0901-4791-bffd-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "30"
+ },
+ {
+  "num": "196",
+  "name": "WCC ASB Adult Show Pleasure Driving",
+  "guid": "8dfa98cc-5cc6-42f4-835d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "197",
+  "name": "WCC Jr Exh Three Gaited Show Pleasure - Rider 13 r",
+  "guid": "5be4532e-080e-4552-89f5-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "28"
+ },
+ {
+  "num": "198",
+  "name": "World&#39;s Champion of Champions Junior Park Pleasure",
+  "guid": "13d71bc2-62de-4fe6-bba6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "29"
+ },
+ {
+  "num": "199",
+  "name": "WCC Jr. Exhib. Three Gaited Country Pl. 14-17",
+  "guid": "bee01a46-047c-421d-99ae-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "21"
+ },
+ {
+  "num": "200",
+  "name": "WCC Adult Three Gaited Country Pleasure",
+  "guid": "097c7683-bb02-4a1d-bf9a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "29"
+ },
+ {
+  "num": "201",
+  "name": "WCC Junior Exhibitor Park Three Gaited",
+  "guid": "60e1d159-d203-43f1-975f-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "31"
+ },
+ {
+  "num": "202",
+  "name": "WCC Junior Exhibitor Roadster Pony Under Saddle",
+  "guid": "36de6cb5-cb19-4040-9eaf-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "16"
+ },
+ {
+  "num": "203",
+  "name": "WCC ASB Country Pleasure Driving",
+  "guid": "026efaaf-905e-40d5-b59a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "15"
+ },
+ {
+  "num": "204",
+  "name": "WCC Junior Exhibitor Five Gaited Show Pleasure",
+  "guid": "2bed9c29-099d-43f8-86ed-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "28"
+ },
+ {
+  "num": "205",
+  "name": "Three  Year Old  Fine Harness Stallion/Gelding",
+  "guid": "79ff15f0-cb57-4f60-abdd-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "206",
+  "name": "WCC Junior Exhibitor Roadster Pony 14-17",
+  "guid": "702e4ac4-c948-4376-b047-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "9"
+ },
+ {
+  "num": "207",
+  "name": "WCC ASB Five Gaited Country Pleasure Championship",
+  "guid": "4df2f322-754e-42bc-885b-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "22"
+ },
+ {
+  "num": "208",
+  "name": "WCC Ladies Three Gaited",
+  "guid": "9bb137f8-1890-43d1-a9f4-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "20"
+ },
+ {
+  "num": "209",
+  "name": "Harness Pony World&#39;s Grand Champion",
+  "guid": "e983ba2f-bb70-4994-aab9-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "5"
+ },
+ {
+  "num": "210",
+  "name": "Roadster to Bike World&#39;s Grand Champion",
+  "guid": "dd77c72e-7726-47e5-a075-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "11"
+ },
+ {
+  "num": "211",
+  "name": "WCC Amateur Three Gaited",
+  "guid": "b3493564-8d08-42a7-b091-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "26"
+ },
+ {
+  "num": "212",
+  "name": "WGC Fine Harness",
+  "guid": "e19c6f13-a0f4-40d2-85df-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "9"
+ },
+ {
+  "num": "213",
+  "name": "WCC Ladies Five Gaited",
+  "guid": "0456bb6b-56cf-4171-b43e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "22"
+ },
+ {
+  "num": "214",
+  "name": "WGC Three Gaited",
+  "guid": "2a6380f7-25ff-4b22-afd3-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "3"
+ },
+ {
+  "num": "215",
+  "name": "Roadster Pony World&#39;s Grand Champion",
+  "guid": "5d2d94d1-99d9-4b3e-b2ed-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "6"
+ },
+ {
+  "num": "216",
+  "name": "WCC Amateur Five Gaited",
+  "guid": "f30014a4-b91c-4c58-8dea-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "32"
+ },
+ {
+  "num": "217",
+  "name": "Hackney Pony World&#39;s Grand Champion",
+  "guid": "afa863f7-95ba-4562-8e2a-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Hackney/Harness",
+  "entries": "9"
+ },
+ {
+  "num": "218",
+  "name": "WGC Five Gaited",
+  "guid": "2ca9ba13-8426-4b7f-af49-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "4"
+ },
+ {
+  "num": "3.1",
+  "name": "ASB Hunter Country Pleasure Section 1",
+  "guid": "07fb6c26-c8a2-4fb2-a0df-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "17"
+ },
+ {
+  "num": "3.2",
+  "name": "ASB Hunter Country Pleasure Section 2",
+  "guid": "c7c6543d-ca57-4205-8d7a-b4ad012ff61b",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "14"
+ },
+ {
+  "num": "10.1",
+  "name": "Open Roadster Under Saddle Section 1",
+  "guid": "5b00309b-d81e-4179-aba6-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "14"
+ },
+ {
+  "num": "10.2",
+  "name": "Open Roadster Under Saddle Section 2",
+  "guid": "f7326a14-6679-443b-b2d2-b4ad012ff61b",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "12"
+ },
+ {
+  "num": "11.1",
+  "name": "Four Year Old Roadster Pony Section 1",
+  "guid": "486952c0-c1ed-4ad6-957e-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "14"
+ },
+ {
+  "num": "11.2",
+  "name": "Four Year Old Roadster Pony Section 2",
+  "guid": "0d3d782d-c125-474a-ba33-b4ad012ff61b",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "9"
+ },
+ {
+  "num": "33.1",
+  "name": "Amateur Roadster Pony Over 50&quot; to 52&quot; Sec 1",
+  "guid": "5e1e6aad-59e0-43e8-8200-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "11"
+ },
+ {
+  "num": "33.2",
+  "name": "Amateur Roadster Pony Over 50&quot; to 52&quot; Sec 2",
+  "guid": "94398bea-d1bd-4485-8b12-b4ae011280b7",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "10"
+ },
+ {
+  "num": "34.1",
+  "name": "ASB Five Gaited Country Pleasure Section 1",
+  "guid": "d087bbd8-b9d4-4a03-87be-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "12"
+ },
+ {
+  "num": "34.2",
+  "name": "ASB Five Gaited Country Pleasure Section 2",
+  "guid": "41fb7c72-9b77-4491-9410-b4ae011280b7",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "45.1",
+  "name": "ASB Junior Exhibitor Park Three Gaited Section 1",
+  "guid": "c9dc224e-b8a4-459d-bb86-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "45.2",
+  "name": "ASB Junior Exhibitor Park Three Gaited Section 2",
+  "guid": "34a010be-7cd6-49bd-9e75-b4af00df83c2",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "12"
+ }
+]
