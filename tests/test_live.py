@@ -151,5 +151,56 @@ r = subprocess.run([sys.executable, os.path.join(ROOT, "refresh", "parse_live.py
 check("cli: missing live.json -> non-zero, cache untouched",
       r.returncode != 0 and json.load(open(cp)) == c1, r.stderr.strip())
 
+# --- build_page.py wiring (temp repo copy: merge + live flag)
+import shutil
+tmp = tempfile.mkdtemp(prefix="livebuild_")
+os.makedirs(os.path.join(tmp, "refresh"))
+shutil.copyfile(os.path.join(ROOT, "refresh", "build_page.py"),
+                os.path.join(tmp, "refresh", "build_page.py"))
+shutil.copyfile(os.path.join(ROOT, "refresh", "live_scores.py"),
+                os.path.join(tmp, "refresh", "live_scores.py"))
+mini = [{"num": "48", "name": "Equitation", "type": None, "division": "EQ",
+         "weekday": "Saturday", "period": "Morning", "date": "August 22",
+         "time": "10:00 a.m.",
+         "entries": [
+             {"entry": "1158", "horse": "H1", "rider": "R1", "trainer": "T1",
+              "owner": "O1", "start": "6", "place": None},
+             {"entry": "958", "horse": "H2", "rider": "R2", "trainer": "T2",
+              "owner": "O2", "start": "7", "place": "1"}]}]
+json.dump(mini, open(os.path.join(tmp, "refresh", "data.json"), "w"))
+json.dump(mcache("48", {"1158": 1}), open(os.path.join(tmp, "refresh", "live_cache.json"), "w"))
+json.dump({"fetched": "2026-08-24 09:20",
+           "classes": [{"num": "48", "updated": "43 min", "updated_min": 43}]},
+          open(os.path.join(tmp, "refresh", "live.json"), "w"))
+r = subprocess.run([sys.executable, os.path.join(tmp, "refresh", "build_page.py")],
+                   capture_output=True, text=True)
+check("build: exits 0", r.returncode == 0, r.stderr.strip())
+b = json.loads(re.search(r"^(?:const|let) DATA = (\{.*\});\s*$",
+                         open(os.path.join(tmp, "index.html")).read(), re.M).group(1))
+c48 = b["classes"][0]
+check("build: live gap filled from cache",
+      c48["e"][0][6] == "1" and c48["e"][1][6] == "1")
+check("build: live flag from fresh live.json", c48.get("live") == 43)
+
+json.dump({"fetched": "2026-08-24 09:20",
+           "classes": [{"num": "48", "updated": "2 hours, 2 min", "updated_min": 122}]},
+          open(os.path.join(tmp, "refresh", "live.json"), "w"))
+r = subprocess.run([sys.executable, os.path.join(tmp, "refresh", "build_page.py")],
+                   capture_output=True, text=True)
+b = json.loads(re.search(r"^(?:const|let) DATA = (\{.*\});\s*$",
+                         open(os.path.join(tmp, "index.html")).read(), re.M).group(1))
+check("build: stale live class -> no flag", b["classes"][0].get("live") is None)
+
+# missing live files -> exactly today's behavior (no live key at all)
+os.remove(os.path.join(tmp, "refresh", "live_cache.json"))
+os.remove(os.path.join(tmp, "refresh", "live.json"))
+r = subprocess.run([sys.executable, os.path.join(tmp, "refresh", "build_page.py")],
+                   capture_output=True, text=True)
+b = json.loads(re.search(r"^(?:const|let) DATA = (\{.*\});\s*$",
+                         open(os.path.join(tmp, "index.html")).read(), re.M).group(1))
+check("build: no live files -> no merge, no flag",
+      r.returncode == 0 and b["classes"][0]["e"][0][6] is None
+      and "live" not in b["classes"][0])
+
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

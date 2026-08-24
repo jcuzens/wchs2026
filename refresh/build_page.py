@@ -33,6 +33,31 @@ else:
                   for e in c["entries"]],
         })
 
+    # Live scores (git-ignored intermediates): official placings win, live
+    # fills gaps; classes with fresh live activity (< 60 min) get "live".
+    # Missing files -> exactly today's behavior.
+    # See docs/superpowers/specs/2026-08-24--live-scores-design.md
+    sys.path.insert(0, HERE)
+    import live_scores as ls
+    cache = {}
+    try:
+        cache = json.load(open(os.path.join(HERE, 'live_cache.json')))
+    except (OSError, ValueError):
+        pass
+    live_fresh = {}
+    try:
+        for c in json.load(open(os.path.join(HERE, 'live.json'))).get("classes", []):
+            u = c.get("updated_min")
+            if u is not None and u < 60:
+                live_fresh[c["num"]] = u
+    except (OSError, ValueError):
+        pass
+    if cache or live_fresh:
+        ls.merge_live_places(classes, cache)
+        for c in classes:
+            if c["n"] in live_fresh:
+                c["live"] = live_fresh[c["n"]]
+
     # The "Updated" timestamp only changes when the data actually changes:
     # if index.html already embeds this exact data, keep its asof.
     asof = None
@@ -130,6 +155,10 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .cls.now { background: var(--now-bg); border: 2px solid var(--now-line); }
 .cls.now .cls-head { background: transparent; }
 .cnow { background: #f59e0b; color: #fff; border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
+.clive { display: inline-flex; align-items: center; gap: 4px; background: var(--now-bg); color: var(--gold); border: 1px solid var(--now-line); border-radius: 6px; font-size: 11px; font-weight: 600; padding: 1px 6px; flex: none; }
+.clivedot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: clivepulse 2s ease-in-out infinite; }
+@keyframes clivepulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .clivedot { animation: none; } }
 .cls-head { width: 100%; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border: none; background: var(--surface); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
 .cls-head:active { background: var(--accent-soft); }
 .cnum { font-weight: 700; color: var(--accent); flex: none; font-size: 13.5px; min-width: 34px; }
@@ -522,6 +551,12 @@ function makeClass(c, isMatch, isFrontier){
   head.appendChild(el("span","cname", c.name));
   if (isDone(c)) head.appendChild(el("span","cdone","done ✓"));
   if (isFrontier) head.appendChild(el("span","cnow","up next"));
+  if (c.live != null){
+    const lv = el("span","clive");
+    lv.appendChild(el("span","clivedot"));
+    lv.appendChild(document.createTextNode("live"));
+    head.appendChild(lv);
+  }
   head.appendChild(el("span","cdiv", c.div));
   const call = canToggle ? el("span","call") : null;
   if (call) head.appendChild(call);

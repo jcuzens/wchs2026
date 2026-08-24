@@ -35,6 +35,14 @@ plj_backup = PLJ + ".bak"
 plj_existed = os.path.exists(PLJ)
 if plj_existed:
     shutil.copyfile(PLJ, plj_backup)
+# live-scores files are local intermediates of a different data source;
+# move them aside so the policy under test depends only on data.json
+live_moved = []
+for lf in ("live.json", "live_cache.json"):
+    p = os.path.join(os.path.dirname(BUILDER), lf)
+    if os.path.exists(p):
+        live_moved.append((p, p + ".asofbak"))
+        shutil.move(p, p + ".asofbak")
 try:
     # 1. plain rebuild, unchanged data -> asof unchanged
     build()
@@ -71,6 +79,8 @@ finally:
         shutil.move(plj_backup, PLJ)
     elif os.path.exists(PLJ):
         os.remove(PLJ)
+    for orig, bak in live_moved:
+        shutil.move(bak, orig)
 
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)
