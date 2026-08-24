@@ -150,8 +150,9 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .ehorse { font-weight: 600; }
 .eppl { grid-column: 2; color: var(--muted); font-size: 12.5px; }
 .eppl .place { color: var(--gold); font-weight: 600; }
-.erow.other .eentry, .erow.other .eentry b, .erow.other .ehorse, .erow.other .eppl, .erow.other .eppl .place { color: var(--muted); }
+.erow.other .eentry, .erow.other .eentry b, .erow.other .ehorse, .erow.other .eppl { color: var(--muted); }
 .erow.other .ehorse { font-weight: 400; }
+.erow.other .eppl .place { color: var(--gold); font-weight: 600; }
 .eother { display: inline-block; margin-left: 6px; padding: 0 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 9px; font-size: 10.5px; line-height: 1.5; color: var(--muted); vertical-align: 1px; }
 .footnote { color: var(--muted); font-size: 12px; text-align: center; margin-top: 30px; }
 #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: var(--toast-ink); padding: 8px 16px; border-radius: 8px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 50; }

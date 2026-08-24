@@ -163,6 +163,10 @@ setTimeout(() => {
   const css = [...doc.querySelectorAll("style")].map(s => s.textContent).join("\n");
   const headRule = (css.match(/(^|\n)\.cls-head\s*\{([^}]*)\}/) || [])[2];
   check("cls-head declares explicit color (button UA default is black)", headRule != null && /(^|;|\s)color\s*:/.test(headRule), headRule != null ? headRule.slice(0, 100) : "rule missing");
+  // placements must stay highlighted (gold) on other/muted rows so you can
+  // see who placed where; the rest of the row stays muted
+  const placeRules = [...css.matchAll(/((?:^|\n)[^{}\n]*erow\.other[^{}\n]*\.place[^{}\n]*)\{([^}]*)\}/g)];
+  check("other-row .place stays gold (not muted)", placeRules.length >= 1 && placeRules.every(r => /color\s*:\s*var\(--gold\)/.test(r[2]) && !r[2].includes("var(--muted)")), placeRules.map(r => r[1].trim() + " { " + r[2].trim() + " }").join(" | ").slice(0, 160));
 
   // ---------- dark mode toggle ----------
   const tbtn = doc.getElementById("themeBtn");
