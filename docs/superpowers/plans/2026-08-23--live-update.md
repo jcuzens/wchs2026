@@ -26,7 +26,7 @@
 | 2 cron commits both files | done | `8ae5542` |
 | 3 `let DATA` + `buildIndexes()` | done | `ddd66e3` |
 | 4 poller core | done | `c4c613b` (note: cron 33a861e already committed `payload.json` tracking at 22:00) |
-| 5 countdown ring | not started | — |
+| 5 countdown ring | done | `ec1e06d` (SVG kept single-line: multi-line markup would put whitespace text nodes in `#updatedLine`.textContent and break the exact-text checks) |
 | 6 no view bounce | not started | — |
 | 7 docs + final verification | not started | — |
 
@@ -669,16 +669,12 @@ Expected: the live ring checks FAIL (`live: ring present when polling`, `ring hi
 
 - [ ] **Step 3: Implement in the template**
 
-a) Markup — the Task 4 line becomes:
+a) Markup — the Task 4 line becomes (KEEP ON ONE LINE — any whitespace
+   around/inside the SVG becomes a text node in `#updatedLine`.textContent
+   and breaks the exact-text asof checks):
 
 ```html
-  <div class="updated" id="updatedLine">
-    <svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
-      <circle class="ring-track" cx="7" cy="7" r="6"></circle>
-      <circle class="ring-fg" cx="7" cy="7" r="6"></circle>
-    </svg>
-    <span id="updatedText"></span>
-  </div>
+  <div class="updated" id="updatedLine"><svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle class="ring-track" cx="7" cy="7" r="6"></circle><circle class="ring-fg" cx="7" cy="7" r="6"></circle></svg><span id="updatedText"></span></div>
 ```
 
 b) CSS — after the `header .updated { ... }` rule add:
