@@ -22,7 +22,7 @@
 
 | Task | Status | Commit |
 |---|---|---|
-| 1 payload.json in the build | not started | — |
+| 1 payload.json in the build | done | `21b9a96` |
 | 2 cron commits both files | not started | — |
 | 3 `let DATA` + `buildIndexes()` | not started | — |
 | 4 poller core | not started | — |
