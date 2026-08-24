@@ -18,22 +18,29 @@ Open the link on your phone:
   encoded in the URL) — handy for the barn you're not at.
 - **Print** produces a day-by-day schedule of only your classes, with a
   page break per day.
+- The page checks for new results about every 30 seconds and updates in
+  place — the small ring next to the "Updated" time fills as the next
+  check approaches, and the timestamp moves when new data lands. No need
+  to refresh.
 - Under each class you'll see the **entry number and placings** (entries
   are listed in start order); a blank slot means that class hasn't been
   judged yet.
 
-The data snapshot date is in the page footer. Entries and placings change
-during the show — refresh it before the day your riders go (below).
+Entries and placings change during the show — the page picks them up on
+its own (the "Updated" time in the header tells you how fresh the data
+is).
 
 ## What's in the repo
 
-One self-contained HTML file — no server, no dependencies, works offline.
-All data (210 classes, 3,471 entries at first snapshot) is embedded in the
-page itself.
+Two generated files, no server, no dependencies. `index.html` is the page
+shell with an embedded data snapshot (first paint + offline fallback);
+`payload.json` is the live data the shell re-fetches about every 30 s
+while the page is open.
 
 | File | Role |
 |---|---|
 | `index.html` | The page. **Generated — don't edit by hand.** Served by GitHub Pages. |
+| `payload.json` | Live data the page polls every ~30 s. **Generated — don't edit by hand.** |
 | `refresh/build_page.py` | Generator: page template + data → `index.html` |
 | `refresh/classes.json` | Class grid (scraped from horseshowsonline.com) |
 | `refresh/schedule.json` | Session schedule (parsed from the 2026 Premium Book PDF) |
@@ -55,8 +62,9 @@ python3 parse_entries.py  # rebuild data.json
 python3 build_page.py     # rebuild ../index.html
 ```
 
-Then commit `index.html` and push — GitHub Pages picks it up within a
-couple of minutes. Details in [refresh/README.md](refresh/README.md).
+Then commit `index.html` and `payload.json` and push — GitHub Pages picks
+them up within a couple of minutes (cron does this automatically every 8
+min). Details in [refresh/README.md](refresh/README.md).
 
 Requirements to rebuild: Python 3 (standard library only) and `curl`.
 That's the whole dependency list.

@@ -46,7 +46,10 @@ exactly. Do not skip this step.
 
 A static, personal schedule site for WCHS 2026 (Aug 22–29, 2026, Kentucky
 State Fair). The entire site is a single generated file, `index.html`,
-served by GitHub Pages from the `main` branch. `refresh/` is the pipeline
+served by GitHub Pages from the `main` branch. The page shell polls the
+published `payload.json` every 30 s and re-renders in place (no manual
+refresh); the embedded snapshot in `index.html` is the first-paint/offline
+fallback. `refresh/` is the pipeline
 that regenerates it from live show data. README.md has the user-facing
 story.
 
@@ -57,15 +60,16 @@ Run from the repo root:
 ```bash
 refresh/fetch_entries.sh                    # resumable; uses refresh/jar.txt session cookie
 python3 refresh/parse_entries.py
-python3 refresh/build_page.py               # data -> index.html (asof only changes if the data changed)
+python3 refresh/build_page.py               # data -> index.html + payload.json (asof only changes if the data changed)
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
 npm --prefix tests install                  # once; jsdom dev-only dependency
 npm --prefix tests test                     # page smoke suite (runs against the built index.html)
 python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
 python3 tests/test_asof.py                  # verifies the asof only changes when the data changes
 python3 tests/test_frontier.py              # frontier/lookahead selection (cron refresh)
+python3 tests/test_payload.py               # verifies payload.json follows the asof policy
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
-git add index.html && git commit -m "Refresh entries <date>" && git push
+git add index.html payload.json && git commit -m "Refresh entries <date>" && git push
 ```
 
 `build_page.py` resolves its inputs and output relative to its own file
@@ -81,7 +85,7 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
   the first class in schedule order without placings, walking forward class
   by class until a class has no results yet — plus the next 8 schedule
   classes (lookahead) to keep upcoming entry lists fresh;
-- rebuilds `index.html`, and commits + pushes **only when the data
+- rebuilds `index.html` + `payload.json`, and commits + pushes **only when the data
   actually changed** (the asof policy makes an unchanged rebuild
   byte-identical, so `git diff` against HEAD is the no-change signal).
 
@@ -104,10 +108,17 @@ cannot clobber good data.
   `refresh/build_page.py`. Change the template, rebuild, commit.
 - The payload is embedded by replacing the `__PAYLOAD__` placeholder with
   compact JSON: `{"asof":"<local time>","classes":[...]}`.
+- `payload.json` (repo root) is the same compact payload as a committed
+  file, served by Pages; the page fetches it every 30 s (`?ts=` +
+  `cache: "no-store"`) and re-renders when it changes. Re-renders preserve
+  the user's view (selection, open cards, day collapse, scroll, focus — a
+  re-render is deferred while a control has focus); a ring in the header
+  counts down to the next check.
 - Data flow: `classes.json` + `schedule.json` + `entries/*.html`
   → `parse_entries.py` → `data.json` → `build_page.py` → `index.html`.
 - **asof policy: the "Updated" stamp changes only when the data
-  actually changes.** The regular build compares the new `classes`
+  actually changes** (both in `index.html` and `payload.json`). The
+  regular build compares the new `classes`
   against the payload already embedded in `index.html` and keeps the old
   `asof` when they're identical. `--ui-only` re-embeds that same payload,
   so template/UI rebuilds never touch the stamp.
@@ -135,9 +146,9 @@ cannot clobber good data.
 
 - GitHub Pages deploys from `main` (root folder). A push to `main`
   publishes https://jcuzens.github.io/wchs2026/ within 1–2 minutes.
-- `index.html` is ~380 KB and must go through `git push`. The GitHub MCP
-  tools take file contents inline and truncate above ~40 KB — do not
-  attempt to push `index.html` through them.
+- `index.html` (~385 KB) and `payload.json` (~370 KB) must go through
+  `git push`. The GitHub MCP tools take file contents inline and truncate
+  above ~40 KB — do not attempt to push either file through them.
 
 ## Verification
 
@@ -153,9 +164,10 @@ print("asof:", re.search(r'"asof":"([^"]*)"', s).group(1))
 EOF
 ```
 
-The jsdom smoke suite (76 checks: filters, context/done toggles, day
-collapse, per-class show-all, entry numbers, persistence, mobile default)
-lives in `tests/test.js` and runs against the freshly built `index.html`:
+The jsdom smoke suite (filters, context/done toggles, day collapse,
+per-class show-all, entry numbers, persistence, mobile default,
+live-update polling) lives in `tests/test.js` and runs against the
+freshly built `index.html`:
 
 ```bash
 npm --prefix tests test
@@ -175,9 +187,9 @@ in `refresh/build_page.py` instead, then rebuild.
 purpose (it contains JS regex with backslashes). Don't remove the `r`
 prefix or "clean up" escape sequences.
 
-**The payload is one line:** the embedded data in `index.html` is a
-single long line by design. A huge `git diff` on `index.html` usually
-means only the `asof` timestamp changed.
+**The payload is one line:** the embedded data in `index.html` (and
+`payload.json`) is a single long line by design. A huge `git diff` on
+`index.html` usually means only the `asof` timestamp changed.
 
 **Don't print the remote:** `git remote -v` leaks the PAT embedded in
 the origin URL.
