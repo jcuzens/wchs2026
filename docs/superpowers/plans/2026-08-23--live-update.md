@@ -24,7 +24,7 @@
 |---|---|---|
 | 1 payload.json in the build | done | `21b9a96` |
 | 2 cron commits both files | done | `8ae5542` |
-| 3 `let DATA` + `buildIndexes()` | not started | — |
+| 3 `let DATA` + `buildIndexes()` | done | `ddd66e3` |
 | 4 poller core | not started | — |
 | 5 countdown ring | not started | — |
 | 6 no view bounce | not started | — |
