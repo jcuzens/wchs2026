@@ -115,7 +115,7 @@ check("cli lookahead prints next fetchable nums", out == "4\n5.1\n5.2", out)
 sched = json.load(open(os.path.join(ROOT, "refresh", "schedule.json")))
 cj = {c["num"] for c in json.load(open(os.path.join(ROOT, "refresh", "classes.json")))}
 payload = json.loads(re.search(
-    r'^const DATA = (\{.*\});\s*$',
+    r'^(?:const|let) DATA = (\{.*\});\s*$',
     open(os.path.join(ROOT, "index.html")).read(), re.M).group(1))
 data = [{"num": c["n"], "entries": [{"place": e[6]} for e in c["e"]]}
         for c in payload["classes"]]

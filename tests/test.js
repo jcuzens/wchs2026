@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 
 const HTML = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-const PL = HTML.match(/^const DATA = (.*);$/m);
+const PL = HTML.match(/^(?:const|let) DATA = (.*);$/m);
 if (!PL) { console.error("FAIL  payload line not found in index.html"); process.exit(1); }
 const DATA = JSON.parse(PL[1]);
 

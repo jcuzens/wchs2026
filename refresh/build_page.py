@@ -185,7 +185,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 <div id="toast"></div>
 <script>
 "use strict";
-const DATA = __PAYLOAD__;
+let DATA = __PAYLOAD__;
 const LS_KEY = "wchs2026.sel.v1";
 const VIEW_KEY = "wchs2026.view.v1";
 const FIELDS = [
@@ -236,16 +236,22 @@ function fmtAsof(s){
 // ---- build name indexes
 const NAMES = {trainer:{}, rider:{}, horse:{}, owner:{}};
 const DIVS = {};
-for (const c of DATA.classes){
-  DIVS[norm(c.div)] = c.div;
-  for (const e of c.e){
-    const t = norm(e[3]); if (t) (NAMES.trainer[t] ||= {d:e[3], n:0}).n++;
-    const r = norm(e[2]); if (r) (NAMES.rider[r]   ||= {d:e[2], n:0}).n++;
-    const h = norm(e[1]); if (h) (NAMES.horse[h]   ||= {d:e[1], n:0}).n++;
-    const o = norm(e[4]); if (o) (NAMES.owner[o]   ||= {d:e[4], n:0}).n++;
+let DIV_LIST = [];
+function buildIndexes(){
+  NAMES.trainer = {}; NAMES.rider = {}; NAMES.horse = {}; NAMES.owner = {};
+  for (const k in DIVS) delete DIVS[k];
+  for (const c of DATA.classes){
+    DIVS[norm(c.div)] = c.div;
+    for (const e of c.e){
+      const t = norm(e[3]); if (t) (NAMES.trainer[t] ||= {d:e[3], n:0}).n++;
+      const r = norm(e[2]); if (r) (NAMES.rider[r]   ||= {d:e[2], n:0}).n++;
+      const h = norm(e[1]); if (h) (NAMES.horse[h]   ||= {d:e[1], n:0}).n++;
+      const o = norm(e[4]); if (o) (NAMES.owner[o]   ||= {d:e[4], n:0}).n++;
+    }
   }
+  DIV_LIST = Object.values(DIVS).sort();
 }
-const DIV_LIST = Object.values(DIVS).sort();
+buildIndexes();
 
 // ---- persistence
 function active(){ return FIELDS.some(f=>state[f.key].size) || state.division.size; }

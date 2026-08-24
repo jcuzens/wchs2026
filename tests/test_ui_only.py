@@ -10,7 +10,7 @@ BUILDER = os.path.join(ROOT, "refresh", "build_page.py")
 
 def payload_of(p):
     s = open(p).read()
-    m = re.search(r"^const DATA = (\{.*\});\s*$", s, re.M)
+    m = re.search(r"^(?:const|let) DATA = (\{.*\});\s*$", s, re.M)
     assert m, "payload not found in " + p
     return m.group(1)
 
