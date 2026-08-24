@@ -63,11 +63,39 @@ npm --prefix tests install                  # once; jsdom dev-only dependency
 npm --prefix tests test                     # page smoke suite (runs against the built index.html)
 python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
 python3 tests/test_asof.py                  # verifies the asof only changes when the data changes
+python3 tests/test_frontier.py              # frontier/lookahead selection (cron refresh)
+bash refresh/refresh_cron.sh                # one full cron cycle, manually
 git add index.html && git commit -m "Refresh entries <date>" && git push
 ```
 
 `build_page.py` resolves its inputs and output relative to its own file
 location, so `cd refresh && python3 build_page.py` is equivalent.
+
+## Auto-refresh (cron)
+
+`refresh/refresh_cron.sh` runs on cron every 8 minutes
+(`*/8 * * * * /path/to/repo/refresh/refresh_cron.sh`). Each run:
+
+- decides what to fetch: if `refresh/entries/` is missing/empty it does the
+  full resumable fetch; otherwise it re-fetches the **results frontier** —
+  the first class in schedule order without placings, walking forward class
+  by class until a class has no results yet — plus the next 8 schedule
+  classes (lookahead) to keep upcoming entry lists fresh;
+- rebuilds `index.html`, and commits + pushes **only when the data
+  actually changed** (the asof policy makes an unchanged rebuild
+  byte-identical, so `git diff` against HEAD is the no-change signal).
+
+The frontier needs no state file: "done" is the page's own rule (a class has
+a place on any entry), read from the payload already embedded in
+`index.html`. A class whose session started 4h ago with no results is
+presumed skipped (otherwise a void class would stall the frontier). One run
+at a time (flock); a run that finds the previous one still going skips. All
+output goes to `refresh/cron.log` (git-ignored; it contains `git push`
+output — masked by git, but never copy log lines containing URLs). Safety:
+the run aborts before publishing if the parsed entry count drops by more
+than half, and the fetcher only replaces a page when the new one looks
+valid (> 50 KB or a legit "No entries" page), so a dead session cookie
+cannot clobber good data.
 
 ## Architecture
 
@@ -83,8 +111,9 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
   against the payload already embedded in `index.html` and keeps the old
   `asof` when they're identical. `--ui-only` re-embeds that same payload,
   so template/UI rebuilds never touch the stamp.
-- `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `tests/node_modules/`
-  are git-ignored intermediates. Never commit them.
+- `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `refreshlist.txt`,
+  `cron.log`, `cron.lock`, `tests/node_modules/` are git-ignored
+  intermediates. Never commit them.
 - **Class number is the join key** across all data sources. Sub-classes
   use `x.y` numbering (e.g. `45.1`) and inherit the parent's schedule
   slot. Some classes legitimately have zero entries — don't "fix" them.
@@ -118,7 +147,7 @@ After any rebuild, sanity-check the embedded payload:
 python3 - <<'EOF'
 import re
 s = open('index.html').read()
-print("classes:", len(re.findall(r'"n":"', s)))      # 210
+print("classes:", len(re.findall(r'"n":"', s)))      # 210 at first snapshot; grows during the show
 print("entries:", len(re.findall(r'\["\d+","', s)))  # 3471 at first snapshot; grows during the show
 print("asof:", re.search(r'"asof":"([^"]*)"', s).group(1))
 EOF

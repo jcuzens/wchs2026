@@ -28,6 +28,8 @@ def check(name, cond, extra=""):
         fails.append(name)
 
 a0 = asof_of(IDX)
+idx_backup = IDX + ".bak"
+shutil.copyfile(IDX, idx_backup)
 
 # 1. plain rebuild, unchanged data -> asof unchanged
 build()
@@ -55,7 +57,10 @@ finally:
 build()
 s = open(IDX).read()
 check("restored build drops test class", "999999" not in s)
-check("restored build has 210 classes", s.count('"n":"') == 210, str(s.count('"n":"')))
+check("restored build has the full class list", s.count('"n":"') >= 210, str(s.count('"n":"')))
+# asof is monotonic, so the rebuild around restored data may not reproduce the
+# committed file byte-for-byte; put the original back so the repo state is clean
+shutil.move(idx_backup, IDX)
 
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

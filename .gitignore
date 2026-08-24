@@ -4,3 +4,7 @@ refresh/entries/
 refresh/data.json
 refresh/jar.txt
 refresh/fetchlist.txt
+refresh/refreshlist.txt
+refresh/cron.log
+refresh/cron.lock
+refresh/__pycache__/

@@ -11,7 +11,10 @@ python3 build_page.py    # rebuilds ../index.html
 ```
 
 - `fetch_entries.sh` needs `curl`; it refreshes the show session automatically.
-  To force a full re-fetch, `rm -rf entries/` first.
+  To force a full re-fetch, `rm -rf entries/` first. It also accepts an
+  optional list file of class numbers (one per line) to re-fetch just those
+  pages. Pages are written to a temp file and moved into place only when the
+  new page looks valid, so a failed fetch never clobbers a good page.
 - `classes.json` / `schedule.json` are the raw sources (class grid from
   horseshowsonline.com, schedule parsed from the 2026 Premium Book PDF).
   They only change if the show adds/removes classes or re-times the schedule.
@@ -32,6 +35,16 @@ data is identical to what's already embedded, and `--ui-only` never touches
 it.
 
 Deploy: replace `index.html` at the repo root and push — GitHub Pages picks it up.
+
+### Auto-refresh (cron)
+
+`refresh_cron.sh` runs on cron every 8 minutes and automates the whole
+cycle: it re-fetches the **results frontier** (the first scheduled class
+without placings, plus the next 8 classes to keep upcoming entry lists
+fresh), rebuilds `index.html`, and commits/pushes only when the data
+changed. The frontier is derived from the payload embedded in `../index.html`
+(a class is done when any entry has a place), so there is no state file.
+All output goes to `cron.log`. See AGENTS.md for details.
 
 After any rebuild, run the smoke tests: `npm --prefix ../tests test`
 (plus `python3 ../tests/test_ui_only.py` for `--ui-only`).

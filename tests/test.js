@@ -40,6 +40,7 @@ function check(name, cond, extra){
 const norm = s => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 const isDone = c => c.e.some(e => e[6] != null);
 const DONE_COUNT = DATA.classes.filter(isDone).length;
+const TOTAL = DATA.classes.length;   // grows during the show (late entries join)
 
 const TRAINER = "STACHOWSKI, JAMES";
 const tNorm = norm(TRAINER);
@@ -54,10 +55,10 @@ w.addEventListener("error", e => { console.log("WINDOW ERROR:", e.message); fail
 
 setTimeout(() => {
   // ---------- initial render (desktop width 1024, now = Aug 25) ----------
-  check("payload: 210 classes", DATA.classes.length === 210, String(DATA.classes.length));
+  check("payload: at least the initial 210 classes", DATA.classes.length >= 210, String(DATA.classes.length));
   check("8 day sections render", doc.querySelectorAll("main .day").length === 8, "got " + doc.querySelectorAll("main .day").length);
   check("15 sessions render", doc.querySelectorAll("main .session").length === 15, "got " + doc.querySelectorAll("main .session").length);
-  check("210 classes render", doc.querySelectorAll("main .cls").length === 210, "got " + doc.querySelectorAll("main .cls").length);
+  check("all classes render", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
   check("entries lazy-built (0 rows initially)", doc.querySelectorAll("main .erow").length === 0, "got " + doc.querySelectorAll("main .erow").length);
   check("5 filter groups", doc.querySelectorAll("#filters .fgroup").length === 5, "got " + doc.querySelectorAll("#filters .fgroup").length);
 
@@ -103,14 +104,14 @@ setTimeout(() => {
   const dbtn = doc.getElementById("doneBtn");
   check("done button present", !!dbtn);
   check("done button default label", !!dbtn && dbtn.textContent === "Hide done");
-  check("done classes shown by default", doc.querySelectorAll("main .cls").length === 210, "got " + doc.querySelectorAll("main .cls").length);
+  check("done classes shown by default", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
   if (dbtn) dbtn.click();
-  check("hide done removes placed classes", doc.querySelectorAll("main .cls").length === 210 - DONE_COUNT, "got " + doc.querySelectorAll("main .cls").length);
+  check("hide done removes placed classes", doc.querySelectorAll("main .cls").length === TOTAL - DONE_COUNT, "got " + doc.querySelectorAll("main .cls").length);
   check("no done pills when hidden", doc.querySelectorAll(".cdone").length === 0);
   check("done button label flips", !!dbtn && dbtn.textContent === "Show done" && dbtn.classList.contains("on"));
   check("view state persisted (done hidden)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").doneHidden === true);
   if (dbtn) dbtn.click();
-  check("show done restores classes", doc.querySelectorAll("main .cls").length === 210, "got " + doc.querySelectorAll("main .cls").length);
+  check("show done restores classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
 
   // ---------- select a trainer ----------
   const groups = doc.querySelectorAll("#filters .fgroup");
@@ -151,8 +152,8 @@ setTimeout(() => {
   const xbtn = doc.getElementById("contextBtn");
   check("context button present", !!xbtn);
   if (xbtn) xbtn.click();
-  check("context shows all classes", doc.querySelectorAll("main .cls").length === 210, "got " + doc.querySelectorAll("main .cls").length);
-  check("non-matching classes muted", doc.querySelectorAll("main .cls.muted").length === 210 - MATCHED_COUNT, "got " + doc.querySelectorAll("main .cls.muted").length);
+  check("context shows all classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
+  check("non-matching classes muted", doc.querySelectorAll("main .cls.muted").length === TOTAL - MATCHED_COUNT, "got " + doc.querySelectorAll("main .cls.muted").length);
   check("muted classes not auto-open", doc.querySelectorAll("main .cls.muted.open").length === 0);
   check("view state persisted (context on)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").context === true);
   const muted = doc.querySelector("main .cls.muted");
@@ -175,7 +176,7 @@ setTimeout(() => {
 
     // clear selection
     d2.querySelector("#clearBtn").click();
-    check("clear restores full schedule", d2.querySelectorAll("main .cls").length === 210, "got " + d2.querySelectorAll("main .cls").length);
+    check("clear restores full schedule", d2.querySelectorAll("main .cls").length === TOTAL, "got " + d2.querySelectorAll("main .cls").length);
     check("clear empties selection storage", Object.keys(JSON.parse(dom2.window.localStorage.getItem("wchs2026.sel.v1") || "{}")).length === 0, dom2.window.localStorage.getItem("wchs2026.sel.v1"));
     const cbClr = d2.getElementById("contextBtn");
     check("context disabled after clear", cbClr && cbClr.disabled === true);
@@ -202,7 +203,7 @@ setTimeout(() => {
       const fbtn3 = d3.getElementById("filtersBtn");
       check("filters collapsed on mobile default", d3.body.classList.contains("nofilters"));
       check("filters button off on mobile default", !!fbtn3 && !fbtn3.classList.contains("on"));
-      check("schedule still renders on mobile default", d3.querySelectorAll("main .cls").length === 210, "got " + d3.querySelectorAll("main .cls").length);
+      check("schedule still renders on mobile default", d3.querySelectorAll("main .cls").length === TOTAL, "got " + d3.querySelectorAll("main .cls").length);
 
       console.log("\n" + (checks - failures) + "/" + checks + " checks passed" + (failures ? "  —  " + failures + " FAILURES" : "  —  ALL TESTS PASSED"));
       process.exit(failures ? 1 : 0);
