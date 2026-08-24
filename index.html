@@ -16,7 +16,7 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 header { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid var(--line); padding: 10px 14px; }
 header h1 { font-size: 17px; margin: 0; }
 header .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
-header .updated { color: var(--muted); font-size: 12px; margin-top: 2px; }
+header .updated { color: var(--muted); font-size: 12px; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
 .actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 .actions button { font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--line); background: #fff; border-radius: 8px; cursor: pointer; }
 .actions button:active { background: var(--accent-soft); }
@@ -113,7 +113,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 <header>
   <h1>WCHS 2026 — My Schedule</h1>
   <div class="sub">World's Championship Horse Show · Aug 22–29 · Kentucky State Fair, Louisville</div>
-  <div class="updated" id="updatedLine"></div>
+  <div class="updated" id="updatedLine"><span id="updatedText"></span></div>
   <div class="actions">
     <button id="filtersBtn">Filters</button>
     <button id="contextBtn" disabled>Context</button>
@@ -523,15 +523,61 @@ $("#copyBtn").addEventListener("click", async ()=>{
 let toastT;
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2200); }
 
+// ---- live update (polls payload.json; the embedded DATA is first paint)
+const POLL_MS = (typeof window.__POLL_MS === "number") ? window.__POLL_MS : 30000;
+const pollingActive = typeof fetch === "function" && location.protocol.indexOf("http") === 0;
+let liveRaw = JSON.stringify(DATA);
+let pollsFailed = 0, pollInFlight = false, pollTimer = null;
+// asof is passed explicitly: while a re-render is focus-deferred, DATA is
+// still the old payload but the header must show the newest asof
+function setUpdatedLine(asof, stale){
+  $("#updatedText").textContent = "Updated " + fmtAsof(asof) + (stale ? " · not updating" : "");
+}
+function restoreSearch(){
+  const keys = ["trainer", "rider", "horse", "owner", "division"];
+  document.querySelectorAll("#filters .fsearch").forEach((inp, i) => { inp.value = search[keys[i]] || ""; });
+}
+function applyDataUpdate(p){
+  liveRaw = JSON.stringify(p);
+  DATA = p;
+  buildIndexes();
+  renderFilters();
+  restoreSearch();
+  renderSchedule();
+  setUpdatedLine(DATA.asof, false);
+}
+async function poll(){
+  if (pollInFlight) return;
+  pollInFlight = true;
+  try {
+    const r = await fetch("payload.json?ts=" + Date.now(), {cache: "no-store"});
+    if (!r.ok) throw new Error("http " + r.status);
+    const p = await r.json();
+    if (!p || !Array.isArray(p.classes)) throw new Error("bad payload");
+    pollsFailed = 0;
+    const raw = JSON.stringify(p);
+    if (raw !== liveRaw) applyDataUpdate(p);
+    else setUpdatedLine(DATA.asof, false);
+  } catch (e) {
+    pollsFailed++;
+    if (pollsFailed >= 3) setUpdatedLine(DATA.asof, true);
+  } finally {
+    pollInFlight = false;
+    clearTimeout(pollTimer);
+    pollTimer = setTimeout(poll, POLL_MS);
+  }
+}
+
 // ---- init
 const src = load();
 renderFilters();
 applyFiltersOpen();
 applyDoneBtn();
 applyContextBtn();
-$("#updatedLine").textContent = "Updated " + fmtAsof(DATA.asof);
+setUpdatedLine(DATA.asof, false);
 renderSchedule();
 if (src) toast("Restored your selection");
+if (pollingActive) pollTimer = setTimeout(poll, POLL_MS);
 </script>
 </body>
 </html>
