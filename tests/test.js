@@ -155,6 +155,27 @@ setTimeout(() => {
   if (dbtn) dbtn.click();
   check("show done restores classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
 
+  // ---------- CSS audit: buttons must declare a text color ----------
+  // In real browsers <button> does NOT inherit color (UA default is black),
+  // so a header button without color: renders near-black text in dark mode.
+  // (jsdom models inheritance for buttons, so this is a rule audit, not a
+  // computed-style check.)
+  const css = [...doc.querySelectorAll("style")].map(s => s.textContent).join("\n");
+  const headRule = (css.match(/(^|\n)\.cls-head\s*\{([^}]*)\}/) || [])[2];
+  check("cls-head declares explicit color (button UA default is black)", headRule != null && /(^|;|\s)color\s*:/.test(headRule), headRule != null ? headRule.slice(0, 100) : "rule missing");
+
+  // ---------- dark mode toggle ----------
+  const tbtn = doc.getElementById("themeBtn");
+  check("theme button present", !!tbtn);
+  check("theme default light (jsdom system is light)", !!tbtn && tbtn.textContent === "Dark" && !doc.documentElement.classList.contains("dark"), tbtn ? tbtn.textContent : "missing");
+  if (tbtn) tbtn.click();
+  check("dark class applied to <html>", doc.documentElement.classList.contains("dark"));
+  check("theme label flips to Light + on style", !!tbtn && tbtn.textContent === "Light" && tbtn.classList.contains("on"), tbtn ? tbtn.textContent : "missing");
+  check("theme persisted (dark)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").theme === "dark");
+  if (tbtn) tbtn.click();
+  check("light restored on second click", !doc.documentElement.classList.contains("dark") && !!tbtn && tbtn.textContent === "Dark" && !tbtn.classList.contains("on"));
+  check("theme persisted (light)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").theme === "light");
+
   // ---------- select a trainer ----------
   const groups = doc.querySelectorAll("#filters .fgroup");
   const gT = groups[0];
@@ -178,8 +199,9 @@ setTimeout(() => {
   check("chip shows selected name", gT.querySelector(".chip") && gT.querySelector(".chip").textContent.includes(TRAINER));
   check("localStorage saved", (JSON.parse(w.localStorage.getItem("wchs2026.sel.v1") || "{}").t || []).length === 1, w.localStorage.getItem("wchs2026.sel.v1"));
   check("hash persisted", w.location.hash.includes("t="), w.location.hash);
-  const cbSel = doc.getElementById("contextBtn");
-  check("context enabled with selection", cbSel && cbSel.disabled === false);
+  const cbSel = doc.getElementById("scopeBtn");
+  check("scope enabled with selection", cbSel && cbSel.disabled === false);
+  check("scope default label is My classes", !!cbSel && cbSel.textContent === "My classes", cbSel ? cbSel.textContent : "missing");
 
   // ---------- (9) per-class show all entries ----------
   const c1 = [...doc.querySelectorAll("main .cls")].find(x => x.querySelector(".cnum").textContent === "1");
@@ -189,6 +211,10 @@ setTimeout(() => {
   check("filtered rows initially", c1.querySelectorAll(".erow").length === SC_MINE, "got " + c1.querySelectorAll(".erow").length);
   if (call) call.click();
   check("show all expands to full entries", c1.querySelectorAll(".erow").length === SC.e.length, "got " + c1.querySelectorAll(".erow").length);
+  const nOther = SC.e.length - SC_MINE;
+  check("other riders' rows flagged other", c1.querySelectorAll(".erow.other").length === nOther, "got " + c1.querySelectorAll(".erow.other").length + " vs " + nOther);
+  check("my rows not flagged other", [...c1.querySelectorAll(".erow")].filter(r => r.textContent.includes(TRAINER)).every(r => !r.classList.contains("other")));
+  check("other rows carry a badge", c1.querySelectorAll(".erow.other .eother").length === nOther && c1.querySelectorAll(".erow:not(.other) .eother").length === 0, "badges " + c1.querySelectorAll(".eother").length + " vs " + nOther);
   // the left column surfaces the entry number — the identity of each entry
   const shownNums = [...c1.querySelectorAll(".erow .eentry")].map(n => n.textContent.trim()).sort();
   const allNums = SC.e.map(e => e[0]).sort();
@@ -197,23 +223,27 @@ setTimeout(() => {
   check("call button flips to show mine", !!call2 && call2.textContent === "Show mine " + SC_MINE, call2 ? call2.textContent : "missing");
   if (call2) call2.click();
   check("show mine restores filtered rows", c1.querySelectorAll(".erow").length === SC_MINE, "got " + c1.querySelectorAll(".erow").length);
+  check("show mine removes other flags", c1.querySelectorAll(".erow.other").length === 0 && c1.querySelectorAll(".eother").length === 0);
 
-  // ---------- (3)+(5) context: show non-matching, muted ----------
-  const xbtn = doc.getElementById("contextBtn");
-  check("context button present", !!xbtn);
+  // ---------- (3)+(5) scope: All classes — show non-matching, muted ----------
+  const xbtn = doc.getElementById("scopeBtn");
+  check("scope button present", !!xbtn);
+  check("scope label My classes before toggling", !!xbtn && xbtn.textContent === "My classes", xbtn ? xbtn.textContent : "missing");
   if (xbtn) xbtn.click();
-  check("context shows all classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
+  check("scope label flips to All classes + on", !!xbtn && xbtn.textContent === "All classes" && xbtn.classList.contains("on"), xbtn ? xbtn.textContent : "missing");
+  check("scope shows all classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
   check("non-matching classes muted", doc.querySelectorAll("main .cls.muted").length === MUTED_SHOWN, "got " + doc.querySelectorAll("main .cls.muted").length + " vs " + MUTED_SHOWN);
-  if (FRONTIER_NUM) check("current card shown in context", !!doc.querySelector("main .cls.now"));
+  if (FRONTIER_NUM) check("current card shown in scope", !!doc.querySelector("main .cls.now"));
   check("muted classes not auto-open", doc.querySelectorAll("main .cls.muted.open").length === 0);
-  check("view state persisted (context on)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").context === true);
+  check("view state persisted (scope on)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").scope === true);
   const muted = doc.querySelector("main .cls.muted");
   const mdata = muted && DATA.classes.find(c => c.n === muted.querySelector(".cnum").textContent);
   if (muted) muted.querySelector(".cls-head").click();
   check("muted class opens with all its entries", !!muted && !!mdata && muted.querySelectorAll(".erow").length === mdata.e.length, muted ? muted.querySelectorAll(".erow").length + " vs " + (mdata ? mdata.e.length : "?") : "no muted class");
+  check("muted class rows all flagged other", !!muted && !!mdata && muted.querySelectorAll(".erow.other").length === mdata.e.length, muted ? muted.querySelectorAll(".erow.other").length + " vs " + (mdata ? mdata.e.length : "?") : "no muted class");
   check("muted class has no show-all button", !!muted && !muted.querySelector(".call"));
   if (xbtn) xbtn.click();
-  check("context off restores filtered view", doc.querySelectorAll("main .cls").length === FILTERED_SHOWN, "got " + doc.querySelectorAll("main .cls").length + " vs " + FILTERED_SHOWN);
+  check("scope off restores filtered view", doc.querySelectorAll("main .cls").length === FILTERED_SHOWN, "got " + doc.querySelectorAll("main .cls").length + " vs " + FILTERED_SHOWN);
 
   const hash = w.location.hash;
 
@@ -229,8 +259,8 @@ setTimeout(() => {
     d2.querySelector("#clearBtn").click();
     check("clear restores full schedule", d2.querySelectorAll("main .cls").length === TOTAL, "got " + d2.querySelectorAll("main .cls").length);
     check("clear empties selection storage", Object.keys(JSON.parse(dom2.window.localStorage.getItem("wchs2026.sel.v1") || "{}")).length === 0, dom2.window.localStorage.getItem("wchs2026.sel.v1"));
-    const cbClr = d2.getElementById("contextBtn");
-    check("context disabled after clear", cbClr && cbClr.disabled === true);
+    const cbClr = d2.getElementById("scopeBtn");
+    check("scope disabled after clear", cbClr && cbClr.disabled === true);
 
     // division filter
     const gDiv = d2.querySelectorAll("#filters .fgroup")[4];
@@ -261,6 +291,24 @@ setTimeout(() => {
       check("filters collapsed on mobile default", d3.body.classList.contains("nofilters"));
       check("filters button off on mobile default", !!fbtn3 && !fbtn3.classList.contains("on"));
       check("schedule still renders on mobile default", d3.querySelectorAll("main .cls").length === TOTAL, "got " + d3.querySelectorAll("main .cls").length);
+
+        // ---------- persisted theme + legacy scope migration (fresh dom) ----------
+        const domT = makeDom({ beforeParse: wt => {
+          pinDate(wt);
+          wt.localStorage.setItem("wchs2026.view.v1", JSON.stringify({ theme: "dark", context: true }));
+          wt.localStorage.setItem("wchs2026.sel.v1", JSON.stringify({ t: [norm(TRAINER)] }));
+        } });
+        const wT = domT.window, dT = wT.document;
+        wT.addEventListener("error", e => { console.log("WINDOW ERROR (theme):", e.message); failures++; });
+
+        (function migrationChecks(){
+          check("persisted theme dark applied on load", dT.documentElement.classList.contains("dark"), dT.documentElement.className || "no class");
+          const tbT = dT.getElementById("themeBtn");
+          check("theme label Light when persisted dark", !!tbT && tbT.textContent === "Light" && tbT.classList.contains("on"), tbT ? tbT.textContent : "missing");
+          const sbT = dT.getElementById("scopeBtn");
+          check("legacy context:true migrates to All classes", !!sbT && sbT.textContent === "All classes" && sbT.classList.contains("on"), sbT ? sbT.textContent : "missing");
+          check("migrated selection + scope show all classes", dT.querySelectorAll("main .cls").length === TOTAL, "got " + dT.querySelectorAll("main .cls").length);
+        })();
 
         // ---------- (10) live update: the shell polls payload.json ----------
         // (jsdom has no fetch; this dom stubs it. __POLL_MS=50 speeds the cycle.)
@@ -325,7 +373,7 @@ setTimeout(() => {
           check("live: selection chip shown", !!(gT4.querySelector(".chip") && gT4.querySelector(".chip").textContent.includes(TRAINER)));
           // context mode: muted cards show and never auto-open, which isolates
           // openCls persistence (matched cards auto-open and would confound it)
-          d4.getElementById("contextBtn").click();
+          d4.getElementById("scopeBtn").click();
           const muted4 = d4.querySelector("main .cls.muted");
           check("live: context shows muted classes", !!muted4);
           const MNUM = muted4.querySelector(".cnum").textContent;
@@ -350,7 +398,7 @@ setTimeout(() => {
           const nowCard2 = d4.querySelector("main .cls.now");
           check("live: up-next reflects new data", !P2_FRONTIER_NUM ? !nowCard2 : (!!nowCard2 && nowCard2.querySelector(".cnum").textContent === P2_FRONTIER_NUM), (nowCard2 && nowCard2.querySelector(".cnum").textContent) + " vs " + P2_FRONTIER_NUM);
           // back to the filtered view: the count now follows the new data
-          d4.getElementById("contextBtn").click();
+          d4.getElementById("scopeBtn").click();
           const P2_MATCHED = P2.classes.filter(c => c.e.some(e => norm(e[3]) === tNorm)).length;
           const P2_FRONTIER_MATCHED = P2_FRONTIER ? P2_FRONTIER.e.some(e => norm(e[3]) === tNorm) : false;
           const P2_FILTERED = P2_MATCHED + (P2_FRONTIER_NUM && !P2_FRONTIER_MATCHED ? 1 : 0);
