@@ -1,0 +1,1104 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" type="text/css" href="/DXR.axd?r=0_4410,1_68,0_4414,0_20,0_2,0_4284,1_209,0_4289,0_4298,0_4302,1_210,1_74-qCwfr" /><meta charset="utf-8" /><title>
+	Live Scoring- HorseShowsOnline
+</title><link href="/Content/css?v=7in1x0FXf1bdxJ9uBv6odj3A-ce5vSFJmPfR2N_TUyk1" rel="stylesheet"/>
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" /><meta name="viewport" content="width=device-width" />
+    <style type="text/css">
+        .contentRight {
+            float: none;
+            margin-left: 128px;
+            padding-right: 10px;
+            width: auto;
+            /*min-height:580px;*/
+        }
+
+        .contentRightNoAds {
+            float: none;
+            /*margin-left:128px;*/
+            padding-right: 10px;
+            width: auto;
+            /*min-height:580px;*/
+        }
+
+        .adsLeft {
+            float: left;
+            width: 120px;
+            /*max-height:600px;*/
+            overflow: auto;
+            /*border:solid;
+            border-width:1px;
+            border-color:black;*/
+        }
+
+        .showmaster6 {
+            width: 250px;
+        }
+
+        .showmaster7 {
+            width: 130px;
+            height: 130px;
+        }
+
+        .showmaster8 {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    </style>
+
+
+    <style type="text/css">
+        .SiteMasterStyle2 {
+            width: 24px;
+            height: 24px;
+            
+        }
+        .SiteMasterStyle4 {
+            height: 17px;
+            text-align: center;
+        }
+        .SiteMasterStyle5 {
+            height: 17px;
+            text-align: center;
+            width: 10px;
+        }
+
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            position: fixed;
+            display: block;
+            opacity: 0.7;
+            background-color: #fff;
+            z-index: 99;
+            text-align: center;
+        }
+
+        #loading-image {
+            position: absolute;
+            top: 100px;
+            left: 240px;
+            z-index: 100;
+        }
+
+    .SiteMasterStyle6 {
+        width: 250px;
+    }
+    .HSObulletin{
+        text-align: center;
+    }
+
+    
+    </style>
+    <script type="text/javascript">
+        var LoadingPanelSuppressed = false;
+        function SuppressLoadingPanel(){
+            LoadingPanelSuppressed = true;
+        }
+
+        function ShowMainLoadingPanel() {
+            if (LoadingPanelSuppressed != true) {
+                loadPanelShow.Show();
+                setTimeout('document.images["imghunt"].src="/Images/animated/houndtracking.gif"', 100);
+            }
+            else {
+                LoadingPanelSuppressed = false;
+            }
+        }
+        function HideMainLoadingPanel() {
+            loadPanelShow.Hide();
+        }
+
+        window.onbeforeunload = ShowMainLoadingPanel;
+
+    </script>
+<meta name="Description" content="HorseShowsOnline - The complete resource for horse show managers and exhibitors" /><meta name="Keywords" content="Horse shows online, HorseShowsOnline, Horse show, Horse shows, Horseshow, Hunter, Jumper, Equitation, Dressage, Results, Class results,  equine, USEF, USHJA, USDA, EC, Equine Canada, FEI, Horse, USA, CANADA, Online entry, Sports, Showgrounds, EMG, Showpro" /></head>
+<body>
+
+ <form method="post" action="./LiveScoring.aspx" id="ctl01">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['ctl01'];
+if (!theForm) {
+    theForm = document.ctl01;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+
+<script src="/bundles/MsAjaxJs?v=_Onj24X0Yu7cK2nh78YBmVwMlQTGcakS5HZSOI_a6SM1" type="text/javascript"></script>
+<script src="/bundles/WebFormsJs?v=a_xwc60Y9YtaLMtoNsRBz_8KBA0dEfHvNjqkCm1Fw3U1" type="text/javascript"></script>
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="B43D53FB" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="rCERdAU1vLtNJ/+B4GFHNSB0mbRy+qQGTCDpFlh2v5gi5Tdkng4fqvQ++adZJtNH6xtCdfxJKJuuOv+fXQ/2X8sq2iYp0+N5QBBlnG1eLuaFfI3HH2ZtNXdJBBKxqfRHY/CDoWAaR/ouDrvp6fksj0jh93EV8slNl9rvk2Mdkws/fEyCUDMvn0mJVDA2ok/r" />
+</div>
+     <script type="text/javascript">
+//<![CDATA[
+Sys.WebForms.PageRequestManager._initialize('ctl00$ctl00$scriptmanagermain', 'ctl01', [], [], [], 90, 'ctl00$ctl00');
+//]]>
+</script>
+
+     
+<div id="SiteMain" >
+    <div id="SiteHeader">
+            <div style="float:left">
+                    <a href="/default.aspx">
+                        <img id="Image1" src="Images/HSObannerTransparentFlat.png" align="left" style="margin-right: 8px; margin-top: 4px; margin-bottom: 8px; margin-left: 4px;" />
+                    </a>
+            </div>
+            <div id="HeaderAd" style="float:right;" class="bannerBox">
+                <div style="margin-top:2px">
+                             <script id="dxis_2075567867" src="/DXR.axd?r=1_11,1_12,1_255,1_23,1_64,1_13,1_14,1_15,1_59,1_56,1_17,1_24,1_33,1_182,1_43,1_48,1_9,1_19,1_213,1_226,1_227,1_228,1_212,1_211,1_230,1_239,1_241,1_242,1_229,1_232,1_233,1_237,1_243,1_183,1_184,1_21,1_22,1_190,1_192,1_41,1_194,1_197,1_40,1_44,1_49,1_189-mCwfr" type="text/javascript"></script><div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="sliderBanner" style="height:50px;width:383px;display:none;">
+
+</div><script id="dxss_2070741615" type="text/javascript">
+<!--
+ASPx.AddHoverItems('sliderBanner',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('sliderBanner',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('sliderBanner',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.FillDocumentElementDXThemeCssClassName("Office2010Blue");
+ASPx.createControl(ASPxClientImageSlider,'sliderBanner','',{'uniqueID':'ctl00$ctl00$sliderBanner','items':{'0':{'s':'/GetAdImage.ashx?id=31f247f1-aef1-48a8-a7f5-b27d01471d51&filename=Banner-for-Equine-Website-Ad_v1-rev-02.png&updated=Sat%2c+08+Feb+2025+00%3a50%3a59+GMT','t':'Banner-for-Equine-Website-Ad_v1-rev-02','u':'https://www.harbinequineandfarm.com/'},'1':{'s':'/GetAdImage.ashx?id=dabccb60-348d-4229-a0b9-a39800fcc1de&filename=HSS+Ad.jpg&updated=Sun%2c+31+Aug+2014+19%3a20%3a15+GMT','t':'HSS Ad','u':'http://www.chartermerchantservices.com/'},'2':{'s':'/GetAdImage.ashx?id=36ecc7c7-ab48-451d-8fc3-b48100ae2d9b&filename=Phoenix20260708A.png&updated=Wed%2c+08+Jul+2026+14%3a34%3a09+GMT','t':'Phoenix20260708A','u':'https://phoenixaccounting.net/'},'3':{'s':'/GetAdImage.ashx?id=811a3679-7178-414d-a206-a2c201817fb6&filename=Advertisehere60x476.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a50+GMT','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'}},'itemsCount':4,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:#BCD2E9;','imgAreaCssCl':'dxis-imageArea','enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>                            
+                </div>
+                <div style="margin-top: 2px">
+                    <span id="lbVisitorsSite">Visitors: 71,032,027 Today: 13,742</span>
+                &nbsp;<a id="HyperLink1" href="Advertising.aspx">Advertise Here</a>
+                </div>
+            </div>
+        <div id="mainmen" style="clear:both; color: #FFFFFF"  >
+                
+                <div class="dxmLite_Office2010Blue dxm-ltr">
+	<div class="dxm-main dxm-horizontal" id="ASPxMenu1" style="width:100%;">
+		<ul class="dx dxm-image-l dxm-noImages">
+			<li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="Default.aspx"><span class="dx-vam dxm-contentText">Home</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="ShowSelector.aspx"><span class="dx-vam dxm-contentText">Show Selector</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="Member/Default.aspx"><span class="dx-vam dxm-contentText">Member Services</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="OnlineEntry.aspx"><span class="dx-vam dxm-contentText">Online Show Entry</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="Member/AddScratch.aspx"><span class="dx-vam dxm-contentText">Online Add/Scratch</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="PrizeListDocuments.aspx"><span class="dx-vam dxm-contentText">Prize Lists and Forms</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-noSubMenu"><a class="dxm-content dxm-hasText dx" href="Advertising.aspx"><span class="dx-vam dxm-contentText">Advertising</span></a></li><li class="dxm-separator"><b></b></li><li class="dxm-item dxm-subMenu"><div class="dxm-content dxm-hasText" style="padding-right:10px;">
+				<span class="dx-vam dxm-contentText">FAQ</span>
+			</div><div class="dxm-popOut">
+				<img class="dxWeb_mHorizontalPopOut_Office2010Blue dxm-pImage" src="/DXR.axd?r=1_89-mCwfr" alt="v" />
+			</div></li><li class="dxm-separator"><b></b></li>
+		</ul>
+	</div><b class="dx-clear"></b><div id="ASPxMenu1_DXM8_" style="z-index:20002;display:none;">
+		<div class="dxm-shadow dxm-popup">
+			<ul class="dx dxm-noImages dxm-gutter">
+				<li class="dxm-item"><a class="dxm-content dxm-hasText dx" href="About.aspx"><span class="dx-vam dxm-contentText">About HorseShowsOnline</span></a><b class="dx-clear"></b></li><li class="dxm-spacing"></li><li class="dxm-item"><a class="dxm-content dxm-hasText dx" href="ContactHSO.aspx"><span class="dx-vam dxm-contentText">Contact HorseShowsOnline</span></a><b class="dx-clear"></b></li><li class="dxm-spacing"></li><li class="dxm-item"><a class="dxm-content dxm-hasText dx" href="PrivacyPolicy.aspx"><span class="dx-vam dxm-contentText">Privacy policy</span></a><b class="dx-clear"></b></li><li class="dxm-spacing"></li><li class="dxm-item"><a class="dxm-content dxm-hasText dx" href="Alerts.aspx"><span class="dx-vam dxm-contentText">Security Alerts</span></a><b class="dx-clear"></b></li><li class="dxm-spacing"></li><li class="dxm-item"><a class="dxm-content dxm-hasText dx" href="TermsOfService.aspx"><span class="dx-vam dxm-contentText">Terms of service</span></a><b class="dx-clear"></b></li>
+			</ul>
+		</div>
+	</div>
+</div><script id="dxss_2016101625" type="text/javascript">
+<!--
+ASPx.AddHoverItems('ASPxMenu1',[[['dxm-hovered',''],['',''],['DXI0_','DXI1_','DXI2_','DXI3_','DXI4_','DXI5_','DXI7_','DXI8i0_','DXI8i1_','DXI8i2_','DXI8i3_','DXI8i4_'],['','T']],[['dxm-hovered','',''],['','',''],['DXI8_'],['','P','T']],[[''],[''],['DXME8_','DXMBC8_']]]);
+ASPx.createControl(ASPxClientMenu,'ASPxMenu1','',{'uniqueID':'ctl00$ctl00$ASPxMenu1','renderData':{'':[[0],[1],[2],[3],[4],[5],[7],[8]],'8':[[0],[1],[2],[3],[4]]},'subMenuFIXOffset':2,'subMenuLIXOffset':2,'subMenuXOffset':2});
+
+//-->
+</script>
+        </div>
+        <div id="panSecure" class="SSLisOnPanel" style="text-align:center;">
+	
+            <table style="width:100%">
+                <tr>
+                    <td style="color: #FFFFFF; text-align:left;">
+                        <span id="lbUserID"></span>
+                        <a id="LoginStatus2" href="javascript:__doPostBack(&#39;ctl00$ctl00$LoginStatus2$ctl02&#39;,&#39;&#39;)" style="color:White;">Login</a>
+                    </td>
+                    <td style="text-align: right; font-size:10px">
+                        <img id="Image2" src="Images/Security16.png" alt="SSL is ON" align="middle" />
+                        <span>SSL encryption is ON. Your personal information is protected.</span> 
+                    </td>
+                </tr>
+            </table>
+        
+</div>   
+    </div>
+     
+    <div id="SiteBody">
+        
+        
+        
+        
+        <div class="main-content" style="overflow: auto">
+            
+    <div id="ShowContent" style="width: 100%">
+        <div class="dxpnlControl_Office2010Blue adsLeft" id="MainContent_panAdsLeft">
+	
+                    <div class="dxpnlControl_Office2010Blue" id="MainContent_panAdsLeft_AdSliderVertical1_panAds2">
+		
+                <table style="width: 100%;border: 0px none #FFFFFF; border-collapse: collapse;">
+                    <tr>
+                        <td align="center" class="auto-style1">
+                            <div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider1" style="border-style:None;height:216px;width:108px;display:none;">
+
+		</div><script id="dxss_617511545" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.createControl(ASPxClientImageSlider,'MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider1','',{'uniqueID':'ctl00$ctl00$MainContent$panAdsLeft$AdSliderVertical1$panAds2$ASPxImageSlider1','items':{'0':{'s':'/GetAdImage.ashx?id=1514e281-5051-4f0c-8039-a2c300055d76&filename=AdvertiseHere144x288.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a32+GMT','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'}},'itemsCount':1,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:White;border-style:None;','imgAreaCssCl':'dxis-imageArea','navDirection':1,'enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider2" style="border-style:None;height:216px;width:108px;display:none;">
+
+		</div><script id="dxss_1245685976" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.createControl(ASPxClientImageSlider,'MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider2','',{'uniqueID':'ctl00$ctl00$MainContent$panAdsLeft$AdSliderVertical1$panAds2$ASPxImageSlider2','items':{'0':{'s':'/GetAdImage.ashx?id=1514e281-5051-4f0c-8039-a2c300055d76&filename=AdvertiseHere144x288.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a32+GMT','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'}},'itemsCount':1,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:White;border-style:None;','imgAreaCssCl':'dxis-imageArea','navDirection':1,'enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider3" style="border-style:None;height:216px;width:108px;display:none;">
+
+		</div><script id="dxss_2140354493" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider3',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider3',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider3',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.createControl(ASPxClientImageSlider,'MainContent_panAdsLeft_AdSliderVertical1_panAds2_ASPxImageSlider3','',{'uniqueID':'ctl00$ctl00$MainContent$panAdsLeft$AdSliderVertical1$panAds2$ASPxImageSlider3','items':{'0':{'s':'/GetAdImage.ashx?id=1514e281-5051-4f0c-8039-a2c300055d76&filename=AdvertiseHere144x288.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a32+GMT','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'}},'itemsCount':1,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:White;border-style:None;','imgAreaCssCl':'dxis-imageArea','navDirection':1,'enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>
+                        </td>
+                    </tr>
+                </table>
+            
+	</div>
+
+
+
+
+
+
+                
+</div>
+        
+
+        <div class="dxpnlControl_Office2010Blue contentRight" id="MainContent_panContentRight">
+	
+                    <table style="width:100%">
+                        <tr>
+                            <td style="text-align:left">
+                                
+<div style="margin-bottom: 5px; overflow: auto;">
+    <span id="MainContent_panContentRight_PageTitle1_Label1" class="pageTitle">WORLDS CHAMPIONSHIP HORSE SHOW Aug 22, 2026</span>
+</div>
+
+                            </td>
+                            <td style="text-align:right">
+                                <a class="dxbButton_Office2010Blue dxbButtonSys" id="MainContent_panContentRight_btGoMobile" style="font-size:14px;"><img class="dxIcon_communication_phone_32x32 dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:4px;" /><span class="dx-vam">Using a phone? - Switch to HSOmobile</span></a><script id="dxss_1055454394" type="text/javascript">
+<!--
+ASPx.InitializeSVGSprite();
+ASPx.createControl(ASPxClientButton,'MainContent_panContentRight_btGoMobile','',{'autoPostBack':true,'uniqueID':'ctl00$ctl00$MainContent$panContentRight$btGoMobile','serverEvents':['Click'],'autoPostBackFunction':function(postBackArg) { WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions("ctl00$ctl00$MainContent$panContentRight$btGoMobile",  postBackArg, true, "", "", false, true)); }});
+
+//-->
+</script>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="showmaster8">
+                        <tr>
+                            <td>
+
+                                <div class="dxtcLite_Office2010Blue dxtcSys dxtc-flex dxtc-top dxtc-noSpacing dxtc-tc" id="ctl00_ctl00_MainContent_panContentRight_tabShow" style="width:100%;">
+		<ul class="dxtc-wrapper dxtc-stripContainer">
+			<li class="dxtc-leftIndent">&nbsp;</li><li id="ctl00_ctl00_MainContent_panContentRight_tabShow_SVA" class="dxtc-sva"><div class="dxtc-vp">
+				<ul class="dxtc-strip dxtc-row">
+					<li title="View the details of this show" class="dxtc-tab dxtc-lead" style="width:60px;"><a title="View the details of this show" class="dxtc-link" href="ShowDetails" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_content_textbox_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Show Details</span></a></li><li title="View the details of this show" class="dxtc-activeTab dxtc-lead" style="width:60px;display:none;"><a title="View the details of this show" class="dxtc-link" href="ShowDetails" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_content_textbox_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Show Details</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View the number of entries in each class" class="dxtc-tab" style="width:60px;"><a title="View the number of entries in each class" class="dxtc-link" href="ClassEntries" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Class Entries</span></a></li><li title="View the number of entries in each class" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View the number of entries in each class" class="dxtc-link" href="ClassEntries" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Class Entries</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results of each class" class="dxtc-tab" style="width:60px;"><a title="View results of each class" class="dxtc-link" href="ClassResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Class Results</span></a></li><li title="View results of each class" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results of each class" class="dxtc-link" href="ClassResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Class Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results of each division" class="dxtc-tab" style="width:60px;"><a title="View results of each division" class="dxtc-link" href="DivisionResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Division Results</span></a></li><li title="View results of each division" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results of each division" class="dxtc-link" href="DivisionResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Division Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results for each entry" class="dxtc-tab" style="width:60px;"><a title="View results for each entry" class="dxtc-link" href="EntryResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Entry Results</span></a></li><li title="View results for each entry" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results for each entry" class="dxtc-link" href="EntryResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Entry Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results for each owner" class="dxtc-tab" style="width:60px;"><a title="View results for each owner" class="dxtc-link" href="OwnerResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Owner Results</span></a></li><li title="View results for each owner" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results for each owner" class="dxtc-link" href="OwnerResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Owner Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results for each horse" class="dxtc-tab" style="width:60px;"><a title="View results for each horse" class="dxtc-link" href="HorseResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Horse Results</span></a></li><li title="View results for each horse" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results for each horse" class="dxtc-link" href="HorseResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Horse Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results for each trainer" class="dxtc-tab" style="width:60px;"><a title="View results for each trainer" class="dxtc-link" href="TrainerResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Trainer Results</span></a></li><li title="View results for each trainer" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results for each trainer" class="dxtc-link" href="TrainerResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Trainer Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View results for each rider" class="dxtc-tab" style="width:60px;"><a title="View results for each rider" class="dxtc-link" href="RiderResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Rider Results</span></a></li><li title="View results for each rider" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View results for each rider" class="dxtc-link" href="RiderResults" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Rider Results</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View the ring schedule.  Note that the show may have revised the schedule since the last time the show was published" class="dxtc-tab" style="width:60px;"><a title="View the ring schedule.  Note that the show may have revised the schedule since the last time the show was published" class="dxtc-link" href="RingSchedule.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_scheduling_calendar_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Ring Sched.</span></a></li><li title="View the ring schedule.  Note that the show may have revised the schedule since the last time the show was published" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View the ring schedule.  Note that the show may have revised the schedule since the last time the show was published" class="dxtc-link" href="RingSchedule.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_scheduling_calendar_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Ring Sched.</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View the current status of each ring" class="dxtc-tab" style="width:60px;"><a title="View the current status of each ring" class="dxtc-link" href="RingStatus.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_scheduling_timelineview_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Ring Status</span></a></li><li title="View the current status of each ring" class="dxtc-activeTab" style="width:60px;display:none;"><a title="View the current status of each ring" class="dxtc-link" href="RingStatus.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxIcon_scheduling_timelineview_16x16 dxtc-img dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="" style="margin-right:;" /><span class="dx-vam dx-wrap">Ring Status</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="Live Scores" class="dxtc-tab" style="width:60px;display:none;"><a title="Live Scores" class="dxtc-link" href="LiveScoring.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxtc-img dx-vam" src="Images/IconAward.svg" alt="" style="height:16px;width:16px;margin-right:;" /><span class="dx-vam dx-wrap">Live Scores</span></a></li><li title="Live Scores" class="dxtc-activeTab" style="width:60px;"><a title="Live Scores" class="dxtc-link" href="LiveScoring.aspx" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><img class="dxtc-img dx-vam" src="Images/IconAward.svg" alt="" style="height:16px;width:16px;margin-right:;" /><span class="dx-vam dx-wrap">Live Scores</span></a></li><li class="dxtc-spacer" style="width:0px;">&nbsp;</li><li title="View the order of go for a class.  NOTE: The show may have revised the order since this data was published." class="dxtc-tab dxtc-last" style="width:60px;"><a title="View the order of go for a class.  NOTE: The show may have revised the order since this data was published." class="dxtc-link" href="OrderOfGo" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Order Of Go</span></a></li><li title="View the order of go for a class.  NOTE: The show may have revised the order since this data was published." class="dxtc-activeTab dxtc-last" style="width:60px;display:none;"><a title="View the order of go for a class.  NOTE: The show may have revised the order since this data was published." class="dxtc-link" href="OrderOfGo" style="padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;"><span class="dx-vam dx-wrap">Order Of Go</span></a></li><li class="dxtc-spacer dxtc-filler"></li>
+				</ul>
+			</div></li><li class="dxtc-sbIndent"></li><li class="dxtc-sbWrapper" style="display:none;"><div id="ctl00_ctl00_MainContent_panContentRight_tabShow_SBL" class="dxtc-sb">
+				<img id="ctl00_ctl00_MainContent_panContentRight_tabShow_SBLImg" class="dxWeb_tcScrollLeft_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="&lt;" />
+			</div></li><li class="dxtc-sbSpacer"></li><li class="dxtc-sbWrapper" style="display:none;"><div id="ctl00_ctl00_MainContent_panContentRight_tabShow_SBR" class="dxtc-sb">
+				<img id="ctl00_ctl00_MainContent_panContentRight_tabShow_SBRImg" class="dxWeb_tcScrollRight_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt=">" />
+			</div></li><li class="dxtc-rightIndent">&nbsp;</li>
+		</ul>
+	</div><b class="dx-clear"></b><script id="dxss_1049237936" type="text/javascript">
+<!--
+ASPx.AddHoverItems('ctl00_ctl00_MainContent_panContentRight_tabShow',[[['dxtc-tabHover',''],['','padding-left:2px;padding-top:2px;padding-right:2px;padding-bottom:2px;'],['T0','T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'],['','T']],[['dxtc-activeTabHover',''],['','padding-left:2px;padding-top:2px;padding-right:2px;padding-bottom:2px;'],['AT0','AT1','AT2','AT3','AT4','AT5','AT6','AT7','AT8','AT9','AT10','AT11','AT12'],['','T']],[['dxtc-sbHover'],[''],['SBL','SBR'],,[[{'spriteCssClass':'dxWeb_tcScrollLeftHover_Office2010Blue'}],[{'spriteCssClass':'dxWeb_tcScrollRightHover_Office2010Blue'}]],['Img']]]);
+ASPx.AddPressedItems('ctl00_ctl00_MainContent_panContentRight_tabShow',[[['dxtc-sbPressed'],[''],['SBL','SBR'],,[[{'spriteCssClass':'dxWeb_tcScrollLeftPressed_Office2010Blue'}],[{'spriteCssClass':'dxWeb_tcScrollRightPressed_Office2010Blue'}]],['Img']]]);
+ASPx.AddDisabledItems('ctl00_ctl00_MainContent_panContentRight_tabShow',[[['dxtcLiteDisabled_Office2010Blue',''],['',''],['T0','AT0','T1','AT1','T2','AT2','T3','AT3','T4','AT4','T5','AT5','T6','AT6','T7','AT7','T8','AT8','T9','AT9','T10','AT10','T11','AT11','T12','AT12'],['','T'],[[{'spriteCssClass':'dxIcon_content_textbox_16x16_disabled'}],[{'spriteCssClass':'dxIcon_content_textbox_16x16_disabled'}],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[null],[{'spriteCssClass':'dxIcon_scheduling_calendar_16x16_disabled'}],[{'spriteCssClass':'dxIcon_scheduling_calendar_16x16_disabled'}],[{'spriteCssClass':'dxIcon_scheduling_timelineview_16x16_disabled'}],[{'spriteCssClass':'dxIcon_scheduling_timelineview_16x16_disabled'}],[null],[null],[null],[null]],['Img']],[['dxtc-sbDisabled'],[''],['SBL','SBR'],,[[{'spriteCssClass':'dxWeb_tcScrollLeftDisabled_Office2010Blue'}],[{'spriteCssClass':'dxWeb_tcScrollRightDisabled_Office2010Blue'}]],['Img']]]);
+ASPx.createControl(ASPxClientTabControl,'ctl00_ctl00_MainContent_panContentRight_tabShow','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$tabShow','activeTabIndex':11,'emptyHeight':true},null,null,{'tabs':[['ShowDetails',,,,,],['ClassEntries',,,,,],['ClassResults',,,,,],['DivisionResults',,,,,],['EntryResults',,,,,],['OwnerResults',,,,,],['HorseResults',,,,,],['TrainerResults',,,,,],['RiderResults',,,,,],['RingSchedule',,,,,],['RingStatus',,,,,],['LiveScoring',,,,,],['OrderOfGo',,,,,],['RealTimeBroadcast',,,false,,]]});
+
+//-->
+</script>
+                            </td>
+                        </tr>
+                    </table>
+                    <div>
+                    </div>
+                    <div style="border: 1px solid #336699">
+                        
+    
+
+<style type="text/css">
+    .dxeBase_Office2010Blue {
+        font: 11px Verdana, Geneva, sans-serif;
+    }
+
+    .dxeBase_Office2010Blue {
+        font: normal normal 700 11px normal Verdana, Geneva, sans-serif;
+    }
+
+    .rsltTitleTable {
+        width: 100%;
+    }
+
+    .rsltTitleRightCol {
+        text-align: right;
+    }
+</style>
+<script type="text/javascript">
+
+    //Expand or Collapse detail of clicked row
+    function OnRowClick(s, e) {
+        if (!cbLiveResults.InCallback()) {
+            var rows = s.cpRowStates;
+            let keyval = s.GetRowKey(e.visibleIndex);
+            let foundRow = rows.find(row => row[1] === keyval);
+            if (foundRow !== undefined) {
+                if (foundRow[2] === 'False') {
+                    s.ExpandDetailRow(foundRow[0]);
+                }
+                else {
+                    s.CollapseDetailRow(foundRow[0]);
+                }
+            }
+        }
+    }
+
+    function OnDetailRowExpanding(s, e) {
+        s.SetFocusedRowIndex(e.visibleIndex);
+    }
+
+    function OnDetailRowCollapsing(s, e) {
+        s.SetFocusedRowIndex(e.visibleIndex);
+    }
+
+
+</script>
+<div class="dxpnlControl_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults">
+		
+            <table class="dxgvControl_Office2010Blue dxgv" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain" style="width:100%;border-collapse:collapse;border-collapse:separate;">
+			<tr>
+				<td><table id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXTitle" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+					<tr>
+						<td class="dxgvTitlePanel_Office2010Blue" style="color:#990000;font-size:14px;font-weight:normal;text-align:Left;">Live scores are not official until judges cards are reviewed by the show secretary.</td>
+					</tr>
+				</table><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSearchPanel" class="dxgvSearchPanel_Office2010Blue" style="background-color:#FFFFCC;">
+					<table cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+						<tr>
+							<td style="width:100%;"><table class="dxeButtonEditSys dxeButtonEdit_Office2010Blue" cellspacing="1" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE" style="width:100%;">
+								<tr>
+									<td class="dxic" style="width:100%;"><input class="dxeEditArea_Office2010Blue dxeEditAreaSys" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE_I" name="ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$DXSE" onchange="ASPx.EValueChanged(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE&#39;)" value="Enter text to search..." type="text" /></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE_B-100" class="dxHideContent dxeButton dxeButtonEditButton_Office2010Blue dxeButtonEditClearButton_Office2010Blue" onmousedown="ASPx.BEClear(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE&#39;, event)"><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE_B-100Img" class="dxEditors_edtClear_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="x" /></td>
+								</tr>
+							</table><script id="dxss_430738177" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE',[[['dxeButtonEditButtonHover_Office2010Blue'],[''],['B-100']]]);
+ASPx.AddPressedItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE',[[['dxeButtonEditButtonPressed_Office2010Blue'],[''],['B-100']]]);
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE',[[['dxeDisabled_Office2010Blue'],[''],['','I']],[['dxeDisabled_Office2010Blue dxeButtonDisabled_Office2010Blue'],[''],['B-100'],,[[{'spriteCssClass':'dxEditors_edtClearDisabled_Office2010Blue'}]],['Img']]]);
+ASPx.createControl(ASPxClientButtonEdit,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXSE','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$DXSE','scStates':2,'scPostfix':'Office2010Blue','stateObject':{'rawValue':''},'nullText':'Enter text to search...','forceShowClearButtonAlways':true},null,null,{'decorationStyles':[{'key':'F','className':'dxeFocused_Office2010Blue','cssText':''},{'key':'N','className':'dxeNullText_Office2010Blue','cssText':''}]});
+
+//-->
+</script></td>
+						</tr>
+					</table>
+				</div><table id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXMainTable" class="dxgvTable_Office2010Blue" cellspacing="0" cellpadding="0" oncontextmenu="return ASPx.GVContextMenu(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,event);" style="width:100%;border-collapse:collapse;empty-cells:show;table-layout:fixed;overflow:hidden;">
+					<tr class="dxgvArm">
+						<td class="dxgvDI" style="width:26px;"></td><td></td><td></td><td></td><td style="width:80px;"></td><td style="width:80px;"></td><td></td><td style="width:150px;"></td><td></td><td class="dxgvDI dxgvAIC" style="width:22px;"></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXHeadersRow0">
+						<td class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><img class="dxGridView_gvDetailExpandedButton_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="" style="visibility:hidden;" /></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col16" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;">Ring Name</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span><img class="dxGridView_gvHeaderSortUp_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="Ascending" style="margin-left:5px;" /></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col19" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;text-align:Center;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;text-align:Center;">Ord</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span><img class="dxGridView_gvHeaderSortUp_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="Ascending" style="margin-left:5px;" /></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col4" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;">Class  (click a class to expand/collapse)</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span><img class="dxGridView_gvHeaderSortUp_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="Ascending" style="margin-left:5px;" /></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col8" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;text-align:Center;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;text-align:Center;">Placed</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col9" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;text-align:Center;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;text-align:Center;">Not Placed</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col6" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;text-align:Center;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;text-align:Center;">Updated</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col14" class="dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;">Source</td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span></td>
+							</tr>
+						</table></td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_col13" class="dxgvHeader_Office2010Blue dx-wrap dxgRRB" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dx-wrap" style="font-size:14px;"> </td><td style="width:1px;text-align:right;"><span class="dx-vam">&nbsp;</span></td>
+							</tr>
+						</table></td><td class="dxgvAIC dxgvHeader_Office2010Blue dx-wrap" style="font-size:14px;border-top-width:0px;border-left-width:0px;cursor:default;"><img class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="" style="visibility:hidden;" /></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXADRow" class="dxgvAdaptiveDetailRow_Office2010Blue dxgvADR" style="display:none;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"></td><td class="dxgv dxgvAdaptiveDetailCell_Office2010Blue" colspan="8"></td><td class="dxgvAIC dxgv dxgRRB" style="border-left-width:0px;">&nbsp;</td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow0" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,0,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">1</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell0_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_ASPxLabel6_0" style="font-size:14px;">        48 - Equitation - Open Class Rider 11 Years Old</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											11 / 11
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_776332781" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell0_4$TC$progBarclass$ctl01','minimum':0,'maximum':11,'position':11,'displayMode':2,'customDisplayFormat':'11 / 11','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_2098360789" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell0_4_progBarclass_0','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell0_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">7</td><td class="dxgv" align="right" style="font-size:14px;">4</td><td class="dxgv" align="right" style="font-size:14px;">1 hour, 51 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,0],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn0"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_1823981435" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn0',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,0],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn1"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_280704550" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn1',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow1" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,1,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">2</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell1_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_ASPxLabel6_1" style="font-size:14px;">        49 - ASB Jr. Exhib. Three Gaited Country Pl. 13 &amp; Unde</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											13 / 13
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_1987513716" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell1_4$TC$progBarclass$ctl01','minimum':0,'maximum':13,'position':13,'displayMode':2,'customDisplayFormat':'13 / 13','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_1667191664" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell1_4_progBarclass_1','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell1_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">8</td><td class="dxgv" align="right" style="font-size:14px;">5</td><td class="dxgv" align="right" style="font-size:14px;">1 hour, 49 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,1],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn2"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_418315577" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn2',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,1],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn3"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_1686649192" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn3',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow2" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,2,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">3</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell2_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_ASPxLabel6_2" style="font-size:14px;">        50 - Junior Exhibitor Hackney/Harness Pony Pl. Driving</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											12 / 12
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_71121717" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell2_4$TC$progBarclass$ctl01','minimum':0,'maximum':12,'position':12,'displayMode':2,'customDisplayFormat':'12 / 12','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_242661343" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell2_4_progBarclass_2','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell2_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">7</td><td class="dxgv" align="right" style="font-size:14px;">5</td><td class="dxgv" align="right" style="font-size:14px;">1 hour, 46 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,2],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn4"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_1216733185" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn4',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,2],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn5"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_973548126" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn5',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow3" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,3,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">4</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell3_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_ASPxLabel6_3" style="font-size:14px;">        51 - ASB Adult Five Gaited Show Pleasure Div I</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											20 / 20
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_1074481142" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell3_4$TC$progBarclass$ctl01','minimum':0,'maximum':20,'position':20,'displayMode':2,'customDisplayFormat':'20 / 20','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_1693952870" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell3_4_progBarclass_3','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell3_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">8</td><td class="dxgv" align="right" style="font-size:14px;">12</td><td class="dxgv" align="right" style="font-size:14px;">1 hour, 21 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,3],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn6"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_1672568253" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn6',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,3],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn7"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_432396516" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn7',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow4" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,4,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">5</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell4_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_ASPxLabel6_4" style="font-size:14px;">        52 - Equitation - Open Class Rider 12 &amp; 13 Years Old</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											14 / 14
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_1165105651" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell4_4$TC$progBarclass$ctl01','minimum':0,'maximum':14,'position':14,'displayMode':2,'customDisplayFormat':'14 / 14','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_1188379199" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell4_4_progBarclass_4','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell4_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">8</td><td class="dxgv" align="right" style="font-size:14px;">6</td><td class="dxgv" align="right" style="font-size:14px;">1 hour, 19 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,4],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn8"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_983513485" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn8',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,4],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn9"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_1206767826" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn9',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow5" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,5,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">6</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell5_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_ASPxLabel6_5" style="font-size:14px;">      53.1 - Jr Exhibitor Roadster Pony 13 &amp; Under Section 1</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											10 / 10
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_837074338" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell5_4$TC$progBarclass$ctl01','minimum':0,'maximum':10,'position':10,'displayMode':2,'customDisplayFormat':'10 / 10','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_658964356" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell5_4_progBarclass_5','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell5_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">8</td><td class="dxgv" align="right" style="font-size:14px;">2</td><td class="dxgv" align="right" style="font-size:14px;">53 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,5],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn10"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_364670378" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn10',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,5],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn11"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_359709137" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn11',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow6" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,6,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;">7</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell6_4" class="dxgv" style="font-size:14px;font-weight:normal;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_ASPxLabel6_6" style="font-size:14px;">      53.2 - Jr Exhibitor Roadster Pony 13 &amp; Under Section 2</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											9 / 9
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_1785723897" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell6_4$TC$progBarclass$ctl01','minimum':0,'maximum':9,'position':9,'displayMode':2,'customDisplayFormat':'9 / 9','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_1250888651" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell6_4_progBarclass_6','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell6_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;">8</td><td class="dxgv" align="right" style="font-size:14px;">1</td><td class="dxgv" align="right" style="font-size:14px;">52 min</td><td class="dxgv" style="font-size:14px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,6],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn12"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_1216329908" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn12',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,6],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn13"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_1955395015" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn13',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr><tr id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXDataRow7" class="dxgvDataRow_Office2010Blue" style="background-color:#EDF3FB;">
+						<td class="dxgvDetailButton_Office2010Blue dxgv dxgRRB dxgvDBC" style="border-bottom-width:0px;overflow:visible;"><img class="dxGridView_gvDetailCollapsedButton_Office2010Blue" onclick="ASPx.GVShowDetailRow(&#39;MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain&#39;,7,event);event.cancelBubble = true" src="/DXR.axd?r=1_89-mCwfr" alt="Expand" style="cursor:pointer;" /></td><td class="dxgv" style="font-size:14px;border-bottom-width:0px;">Ring 1</td><td class="dxgv" align="center" style="font-size:14px;border-bottom-width:0px;">8</td><td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_tccell7_4" class="dxgv" style="font-size:14px;font-weight:normal;border-bottom-width:0px;">
+                            <span class="dxeBase_Office2010Blue" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_ASPxLabel6_7" style="font-size:14px;">        54 - ASB Adult Five Gaited Show Pleasure Div II</span>
+                            <br />
+                            <table class="dxeProgressBar_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7" style="height:21px;width:100%;border-collapse:collapse;border-collapse:separate;">
+							<tr>
+								<td class="dxePBMainCell"><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7_ctl01_DI" class="dxeProgressBarIndicator_Office2010Blue" style="background-color:#00CC00;width:100%;">
+
+								</div><table cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-top:-21px;">
+									<tr>
+										<td id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7_ctl01_VIC" class="dxe" style="text-align:Center;vertical-align:Middle;"><div class="dxpbVC">
+											15 / 15
+										</div></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table><script id="dxss_1333815350" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7_ctl01',[[['dxeDisabled_Office2010Blue'],[''],['VIC']]]);
+ASPx.createControl(ASPxClientProgressBarBase,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7_ctl01','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7_MC',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell7_4$TC$progBarclass$ctl01','minimum':0,'maximum':15,'position':15,'displayMode':2,'customDisplayFormat':'15 / 15','displayFormat':'{0:0}'});
+
+//-->
+</script><script id="dxss_685725562" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientProgressBar,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_cell7_4_progBarclass_7','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain$cell7_4$TC$progBarclass','scStates':4,'scPostfix':'Office2010Blue'});
+
+//-->
+</script>
+                        </td><td class="dxgv" align="right" style="font-size:14px;border-bottom-width:0px;">8</td><td class="dxgv" align="right" style="font-size:14px;border-bottom-width:0px;">7</td><td class="dxgv" align="right" style="font-size:14px;border-bottom-width:0px;">32 min</td><td class="dxgv" style="font-size:14px;border-bottom-width:0px;">Show Secretary</td><td class="dxgv dxgRRB" style="font-size:14px;border-bottom-width:0px;">&nbsp;</td><td class="dxgvAIC dxgv" style="width:0px;border-left-width:0px;border-bottom-width:0px;"><a class="dxbButton_Office2010Blue dxgvADSB dxbButtonSys" data-args="[[&#39;ShowAdaptiveDetail&#39;,7],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn14"><img title="..." class="dxGridView_gvShowAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="..." /></a><script id="dxss_1077161406" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn14',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script><a class="dxbButton_Office2010Blue dxgvADHB dxbButtonSys" data-args="[[&#39;HideAdaptiveDetail&#39;,7],0]" data-isImage="true" id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn15"><img title="X" class="dxGridView_gvHideAdaptiveDetailButton_Office2010Blue dx-vam" src="/DXR.axd?r=1_89-mCwfr" alt="X" /></a><script id="dxss_352781891" type="text/javascript">
+<!--
+ASPx.AddDisabledItems('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn15',[[['dxbDisabled_Office2010Blue'],[''],[''],['','TC']]]);
+
+//-->
+</script></td>
+					</tr>
+				</table><table id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_LP" class="dxgvLoadingPanel_Office2010Blue" cellspacing="0" cellpadding="0" style="border-collapse:collapse;left:0px;top:0px;z-index:30000;display:none;">
+					<tr>
+						<td class="dx" style="padding-right:0px;"><img class="dxlp-loadingImage dxlp-imgPosLeft" src="/DXR.axd?r=1_89-mCwfr" alt="" align="middle" style="margin-right:5px;" /></td><td class="dx" style="padding-left:0px;"><span id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_TL">Loading&hellip;</span></td>
+					</tr>
+				</table><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_LD" class="dxgvLoadingDiv_Office2010Blue" style="display:none;z-index:29999;position:absolute;">
+
+				</div><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_IADD" class="dxGridView_gvDragAndDropArrowDown_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Down Arrow" style="position:absolute;visibility:hidden;top:-100px;" /><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_IADU" class="dxGridView_gvDragAndDropArrowUp_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Up Arrow" style="position:absolute;visibility:hidden;top:-100px;" /><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_IADL" class="dxGridView_gvDragAndDropArrowLeft_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Left Arrow" style="position:absolute;visibility:hidden;top:-100px;" /><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_IADR" class="dxGridView_gvDragAndDropArrowRight_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Right Arrow" style="position:absolute;visibility:hidden;top:-100px;" /><img id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_IDHF" class="dxGridView_gvDragAndDropHideColumn_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Hide" style="position:absolute;visibility:hidden;top:-100px;" /></td>
+			</tr>
+		</table><script id="dxss_1280566063" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientGridView,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain','grMain',{'callBack':function(arg) { WebForm_DoCallback('ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain',arg,ASPx.Callback,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain',ASPx.CallbackError,true); },'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults$grMain','stateObject':{'keys':['48f5cb27-5d07-48d5-b9b6-b45200d578d6','1f7639bd-9ad1-4ba4-a92e-b45200d578d6','0d9efb0d-d0b6-41f7-a54c-b45200d578d6','ed24034f-ecce-490a-afe8-b45200d578d6','31c5b6e3-33b2-4ac3-ad8d-b45200d578d6','11ea54d6-b2d4-4b9f-8263-b45200d578d6','fb55c06f-1ad2-41e9-a839-b4af0130c8ec','a3b778b9-47a7-4e85-b816-b45200d578d6'],'groupLevelState':{},'callbackState':'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','focusedRow':'','selection':''},'cpRowStates':[['0','48f5cb27-5d07-48d5-b9b6-b45200d578d6','False'],['1','1f7639bd-9ad1-4ba4-a92e-b45200d578d6','False'],['2','0d9efb0d-d0b6-41f7-a54c-b45200d578d6','False'],['3','ed24034f-ecce-490a-afe8-b45200d578d6','False'],['4','31c5b6e3-33b2-4ac3-ad8d-b45200d578d6','False'],['5','11ea54d6-b2d4-4b9f-8263-b45200d578d6','False'],['6','fb55c06f-1ad2-41e9-a839-b4af0130c8ec','False'],['7','a3b778b9-47a7-4e85-b816-b45200d578d6','False']],'callBacksEnabled':true,'pageRowCount':8,'pageRowSize':10,'pageIndex':-1,'pageCount':1,'selectedWithoutPageRowCount':0,'visibleStartIndex':0,'focusedRowIndex':0,'allowFocusedRow':true,'allowSelectByItemClick':false,'allowSelectSingleRowOnly':false,'callbackOnFocusedRowChanged':false,'callbackOnSelectionChanged':false,'editState':0,'editItemVisibleIndex':-1,'searchPanelFilter':'','allowDelete':false,'allowEdit':false,'allowInsert':false,'columnProp':[[0,0,,'ClassGUID',0,,,,0,,,,,0,0,,1],[1,0,,'ClassNo',0,,,,1,,,,,0,0,,1],[2,0,,'ClassNoRjust',0,,,,2,,,,,0,0,,1],[3,0,,'ClassName',0,,,,3,,,,,0,0,,1],[4,,,'ClassDesc',0,,3,1,11,,,,,0,0,,,200,400],[5,0,,'Updated',0,3,,,7,,,,,0,0,,1],[6,,,'MinutesSinceUpdate',0,,,,15,,,,,0,0,,,80,100],[7,0,,'ResultCount',0,,,,14,,,,,0,0,,1],[8,,,'CountPlaced',0,,,,12,,,,,0,0],[9,,,'CountUnplaced',0,,,,13,,,,,0,0],[10,0,,'R1timeTotal',0,,,,4,,,,,0,0,,1],[11,0,,'R2timeTotal',0,,,,5,,,,,0,0,,1],[12,0,,'R3timeTotal',0,,,,6,,,,,0,0,,1],[13,,,,0,,,,19,,,,,0,0,,,,900],[14,,,'Source',0,,,,16,,,,,0,0],[15,0,,'RingDate',0,3,0,1,8,,,,,0,0,,1,80,100],[16,,,'RingName',0,,1,1,9,,,,,,0,,,100,200],[17,0,,'HSSentryCount',0,,,,17,,,,,0,0,,1],[18,0,,'ClassFinished',0,,,,18,,,,,0,0,,1],[19,,,'SchedPos',0,,2,1,10,,,,,0,0,,,60,80]],'pendingEvents':['RaiseFocusedItemChangedOutOfServer'],'shouldScrollToNewRow':false,'editMode':2,'indentColumnCount':1,'allowChangeColumnHierarchy':false,'allowMultiColumnAutoFilter':false,'hasDetailRows':true,'adaptiveButtonPos':2,'adaptiveColumnsOrder':[13,14,6,9,8,4,19,16]},{'DetailRowExpanding':OnDetailRowExpanding,'DetailRowCollapsing':OnDetailRowCollapsing,'RowClick':OnRowClick},null,{'adaptiveModeInfo':{'adaptivityMode':1,'hideDataCellsWindowInnerWidth':0,'adaptiveDetailColumnCount':1,'allowTextTruncationInAdaptiveMode':[false,false,false,false,false,false,false,false],'allowHideDataCellsByColumnMinWidth':false,'allowOnlyOneAdaptiveDetailExpanded':false}});
+ASPxClientGridBase.PostponeInitialize('MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain',({'commandButtonIDs':['MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn0','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn1','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn2','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn3','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn4','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn5','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn6','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn7','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn8','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn9','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn10','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn11','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn12','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn13','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn14','MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_grMain_DXCBtn15'],'styleInfo':{'ei':'<tr class="dxgvEditingErrorRow_Office2010Blue">\r\n\t<td class="dxgvIndentCell dxgv dxgRRB dxgvDIC" style="border-left-width:0px;">&nbsp;</td><td class="dxgv dxgRRB" data-colSpan="8"></td><td class="dxgvAIC dxgv dxgRRB" style="border-left-width:0px;">&nbsp;</td>\r\n</tr>','fc':{'className':'dxgvFocusedCell_Office2010Blue'},'sc':{'className':'dxgvSelectedCell_Office2010Blue'},'bec':{'cssText':'font-size:14px;','className':'dxgvBatchEditCell_Office2010Blue dxgv'},'bemc':{'cssText':'font-size:14px;','className':'dxgvBatchEditModifiedCell_Office2010Blue dxgv'},'bemergmc':{'cssText':'font-size:14px;','className':'dxgvBatchEditModifiedCell_Office2010Blue dxgvBatchEditCell_Office2010Blue dxgv'},'bedi':{'className':'dxgvBatchEditDeletedItem_Office2010Blue dxgv'},'sel':{'className':'dxgvSelectedRow_Office2010Blue'},'fi':{'cssText':'background-color:#0099CC;','className':'dxgvFocusedRow_Office2010Blue'},'fgi':{'cssText':'background-color:#99C8EE;font-size:14px;font-weight:normal;','className':'dxgvFocusedGroupRow_Office2010Blue'},'beni':{'className':'dxgvBatchEditNewItem_Office2010Blue dxgv'}}}));
+
+//-->
+</script>
+            <br />
+        
+	</div><table id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_LP" class="dxpnlLoadingPanelWithContent_Office2010Blue dxlpLoadingPanelWithContent_Office2010Blue" cellspacing="0" cellpadding="0" style="border-collapse:collapse;left:0px;top:0px;z-index:30000;display:none;">
+		<tr>
+			<td class="dx" style="padding-right:0px;"><img class="dxlp-loadingImage dxlp-imgPosLeft" src="/DXR.axd?r=1_89-mCwfr" alt="" align="middle" /></td><td class="dx" style="padding-left:0px;"><span id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_TL">Loading&hellip;</span></td>
+		</tr>
+	</table><div id="MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults_LD" class="dxpnlLoadingDivWithContent_Office2010Blue dxlpLoadingDivWithContent_Office2010Blue dx-ft" style="left:0px;top:0px;z-index:29999;display:none;position:absolute;">
+
+	</div><script id="dxss_221079098" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientCallbackPanel,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults','cbLiveResults',{'callBack':function(arg) { WebForm_DoCallback('ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults',arg,ASPx.Callback,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_cbLiveResults',ASPx.CallbackError,true); },'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$cbLiveResults','hideContentOnCallback':false},{'CallbackError':function(s, e) {
+e.handled = true; 
+//alert("Callback error: Page will be reloaded");
+location.reload();	
+}});
+
+//-->
+</script>
+
+
+
+
+
+
+
+<script id="dxss_1209919030" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientTimer,'MainContent_panContentRight_ContentShow_LiveClassResultsControl_timRefresh','timRefresh',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$ContentShow$LiveClassResultsControl$timRefresh'},{'Tick':function(s, e) {
+if (!cbLiveResults.InCallback()) {
+        cbLiveResults.PerformCallback();
+    }
+}});
+
+//-->
+</script>
+
+
+
+
+
+
+                    </div>
+
+                    <div id="adsBelow">
+                        <div class="dxpnlControl_Office2010Blue" id="MainContent_panContentRight_AdSliderHorizontal1_panAds2">
+		
+                <table style="border: 0px none #FFFFFF; border-collapse: collapse; margin-right: auto; margin-left: auto;" cellspacing="4px">
+                    <tr>
+                        <td>
+                            <div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider1" style="background-color:White;height:52px;width:400px;display:none;">
+
+		</div><script id="dxss_2031278416" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider1',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.createControl(ASPxClientImageSlider,'MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider1','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$AdSliderHorizontal1$panAds2$ASPxImageSlider1','items':{'0':{'s':'/GetAdImage.ashx?id=811a3679-7178-414d-a206-a2c201817fb6&filename=Advertisehere60x476.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a50+GMT&Width=400&Height=52','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'},'1':{'s':'/GetAdImage.ashx?id=31f247f1-aef1-48a8-a7f5-b27d01471d51&filename=Banner-for-Equine-Website-Ad_v1-rev-02.png&updated=Sat%2c+08+Feb+2025+00%3a50%3a59+GMT&Width=400&Height=52','t':'Banner-for-Equine-Website-Ad_v1-rev-02','u':'https://www.harbinequineandfarm.com/'},'2':{'s':'/GetAdImage.ashx?id=dabccb60-348d-4229-a0b9-a39800fcc1de&filename=HSS+Ad.jpg&updated=Sun%2c+31+Aug+2014+19%3a20%3a15+GMT&Width=400&Height=52','t':'HSS Ad','u':'http://www.chartermerchantservices.com/'},'3':{'s':'/GetAdImage.ashx?id=36ecc7c7-ab48-451d-8fc3-b48100ae2d9b&filename=Phoenix20260708A.png&updated=Wed%2c+08+Jul+2026+14%3a34%3a09+GMT&Width=400&Height=52','t':'Phoenix20260708A','u':'https://phoenixaccounting.net/'}},'itemsCount':4,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:White;border-style:None;','imgAreaCssCl':'dxis-imageArea','enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>
+                        </td>
+                        <td>
+                            <div title="Click to visit sponsor site." class="dxisControl_Office2010Blue" id="MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider2" style="background-color:White;height:52px;width:400px;display:none;">
+
+		</div><script id="dxss_1624691387" type="text/javascript">
+<!--
+ASPx.AddHoverItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorHover'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorHover_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorHover'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorHover_Office2010Blue'}]],['']]]);
+ASPx.AddPressedItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorPressed'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorPressed_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorPressed'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorPressed_Office2010Blue'}]],['']]]);
+ASPx.AddDisabledItems('MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider2',[[['dxis-prevPageBtnHorDisabled'],[''],['ntbb'],,[[{'spriteCssClass':'dxWeb_isPrevPageBtnHorDisabled_Office2010Blue'}]],['']],[['dxis-nextPageBtnHorDisabled'],[''],['ntbf'],,[[{'spriteCssClass':'dxWeb_isNextPageBtnHorDisabled_Office2010Blue'}]],['']]]);
+ASPx.createControl(ASPxClientImageSlider,'MainContent_panContentRight_AdSliderHorizontal1_panAds2_ASPxImageSlider2','',{'uniqueID':'ctl00$ctl00$MainContent$panContentRight$AdSliderHorizontal1$panAds2$ASPxImageSlider2','items':{'0':{'s':'/GetAdImage.ashx?id=36ecc7c7-ab48-451d-8fc3-b48100ae2d9b&filename=Phoenix20260708A.png&updated=Wed%2c+08+Jul+2026+14%3a34%3a09+GMT&Width=400&Height=52','t':'Phoenix20260708A','u':'https://phoenixaccounting.net/'},'1':{'s':'/GetAdImage.ashx?id=811a3679-7178-414d-a206-a2c201817fb6&filename=Advertisehere60x476.jpg&updated=Thu%2c+30+Jan+2014+05%3a19%3a50+GMT&Width=400&Height=52','t':'Place Your Ad Here on HorseShowsOnline','u':'http://horseshowsonline.com/Advertising.aspx'},'2':{'s':'/GetAdImage.ashx?id=31f247f1-aef1-48a8-a7f5-b27d01471d51&filename=Banner-for-Equine-Website-Ad_v1-rev-02.png&updated=Sat%2c+08+Feb+2025+00%3a50%3a59+GMT&Width=400&Height=52','t':'Banner-for-Equine-Website-Ad_v1-rev-02','u':'https://www.harbinequineandfarm.com/'},'3':{'s':'/GetAdImage.ashx?id=dabccb60-348d-4229-a0b9-a39800fcc1de&filename=HSS+Ad.jpg&updated=Sun%2c+31+Aug+2014+19%3a20%3a15+GMT&Width=400&Height=52','t':'HSS Ad','u':'http://www.chartermerchantservices.com/'}},'itemsCount':4,'animationType':1,'enablePagingGestures':false,'itemCssCl':'dxis-item','imgAreaStyle':'background-color:White;border-style:None;','imgAreaCssCl':'dxis-imageArea','enablePagingByClick':false,'navBtnsVbl':0,'itemTxtVbl':0,'hasNavigateUrls':true,'target':'_blank','showNavBar':false,'autoPlay':true});
+
+//-->
+</script>
+                        </td>
+                    </tr>
+                </table>
+            
+	</div>
+
+
+
+
+
+
+                    </div>
+
+                
+</div>
+
+
+        
+
+        <span class="dxeBase_Office2010Blue" id="MainContent_labReferrer" style="font-size:8px;"></span>
+    </div>
+    <table class="dxlpLoadingPanel_Office2010Blue dxlpControl_Office2010Blue" cellspacing="0" cellpadding="0" id="MainContent_loadPanelShow" style="border-collapse:collapse;position:absolute;left:0px;top:0px;z-index:30000;display:none;">
+	<tr>
+		<td>
+            <table class="showmaster6" style="margin-right: auto; margin-left: auto">
+                <tr>
+                    <td style="margin-right: auto; margin-left: auto; text-align: center;">
+                        <img alt="" class="showmaster7" src="Images/animated/houndtracking.gif" id="imghunt" style="margin-right: auto; margin-left: auto" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; font-size: 12px; font-weight: bold;">Fetching requested information.<br />
+                        Please wait...</td>
+                </tr>
+            </table>
+        </td>
+	</tr>
+</table><script id="dxss_1012688918" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientLoadingPanel,'MainContent_loadPanelShow','loadPanelShow',{'uniqueID':'ctl00$ctl00$MainContent$loadPanelShow'});
+
+//-->
+</script>
+    <br />
+
+        </div>
+    </div>
+    <div class="clear-fix:after">
+            <script id="dxss_1242973809" type="text/javascript">
+<!--
+(function(){
+var a = {'is12HoursCulture':true,'percentPattern':1,'numPosInf':'∞','numNegInf':'-∞'};
+for(var b in a) ASPx.CultureInfo[b] = a[b];
+})();
+
+
+//-->
+</script><table id="ASPxDateEditMaster_LP" class="dxeLoadingPanel_Office2010Blue dxlpLoadingPanel_Office2010Blue" cellspacing="0" cellpadding="0" style="border-collapse:collapse;left:0px;top:0px;z-index:30000;display:none;">
+	<tr>
+		<td class="dx" style="padding-right:0px;"><img class="dxlp-loadingImage dxlp-imgPosLeft" src="/DXR.axd?r=1_89-mCwfr" alt="" align="middle" /></td><td class="dx" style="padding-left:0px;"><span id="ASPxDateEditMaster_TL">Loading&hellip;</span></td>
+	</tr>
+</table><table class="dxeButtonEditSys dxeButtonEdit_Office2010Blue" cellspacing="1" cellpadding="0" id="ASPxDateEditMaster" style="display:none;">
+	<tr>
+		<td class="dxic" onmousedown="return ASPx.DDMC_MD(&#39;ASPxDateEditMaster&#39;, event)" style="width:100%;"><input class="dxeEditArea_Office2010Blue dxeEditAreaSys" id="ASPxDateEditMaster_I" name="ctl00$ctl00$ASPxDateEditMaster" onchange="ASPx.ETextChanged(&#39;ASPxDateEditMaster&#39;)" type="text" /></td><td id="ASPxDateEditMaster_B-1" class="dxeButton dxeButtonEditButton_Office2010Blue" style="-webkit-user-select:none;"><img id="ASPxDateEditMaster_B-1Img" class="dxEditors_edtDropDown_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="v" /></td>
+	</tr>
+</table><div id="ASPxDateEditMaster_DDD_PW-1" class="dxpcDropDown_Office2010Blue dxpclW dxpc-ddSys dxdd-root" style="z-index:10000;display:none;visibility:hidden;">
+	<div class="dxpc-mainDiv dxdd-cal dxpc-shadow">
+		<div class="dxpc-contentWrapper">
+			<div class="dxpc-content">
+				<table style="display:none;">
+					<tr>
+						<td id="ASPxDateEditMaster_DDD_C_EC_D" class="dxeCalendarDay_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DS" class="dxeCalendarSelected_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DH" class="dxeCalendarHover_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DA" class="dxeCalendarOtherMonth_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DO" class="dxeCalendarOutOfRange_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DDD" class="dxeCalendarDayDisabled_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DW" class="dxeCalendarWeekend_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DT" class="dxeCalendarToday_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_DD" class="dxeDisabled_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_FNI" class="dxeCalendarFastNavItem_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_FNIS" class="dxeCalendarFastNavItemSelected_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_FNIH" class="dxeCalendarFastNavItemHover_Office2010Blue"></td><td id="ASPxDateEditMaster_DDD_C_EC_FNIA" class="dxeCalendarFastNavItemOtherPeriod_Office2010Blue"></td>
+					</tr>
+				</table><table class="dxeCVC dxeCalendar_Office2010Blue" cellspacing="0" cellpadding="0" id="ASPxDateEditMaster_DDD_C" style="border-collapse:collapse;">
+					<tr>
+						<td valign="top"><table cellpadding="0" style="width:100%;border-collapse:collapse;">
+							<tr>
+								<td class="dxeCalendarHeader_Office2010Blue" style="border-top:0;"><table cellpadding="0" style="width:100%;border-collapse:collapse;">
+									<tr>
+										<td id="ASPxDateEditMaster_DDD_C_PTPC" class="dxe" style="display:none;"><img id="ASPxDateEditMaster_DDD_C_PTPCImg" class="dxEditors_edtCalendarFNPrevPeriod_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Back" /></td><td id="ASPxDateEditMaster_DDD_C_PYC" class="dxe"><img id="ASPxDateEditMaster_DDD_C_PYCImg" class="dxEditors_edtCalendarPrevYear_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Previous year" /></td><td class="dxeCHS"></td><td id="ASPxDateEditMaster_DDD_C_PMC" class="dxe"><img id="ASPxDateEditMaster_DDD_C_PMCImg" class="dxEditors_edtCalendarPrevMonth_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Previous month" /></td><td id="ASPxDateEditMaster_DDD_C_TC" class="dxe" style="width:100%;cursor:default;"><span id="ASPxDateEditMaster_DDD_C_T" style="cursor:pointer;">August 2026</span></td><td id="ASPxDateEditMaster_DDD_C_NMC" class="dxe"><img id="ASPxDateEditMaster_DDD_C_NMCImg" class="dxEditors_edtCalendarNextMonth_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Next month" /></td><td class="dxeCHS"></td><td id="ASPxDateEditMaster_DDD_C_NYC" class="dxe"><img id="ASPxDateEditMaster_DDD_C_NYCImg" class="dxEditors_edtCalendarNextYear_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Next year" /></td><td id="ASPxDateEditMaster_DDD_C_NTPC" class="dxe" style="display:none;"><img id="ASPxDateEditMaster_DDD_C_NTPCImg" class="dxEditors_edtCalendarFNNextPeriod_Office2010Blue" src="/DXR.axd?r=1_89-mCwfr" alt="Forward" /></td>
+									</tr>
+								</table></td>
+							</tr><tr>
+								<td id="ASPxDateEditMaster_DDD_C_mc" class="dxMonthGridWithWeekNumbers" style="-webkit-user-select:none;"><table id="ASPxDateEditMaster_DDD_C_mt" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;border-collapse:separate;">
+									<tr align="center">
+										<td></td><td class="dxeCalendarDayHeader_Office2010Blue">Sun</td><td class="dxeCalendarDayHeader_Office2010Blue">Mon</td><td class="dxeCalendarDayHeader_Office2010Blue">Tue</td><td class="dxeCalendarDayHeader_Office2010Blue">Wed</td><td class="dxeCalendarDayHeader_Office2010Blue">Thu</td><td class="dxeCalendarDayHeader_Office2010Blue">Fri</td><td class="dxeCalendarDayHeader_Office2010Blue">Sat</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">31</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">26</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">27</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">28</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">29</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">30</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">31</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">1</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">32</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">2</td><td class="dxeCalendarDay_Office2010Blue">3</td><td class="dxeCalendarDay_Office2010Blue">4</td><td class="dxeCalendarDay_Office2010Blue">5</td><td class="dxeCalendarDay_Office2010Blue">6</td><td class="dxeCalendarDay_Office2010Blue">7</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">8</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">33</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">9</td><td class="dxeCalendarDay_Office2010Blue">10</td><td class="dxeCalendarDay_Office2010Blue">11</td><td class="dxeCalendarDay_Office2010Blue">12</td><td class="dxeCalendarDay_Office2010Blue">13</td><td class="dxeCalendarDay_Office2010Blue">14</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">15</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">34</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">16</td><td class="dxeCalendarDay_Office2010Blue">17</td><td class="dxeCalendarDay_Office2010Blue">18</td><td class="dxeCalendarDay_Office2010Blue">19</td><td class="dxeCalendarDay_Office2010Blue">20</td><td class="dxeCalendarDay_Office2010Blue">21</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">22</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">35</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">23</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarToday_Office2010Blue">24</td><td class="dxeCalendarDay_Office2010Blue">25</td><td class="dxeCalendarDay_Office2010Blue">26</td><td class="dxeCalendarDay_Office2010Blue">27</td><td class="dxeCalendarDay_Office2010Blue">28</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">29</td>
+									</tr><tr>
+										<td class="dxeCalendarWeekNumber_Office2010Blue">36</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue">30</td><td class="dxeCalendarDay_Office2010Blue">31</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">1</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">2</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">3</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">4</td><td class="dxeCalendarDay_Office2010Blue dxeCalendarWeekend_Office2010Blue dxeCalendarOtherMonth_Office2010Blue">5</td>
+									</tr>
+								</table></td>
+							</tr><tr>
+								<td id="ASPxDateEditMaster_DDD_C_yc" class="dxFastNavGrid" style="display:none;"><table id="ASPxDateEditMaster_DDD_C_yt" class="dxeCalendarFastNav_Office2010Blue" style="height:100%;width:100%;border-collapse:separate;">
+									<tr>
+										<td class="dxeCalendarFastNavItemArea_Office2010Blue" style="height:100%;width:100%;"><table id="ASPxDateEditMaster_DDD_C_yt_n" cellspacing="0" cellpadding="0" style="height:100%;width:100%;border-collapse:collapse;border-collapse:separate;">
+											<tr>
+												<td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Jan</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Feb</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Mar</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Apr</td>
+											</tr><tr>
+												<td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">May</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Jun</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Jul</td><td class="dxeCalendarFastNavItem_Office2010Blue">Aug</td>
+											</tr><tr>
+												<td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Sep</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Oct</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Nov</td><td class="dxeCalendarFastNavItem_Office2010Blue dxeCalendarFastNavItemOtherPeriod_Office2010Blue">Dec</td>
+											</tr>
+										</table></td>
+									</tr>
+								</table></td>
+							</tr>
+						</table></td>
+					</tr><tr>
+						<td id="ASPxDateEditMaster_DDD_C_F" class="dxeCalendarFooter_Office2010Blue"><button id="ASPxDateEditMaster_DDD_C_BT" class="dxeCalendarButton_Office2010Blue" type="button">Today</button><button id="ASPxDateEditMaster_DDD_C_BC" class="dxeCalendarButton_Office2010Blue" type="button">Clear</button></td>
+					</tr>
+				</table><script id="dxss_690758902" type="text/javascript">
+<!--
+ASPx.AddHoverItems('ASPxDateEditMaster_DDD_C',[[['dxeCalendarButtonHover_Office2010Blue'],[''],['BT','BC','BO','BCN','FNP_BO','FNP_BC']]]);
+ASPx.AddPressedItems('ASPxDateEditMaster_DDD_C',[[['dxeCalendarButtonPressed_Office2010Blue'],[''],['BT','BC','BO','BCN','FNP_BO','FNP_BC']]]);
+ASPx.AddDisabledItems('ASPxDateEditMaster_DDD_C',[[['dxeDisabled_Office2010Blue'],[''],['']],[['dxeDisabled_Office2010Blue dxeButtonDisabled_Office2010Blue'],[''],['BT','BC','BO','BCN','FNP_BO','FNP_BC']],[[''],[''],['PYC','PMC','NMC','NYC'],,[[{'spriteCssClass':'dxEditors_edtCalendarPrevYearDisabled_Office2010Blue'}],[{'spriteCssClass':'dxEditors_edtCalendarPrevMonthDisabled_Office2010Blue'}],[{'spriteCssClass':'dxEditors_edtCalendarNextMonthDisabled_Office2010Blue'}],[{'spriteCssClass':'dxEditors_edtCalendarNextYearDisabled_Office2010Blue'}]],['Img']]]);
+ASPx.createControl(ASPxClientCalendar,'ASPxDateEditMaster_DDD_C','',{'uniqueID':'ctl00$ctl00$ASPxDateEditMaster$DDD$C','scStates':2,'scPostfix':'Office2010Blue','serverCurrentDate':new Date(2026,7,24,0,0,0,0),'visibleDate':new Date(2026,7,24,0,0,0,0),'fastNavRollbackTexts':['Back To Days', 'Back To Months', 'Back To Years'],'isDateEditCalendar':true},null,null,{'decorationStyles':[{'key':'F','className':'dxeFocused_Office2010Blue','cssText':''}]});
+
+//-->
+</script>
+			</div>
+		</div>
+	</div>
+</div><script id="dxss_1870570963" type="text/javascript">
+<!--
+ASPx.AddHoverItems('ASPxDateEditMaster_DDD',[[['dxpc-closeBtnHover'],[''],['HCB-1']]]);
+ASPx.createControl(ASPxClientPopupControl,'ASPxDateEditMaster_DDD','',{'uniqueID':'ctl00$ctl00$ASPxDateEditMaster$DDD','adjustInnerControlsSizeOnShow':false,'popupAnimationType':'slide','closeAction':'CloseButton','popupHorizontalAlign':'LeftSides','popupVerticalAlign':'Below','isPopupPositionCorrectionOn':false},{'Shown':function (s, e) { ASPx.DDBPCShown('ASPxDateEditMaster', e); }});
+
+//-->
+</script><script id="dxss_844348497" type="text/javascript">
+<!--
+ASPx.AddHoverItems('ASPxDateEditMaster',[[['dxeButtonEditButtonHover_Office2010Blue'],[''],['B-1']]]);
+ASPx.RemoveHoverItems('ASPxDateEditMaster',[[['B-100']]]);
+ASPx.AddPressedItems('ASPxDateEditMaster',[[['dxeButtonEditButtonPressed_Office2010Blue'],[''],['B-1']]]);
+ASPx.RemovePressedItems('ASPxDateEditMaster',[[['B-100']]]);
+ASPx.AddDisabledItems('ASPxDateEditMaster',[[['dxeDisabled_Office2010Blue'],[''],['','I']],[['dxeDisabled_Office2010Blue dxeButtonDisabled_Office2010Blue'],[''],['B-1'],,[[{'spriteCssClass':'dxEditors_edtDropDownDisabled_Office2010Blue'}]],['Img']]]);
+ASPx.RemoveDisabledItems('ASPxDateEditMaster',[[['B-100'],]]);
+ASPx.createControl(ASPxClientDateEdit,'ASPxDateEditMaster','',{'callBack':function(arg) { WebForm_DoCallback('ctl00$ctl00$ASPxDateEditMaster',arg,ASPx.Callback,'ASPxDateEditMaster',ASPx.CallbackError,true); },'uniqueID':'ctl00$ctl00$ASPxDateEditMaster','clientVisible':false,'scStates':2,'scPostfix':'Office2010Blue','stateObject':{'rawValue':'N','useMinDateInsteadOfNull':false},'autoCompleteAttribute':{'name':'autocomplete','value':'off'},'outOfRangeWarningClassName':'dxeOutOfRWarn_Office2010Blue dxeOutOfRWarnRight_Office2010Blue','outOfRangeWarningMessages':['The date must be in the range {0}...{1}', 'The date must be greater than or equal to {0}', 'The date must be less than or equal to {0}'],'dateFormatter':ASPx.DateFormatter.Create('M/d/yyyy')},null,null,{'decorationStyles':[{'key':'F','className':'dxeFocused_Office2010Blue','cssText':''}]});
+
+//-->
+</script>
+    </div>
+    <div id="SiteFooter" >
+        
+           <table style="width: 100%; border-top-style: solid; border-top-width: 1px; border-top-color: #C0C0C0">
+               <tr>
+                   <td style="width: 200px">
+                       &nbsp;<img title="HSS Show Management Software is accredited at the highest (platinum) level by USEF, the United States Equestrian Federation" class="dxeImage_Office2010Blue" id="ASPxImage3" src="Images/HSSintegratedWith.jpg" alt="" style="height:50px;" />
+                   </td>
+                   <td class="SiteMasterStyle4">&copy; 2001-2023 TimeSlice Technologies Corporation
+                       -
+                       All Rights Reserved&nbsp;
+                       <span id="lbVersion">Ver: 1.0.2026.603</span>
+                       <br />
+                       <table id="FooterMenu" style="margin-left:auto; margin-right:auto" >
+                           <tr>
+                               <td>
+                                   <a class="dxeHyperlink_Office2010Blue" id="ASPxHyperLink1" href="ContactHSO.aspx">Contact HSO</a>
+                               </td>
+                               <td>
+                                   <a class="dxeHyperlink_Office2010Blue" id="ASPxHyperLink2" href="PrivacyPolicy.aspx">Privacy Policy</a>
+                               </td>
+                               <td>
+                                   <a class="dxeHyperlink_Office2010Blue" id="ASPxHyperLink3" href="TermsOfService.aspx">Terms of Service</a>
+                               </td>
+                               <td>
+                                   <a class="dxeHyperlink_Office2010Blue" id="ASPxHyperLink4" href="Alerts.aspx">Security Alerts</a>
+                               </td>
+                           </tr>
+                       </table>
+                   </td>
+                   <td class="SiteMasterStyle5" style="width: 200px; text-align: right; margin-right: 4px; vertical-align: middle;">
+                       
+                   </td>
+               </tr>
+           </table>
+    </div>
+</div> 
+
+
+
+ <table class="dxlpLoadingPanel_Office2010Blue dxlpControl_Office2010Blue" cellspacing="0" cellpadding="0" id="loadPanelShow" style="border-collapse:collapse;position:absolute;left:0px;top:0px;z-index:30000;display:none;">
+	<tr>
+		<td>
+         <table class="SiteMasterStyle6" style="margin-right: auto; margin-left: auto">
+             <tr>
+                 <td style="margin-right: auto; margin-left: auto; text-align: center;">
+                     <img class="dxeImage_Office2010Blue" id="loadPanelShow_LPTC_ASPxImage1_0" onclick="return ASPx.SEClick(&#39;loadPanelShow_LPTC_ASPxImage1_0&#39;, event)" src="Images/CloseXgrey.png" alt="" align="right" /><script id="dxss_56558118" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientImage,'loadPanelShow_LPTC_ASPxImage1_0','',{'uniqueID':'ctl00$ctl00$loadPanelShow$LPTC$TC$ASPxImage1','scStates':4,'scPostfix':'Office2010Blue'},{'Click':function(s, e) {
+	HideMainLoadingPanel();
+}});
+
+//-->
+</script>
+                 </td>
+             </tr>
+             <tr>
+                 <td style="margin-right: auto; margin-left: auto; text-align: center;">
+                     <img alt="" src="/Images/animated/houndtracking.gif" id="imghunt" style="margin-right: auto; margin-left: auto" />
+                 </td>
+             </tr>
+             <tr>
+                 <td style="text-align: center; font-size: 12px; font-weight: bold;">Fetching requested information.<br />Please wait...</td>
+             </tr>
+         </table>
+     </td>
+	</tr>
+</table><script id="dxss_1554108262" type="text/javascript">
+<!--
+ASPx.createControl(ASPxClientLoadingPanel,'loadPanelShow','',{'uniqueID':'ctl00$ctl00$loadPanelShow'});
+
+//-->
+</script>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+var callBackFrameUrl='/WebResource.axd?d=beToSAE3vdsL1QUQUxjWdeaIxJU2Fi-rbkJiTEyV05rf1Hktb4FdKPd7bNN0G6PFuZcpGkEIhkwsg1SM2juZYA2&t=638563127773552689';
+WebForm_InitCallback();//]]>
+</script>
+</form>
+</body>
+</html>
