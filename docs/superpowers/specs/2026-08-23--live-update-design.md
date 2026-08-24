@@ -99,9 +99,11 @@ the re-render from fresh data produces the behavior.
   (`__POLL_MS` is a test hook set via jsdom `beforeParse`.)
 - Module state: `liveRaw = JSON.stringify(DATA)` (last accepted payload),
   `pollsFailed = 0`, `pollInFlight = false`, `pollTimer = null`.
-- Startup: only if `typeof fetch === "function"` (keeps jsdom and
-  file:// usage working — poller inert there), schedule the first poll at
-  `+POLL_MS` (no immediate poll; the embedded snapshot is fresh at deploy).
+- Polling is active when `fetch` exists **and** the origin is http(s)
+  (`pollingActive`); this single condition drives the poller, the ring, and
+  the failure marker, so file:// and jsdom usage never poll or show a fake
+  countdown. When active, schedule the first poll at `+POLL_MS` (no
+  immediate poll; the embedded snapshot is fresh at deploy).
 - `poll()`:
   1. If `pollInFlight`, return; else set it.
   2. `fetch("payload.json?ts=" + Date.now(), {cache: "no-store"})`.
@@ -251,8 +253,9 @@ window scroll, filter-list scroll, and focus.
        "not updating" and the ring is hidden; stub recovers → marker
        clears and the ring is visible again.
     5. Ring: present in this dom; progress circle `stroke-dasharray` ≈ 37.7
-       (2π·6); `stroke-dashoffset` returns to C (empty) after the first
-       poll's cycle reset.
+       (2π·6); after a poll the progress circle's transition is set to span
+       `POLL_MS` (jsdom does not run CSS transitions, so the test asserts
+       the transition string rather than the animated offset).
     6. No view bounce — scroll: `beforeParse` sets
        `Object.defineProperty(w, "scrollY", {value: 123, configurable: true})`
        and replaces `w.scrollTo` with a recording spy; after the first
