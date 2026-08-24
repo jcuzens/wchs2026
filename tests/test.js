@@ -377,6 +377,43 @@ setTimeout(() => {
           check("live: ring dasharray = circumference (2π·6 ≈ 37.7)", Math.abs(parseFloat(dash) - 2 * Math.PI * 6) < 0.1, dash);
           check("live: ring transition spans one poll cycle", !!ringFg5 && ringFg5.style.transition.indexOf("50ms") !== -1, ringFg5 ? ringFg5.style.transition : "missing");
 
+          // check 6: window scroll restored after re-render
+          check("live: scroll position restored after re-render", w4.__scrollCalls.some(c => c[0] === 0 && c[1] === 123), JSON.stringify(w4.__scrollCalls));
+
+          // check 7: re-render deferred while a control has focus
+          // (in filtered view the settled frontier may be filtered out, so
+          //  assert via the up-next pill, not the done count)
+          if (P2_FRONTIER_NUM){
+            const si4b = d4.querySelectorAll("#filters .fgroup")[0].querySelector(".fsearch");
+            si4b.focus();
+            check("live: search input can take focus", d4.activeElement === si4b);
+            const firstChildBefore = d4.querySelector("#schedule").firstChild;
+            const daysBefore = [...d4.querySelectorAll("main .day")].map(el => el.classList.contains("collapsed"));
+            // serve one more update: settle the next frontier class
+            const p3 = JSON.parse(JSON.stringify(w4.__live.current));
+            const f3 = p3.classes.find(c => c.n === P2_FRONTIER_NUM);
+            if (f3 && f3.e.length) f3.e[0][6] = "1";
+            p3.asof = "2026-08-25 11:10";
+            const P3_FRONTIER = orderedClassesOf(p3.classes).find(c => !isDone(c));
+            const P3_FRONTIER_NUM = P3_FRONTIER ? P3_FRONTIER.n : null;
+            w4.__live.current = p3;
+            await sleep(200);
+            const nowWhileDeferred = d4.querySelector("main .cls.now");
+            check("live: re-render deferred while focused (body unchanged)", d4.querySelector("#schedule").firstChild === firstChildBefore);
+            check("live: body still shows old frontier while deferred", !!nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent === P2_FRONTIER_NUM, (nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent) + " vs " + P2_FRONTIER_NUM);
+            check("live: header still shows newest asof while deferred", /^Updated Aug 25, 2026 · 11:10 AM/.test(upd4.textContent), upd4.textContent);
+            si4b.blur();
+            await sleep(100);
+            const nowAfter = d4.querySelector("main .cls.now");
+            check("live: blur applies the deferred update", d4.querySelector("#schedule").firstChild !== firstChildBefore);
+            check("live: up-next advanced after deferred apply", !P3_FRONTIER_NUM ? !nowAfter : (!!nowAfter && nowAfter.querySelector(".cnum").textContent === P3_FRONTIER_NUM), (nowAfter && nowAfter.querySelector(".cnum").textContent) + " vs " + P3_FRONTIER_NUM);
+            const gT4b = d4.querySelectorAll("#filters .fgroup")[0];
+            check("live: selection survives the deferred re-render", !!(gT4b.querySelector(".chip") && gT4b.querySelector(".chip").textContent.includes(TRAINER)));
+            // check 8: day collapse state survives the re-render
+            const daysAfter = [...d4.querySelectorAll("main .day")].map(el => el.classList.contains("collapsed"));
+            check("live: day collapse state survives re-render", JSON.stringify(daysAfter) === JSON.stringify(daysBefore), JSON.stringify(daysAfter) + " vs " + JSON.stringify(daysBefore));
+          }
+
           console.log("\n" + (checks - failures) + "/" + checks + " checks passed" + (failures ? "  —  " + failures + " FAILURES" : "  —  ALL TESTS PASSED"));
           process.exit(failures ? 1 : 0);
         })();

@@ -420,6 +420,7 @@ function renderSchedule(){
   for (const d of days){
     const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
     const dEl = el("section","day");
+    dEl.dataset.day = d.day;
     const collapsed = dayState[d.day] != null ? dayState[d.day] : isPastDay(d.day);
     if (collapsed) dEl.classList.add("collapsed");
     const h2 = el("h2");
@@ -613,14 +614,42 @@ function restoreSearch(){
 }
 function applyDataUpdate(p){
   liveRaw = JSON.stringify(p);
+  const x = window.scrollX || 0, y = window.scrollY || 0;
+  const aside = $("#filters");
+  const asy = aside ? (aside.scrollTop || 0) : 0;
+  for (const dEl of document.querySelectorAll("#schedule .day")){
+    const key = dEl.dataset.day;
+    if (key != null && dayState[key] == null) dayState[key] = dEl.classList.contains("collapsed");
+  }
   DATA = p;
   buildIndexes();
   renderFilters();
   restoreSearch();
   renderSchedule();
-  setUpdatedLine(DATA.asof, false);
+  setUpdatedLine(p.asof, false);
+  if (aside) aside.scrollTop = asy;
+  if (x || y) window.scrollTo(x, y);
 }
+let pendingPayload = null;
+function focusInBody(){
+  const a = document.activeElement;
+  return !!a && a !== document.body &&
+    ($("#filters").contains(a) || $("#schedule").contains(a));
+}
+function flushPending(){
+  if (pendingPayload && !focusInBody()){
+    const p = pendingPayload;
+    pendingPayload = null;
+    applyDataUpdate(p);
+  }
+}
+document.addEventListener("focusout", flushPending);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) { clearTimeout(pollTimer); }
+  else { clearTimeout(pollTimer); poll(); }
+});
 async function poll(){
+  flushPending();
   if (pollInFlight) return;
   pollInFlight = true;
   try {
@@ -630,8 +659,16 @@ async function poll(){
     if (!p || !Array.isArray(p.classes)) throw new Error("bad payload");
     pollsFailed = 0;
     const raw = JSON.stringify(p);
-    if (raw !== liveRaw) applyDataUpdate(p);
-    else setUpdatedLine(DATA.asof, false);
+    if (raw !== liveRaw){
+      if (focusInBody()){
+        pendingPayload = p;
+        setUpdatedLine(p.asof, false);
+      } else {
+        applyDataUpdate(p);
+      }
+    } else {
+      setUpdatedLine(DATA.asof, false);
+    }
   } catch (e) {
     pollsFailed++;
     if (pollsFailed >= 3) setUpdatedLine(DATA.asof, true);
