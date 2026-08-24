@@ -78,6 +78,10 @@ else
   fi
 fi
 
+# --- live scores (additive source; a failure never blocks the pipeline) ---
+python3 fetch_live.py && python3 parse_live.py \
+  || log "WARNING: live scores fetch failed (cache retained)"
+
 # --- safety: refuse to publish a catastrophic data loss
 counts=$(python3 - <<'PY'
 import json, os, re

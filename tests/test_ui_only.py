@@ -20,6 +20,12 @@ def check(name, cond, extra=""):
     if not cond:
         fails.append(name)
 
+# Hold the cron lock so a concurrent cron cycle cannot rebuild mid-test
+# (the cron then skips that cycle, "previous run still going").
+import fcntl
+_lock = open(os.path.join(os.path.dirname(BUILDER), "cron.lock"), "a+")
+fcntl.flock(_lock.fileno(), fcntl.LOCK_EX)
+
 p_before = payload_of(IDX)
 subprocess.run([sys.executable, BUILDER, "--ui-only"], check=True)
 check("payload preserved across --ui-only rebuild", payload_of(IDX) == p_before)

@@ -9,6 +9,8 @@ the day your riders go.
 ```bash
 bash fetch_entries.sh   # re-download all class pages (skips already-fetched; resumable)
 python3 parse_entries.py
+python3 fetch_live.py    # fetch the live scores grid -> live.json (minutes after scoring)
+python3 parse_live.py    # fold live.json into live_cache.json (accumulating)
 python3 build_page.py    # rebuilds ../index.html
 ```
 
@@ -24,6 +26,12 @@ python3 build_page.py    # rebuilds ../index.html
 - `payload.json` (repo root) is the compact published payload the page polls.
   A regular `build_page.py` writes it; `--ui-only` never touches it; cron
   commits it with `index.html`.
+- `live.json` / `live_cache.json` are git-ignored live-scores
+  intermediates. `build_page.py` merges cached placings into entries that
+  have no official place yet (official results always win) and puts a gold
+  "live" pill on classes with live activity fresher than 60 min. If the
+  live fetch fails — or the files are absent — the build output is exactly
+  the official-only page.
 
 ### Changing the page without re-fetching data
 

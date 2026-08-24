@@ -33,6 +33,13 @@ def check(name, cond, extra=""):
     if not cond:
         fails.append(name)
 
+# Hold the cron lock for the duration of this test so a concurrent cron
+# cycle cannot change the inputs (or the built files) mid-test; the cron
+# then skips that cycle ("previous run still going").
+import fcntl
+_lock = open(os.path.join(os.path.dirname(BUILDER), "cron.lock"), "a+")
+fcntl.flock(_lock.fileno(), fcntl.LOCK_EX)
+
 idx_backup = IDX + ".bak"
 plj_backup = PLJ + ".bak"
 plj_existed = os.path.exists(PLJ)

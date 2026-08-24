@@ -1,7 +1,10 @@
 # Live Scores integration — design
 
 Date: 2026-08-24
-Status: approved (sectioned design approved in chat 2026-08-24)
+Status: approved (sectioned design approved in chat 2026-08-24).
+Protocol details corrected 2026-08-24 after end-to-end verification:
+per-row `SHOWDETAILROW` (accordion detail), state from the response
+envelope, growing key set.
 
 ## Problem
 
@@ -89,7 +92,13 @@ Page: `https://horseshowsonline.com/LiveScoring.aspx?ShowGUID=46c298a5-6bac-44e0
    ```
    HTML-escaped (`"` → `&quot;`) as the field value.
 
-### Callback POST (one per grid page)
+### Callback POST (one per class row)
+
+**The detail view is an accordion**: the server keeps at most one detail
+row expanded per response (`SHOWALLDETAIL` expands only row 0 — do not use
+it). To collect every class's placed entries the fetcher sends
+**`SHOWDETAILROW <key>` once per row key** and parses the detail from each
+response.
 
 POST to the same URL, body = all form fields (step 2) + the grid state
 input (step 3), then:
@@ -99,11 +108,14 @@ input (step 3), then:
   `c0:KV|<len>;<keys-json>;FR|1;0;CT|2;{};GB|<len>;<serArgs>;`
   where `<keys-json>` is the compact JSON key array, and `<serArgs>` is
   each item as `<strlen>|<item>` concatenated:
-  - `SHOWALLDETAIL` → `13|SHOWALLDETAIL`
-  - `GOTOPAGE <n>` (0-based) → `8|GOTOPAGE1|<n>`
+  - `SHOWDETAILROW <key>` → `13|SHOWDETAILROW<len(key)>|<key>`
+  - `GOTOPAGE <n>` (0-based) → `8|GOTOPAGE1|<n>` (only needed if the GET
+    page itself is paginated; callback responses always render the whole
+    current window)
 - `__EVENTVALIDATION` (last)
 
-Wire facts (all verified against a jsdom capture of the real page):
+Wire facts (all verified against a jsdom capture of the real page and
+end-to-end runs on 2026-08-24):
 
 - The `c0:` prefix (callback type `c` = common, slot `0`) is **required** —
   without it the server throws `Length cannot be less than zero`.
@@ -113,59 +125,98 @@ Wire facts (all verified against a jsdom capture of the real page):
   work: the grid binds data on GET only ("No data to display").
 - The callback response is `0|/*DX*/({'result':{'html':'<escaped grid
   html>','stateObject':{...}},...})`. A server fault appears as
-  `{'error':{'message':...}}` or `{'generalError':...}`.
-- `result.html` is a JS-escaped string (unescape `\'` `\\` `\n` `\/`).
-- On multi-page grids: `GOTOPAGE n` then `SHOWALLDETAIL`. Re-parse the
-  grid state (keys/callbackState) **from each response's HTML** before the
-  next request. `NEXTPAGE` (no args) errors server-side — don't use it.
-  (Verified `GOTOPAGE` to a nonexistent page degrades gracefully.)
+  `{'error':{'message':...}}` or `{'generalError':...}`
+  (stale/corrupt state → "control callback state encryption" error —
+  always re-parse state from the previous response).
+- `result.html` is a JS-escaped string (unescape `\'` `\\` `\n` `\r` `\/`).
+- **State comes from the envelope `stateObject`, not the response HTML.**
+  The response HTML re-initializes the main grid via
+  `PostponeInitialize` (no `createControl`), and it *also* contains
+  `createControl` blocks for the detail sub-grids (`grPlaced_*`,
+  `grNonPlaced_*`) whose state must not be confused with the main grid's.
+  After each callback, re-parse `keys`/`callbackState`/`groupLevelState`
+  from the envelope before the next request.
+- **The key set grows while fetching** (the show is live: new classes join
+  the window mid-run). Loop: expand every key of the current set, then
+  re-check the set from the last response; repeat until stable (cap ~5
+  rounds). Row index for a key = `keys.index(key)` in the *current* key
+  list (the server expands by key, so this stays correct when the window
+  shifts).
+- Each response contains **all** parent rows (fresh ring/ord/progress/
+  placed/updated/source) plus exactly **one** detail row (the row just
+  expanded). Parse parent info from every response; parse the detail from
+  the response it belongs to.
+- `NEXTPAGE` (no args) errors server-side — don't use it.
 
 ### Parse
 
-From `result.html`:
+The grid's top-level rows all carry ids `<prefix>_grMain_DX*` (headers,
+`DXADRow`, `DXDataRowN`, `DXDRowN`); nested table rows (progress bar,
+sub-grids) do not — so split the grid HTML on
+`<tr id="[^"]*_grMain_DX[A-Za-z]` to get complete rows without a
+depth-tracker.
 
-- Parent rows (`dxgvDataRow_*`): ring, ord, `NN - <name>` (num includes
-  `x.y` sub-classes), progress bar `shown / total` (the
-  `customDisplayFormat` "N / M" div), Placed, Not Placed, Updated, Source.
-- Detail rows (one block per expanded parent): header `Entries that
-  placed`, then per entry: entry #, horse name, color/age/sex (ignored),
-  rider, country (ignored), Ord (ignored), **Place** (1-based; blank =
-  not placed, not listed), Score (ignored in v1).
+From each response:
+
+- Parent rows (`DXDataRowN`, N = row index = position in the key list):
+  columns are Ring Name, Ord, `NN - <name>` (num includes `x.y`
+  sub-classes), progress bar `shown / total`, Placed, Not Placed, Updated,
+  Source. The name+progress cell is the `<td id="..._tccell...">`; the four
+  plain cells after it are Placed, Not Placed, Updated, Source.
+- The one detail row (`DXDRowN`) holds two sub-grids:
+  `grPlaced_N` (placed entries) and `grNonPlaced_N` (not placed — v1
+  ignores it). Placed entry rows carry spans with ids
+  `..._lbEntryNo_K` (entry #), `..._lbEntryName_K` (horse),
+  `..._lbHorseDetails_K` (color/age — ignored), `..._lbCntry_K`
+  (country — ignored); the rider is the bold plain cell, then two bold
+  right-aligned cells: Ord (ignored) and **Place** (1-based). Score column
+  empty in sampled classes — ignored in v1.
 
 ### Output: `refresh/live.json` (git-ignored)
 
 ```json
 {
   "fetched": "2026-08-24 09:20",
-  "pages": 1,
   "classes": [
     {"num": "54", "name": "ASB Adult Five Gaited Show Pleasure Div II",
-     "ring": "Ring 1", "shown": 15, "total": 15,
+     "ring": "Ring 1", "ord": 8,
+     "shown": 15, "total": 15,
      "placed": 8, "not_placed": 7,
-     "updated": "32 min", "source": "Show Secretary",
+     "updated": "32 min", "updated_min": 32, "source": "Show Secretary",
      "entries": [[1379, "SOMETHING JUSTT LIKE THIS", "VERRILL, TAYLOR", 5]]}
   ]
 }
 ```
 
 `entries` = `[entry#, horse, rider, place]` for placed entries only.
+`updated_min` = parsed minutes (feeds the 60-min freshness cutoff). The
+window can contain sub-classes that are not in `classes.json` (e.g. `55.1`,
+split from its parent during the show); the merge ignores class numbers
+the page doesn't know.
 
 ## Section 2 — Pipeline scripts
 
 ### `refresh/fetch_live.py` (new; stdlib only — urllib, re, json)
 
-- Warms the session (GET ShowDetails, mirroring `fetch_entries.sh`), then
-  runs the GET + callbacks above: page 0 = 1 callback (SHOWALLDETAIL);
-  each further page = 2 (GOTOPAGE n, then SHOWALLDETAIL). `pageIndex` is
-  assumed 0-based (ASPx convention; the server clamps invalid pages and an
-  off-by-one would worst-case re-fetch a page, which the merge tolerates).
+- Reuses the protocol helpers from `refresh/live_scores.py` (pure
+  functions, unit-tested) for GET parsing, callback param building,
+  response parsing.
+- Warms the session (GET ShowDetails, mirroring `fetch_entries.sh`), then:
+  GET `LiveScoring.aspx`, then one `SHOWDETAILROW` callback per row key,
+  re-parsing state (keys/callbackState) from each response's envelope.
+  Loop until the key set is stable (new classes can join the window
+  mid-run); cap ~5 rounds. ~0.7 s pacing between callbacks.
+- Parent-row info is collected from every response (all rows are rendered
+  in each); the detail is parsed from the response that expanded it
+  (accordion: only the just-expanded row is detailed).
 - Writes `live.json`. Exits 0 on success.
 - **Fail-safe:** any failure (no grid block, callback error, parse yields
   zero classes) → non-zero exit, **does not touch** `live.json` or
   `live_cache.json`. Cron logs a warning and continues; the page degrades
   to official-only data (today's behavior) with the cache retained.
-- Request pacing: one GET + N callbacks (N = pages, expected 1); ~8-min
-  cron cadence makes rate limits a non-issue.
+- Request volume: one GET + N callbacks (N = class rows in the live
+  window, 8–15 observed); ~8-min cron cadence makes rate limits a
+  non-issue.
 
 ### `refresh/parse_live.py` (new; stdlib only)
 
@@ -213,16 +264,28 @@ From `result.html`:
 ## Section 4 — Tests
 
 - `tests/test_live.py` (new, stdlib):
-  - fixture: a saved real callback response (today's `SHOWALLDETAIL`
-    capture) committed under `tests/fixtures/`;
-  - response parse → expected classes/placings (entry #, place);
+  - fixtures committed under `tests/fixtures/`:
+    `live_page.html` (a real GET of LiveScoring.aspx — form fields + grid
+    state) and `live_showall.txt` (a real callback response with one
+    expanded detail row — the parse is identical for any
+    `SHOWDETAILROW`/`SHOWALLDETAIL` response).
+  - `parse_get_page` → form fields, callback ID, keys, callbackState;
+  - response parse → expected classes (fixture: 8 classes 48–54, class 48
+    expanded: placed 7 / not-placed 4, "2 hours, 2 min", "Show
+    Secretary") and the 7 placed entries (e.g. `1158 TWENTY FOUR KARAT
+    MAGIC, WITMER HAYLEN, ord 6, place 1`);
   - `updated`-string → minutes (`53 min`, `1 hour, 51 min`, `2 hours, 2
-    min`);
+    min`, `43 min`);
   - merge rule: official wins over live; live fills gaps; classes absent
     from cache untouched;
   - cache: accumulates across simulated runs, idempotent on re-run,
     unchanged on failed fetch (no live.json);
   - freshness cutoff: 59 min → `live` present, 61 min → absent.
+- `tests/test_asof.py` / `tests/test_payload.py` unchanged: the build only
+  *reads* `live.json`/`live_cache.json` (never writes them), so the
+  byte-identical/asof invariants hold exactly as they do for `data.json`
+  (local intermediates must match the committed build — same pre-existing
+  assumption).
 - `tests/test.js` additions (pinned date as today):
   - pill present exactly for `live` classes, absent otherwise;
   - an entry with no official place but a cached-live place renders its
@@ -246,4 +309,5 @@ From `result.html`:
   existing frontier).
 - Displaying live **scores** (column empty in sampled classes).
 - A "live Xm ago" time text on the pill (user chose pill only).
-- Not-placed detail (the live page doesn't render it).
+- Not-placed entries (the live page renders them in a separate
+  `grNonPlaced` sub-grid without placings; v1 ignores them).

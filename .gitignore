@@ -7,4 +7,6 @@ refresh/fetchlist.txt
 refresh/refreshlist.txt
 refresh/cron.log
 refresh/cron.lock
+refresh/live.json
+refresh/live_cache.json
 refresh/__pycache__/

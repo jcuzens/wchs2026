@@ -63,12 +63,15 @@ refresh/fetch_entries.sh                    # resumable; uses refresh/jar.txt se
 python3 refresh/parse_entries.py
 python3 refresh/build_page.py               # data -> index.html + payload.json (asof only changes if the data changed)
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
+python3 refresh/fetch_live.py               # live scores fetch -> refresh/live.json
+python3 refresh/parse_live.py               # fold live.json into refresh/live_cache.json
 npm --prefix tests install                  # once; jsdom dev-only dependency
 npm --prefix tests test                     # page smoke suite (runs against the built index.html)
 python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
 python3 tests/test_asof.py                  # verifies the asof only changes when the data changes
 python3 tests/test_frontier.py              # frontier/lookahead selection (cron refresh)
 python3 tests/test_payload.py               # verifies payload.json follows the asof policy
+python3 tests/test_live.py                  # live protocol/parse/merge tests (fixtures)
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
 git add index.html payload.json && git commit -m "Refresh entries <date>" && git push
 ```
@@ -86,6 +89,10 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
   the first class in schedule order without placings, walking forward class
   by class until a class has no results yet — plus the next 8 schedule
   classes (lookahead) to keep upcoming entry lists fresh;
+- also fetches the **live scores** grid (one callback per class row;
+  placings land minutes after scoring) into `refresh/live.json` and folds
+  it into the accumulating `refresh/live_cache.json`; a live failure is a
+  warning only — the page degrades to official-only data;
 - rebuilds `index.html` + `payload.json`, and commits + pushes **only when the data
   actually changed** (the asof policy makes an unchanged rebuild
   byte-identical, so `git diff` against HEAD is the no-change signal).
@@ -117,6 +124,16 @@ cannot clobber good data.
   counts down to the next check.
 - Data flow: `classes.json` + `schedule.json` + `entries/*.html`
   → `parse_entries.py` → `data.json` → `build_page.py` → `index.html`.
+- **Live scores:** `LiveScoring.aspx` (same session as the entry fetcher)
+  is a second, faster data source. `fetch_live.py` walks its
+  reverse-engineered DevExpress callback protocol (see the spec
+  `docs/superpowers/specs/2026-08-24--live-scores-design.md` for the wire
+  format) into `refresh/live.json`; `parse_live.py` accumulates placings in
+  `refresh/live_cache.json`; `build_page.py` merges them: **official
+  class-results placings always win, live fills gaps only**, and classes
+  with live activity fresher than 60 min get a gold **live pill** on the
+  page. If the live source fails or the files are missing, the page is
+  byte-identical to official-only.
 - **asof policy: the "Updated" stamp changes only when the data
   actually changes** (both in `index.html` and `payload.json`). The
   regular build compares the new `classes`
@@ -124,7 +141,8 @@ cannot clobber good data.
   `asof` when they're identical. `--ui-only` re-embeds that same payload,
   so template/UI rebuilds never touch the stamp.
 - `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `refreshlist.txt`,
-  `cron.log`, `cron.lock`, `tests/node_modules/` are git-ignored
+  `cron.log`, `cron.lock`, `live.json`, `live_cache.json`,
+  `tests/node_modules/` are git-ignored
   intermediates. Never commit them.
 - **Class number is the join key** across all data sources. Sub-classes
   use `x.y` numbering (e.g. `45.1`) and inherit the parent's schedule
@@ -191,6 +209,13 @@ prefix or "clean up" escape sequences.
 **The payload is one line:** the embedded data in `index.html` (and
 `payload.json`) is a single long line by design. A huge `git diff` on
 `index.html` usually means only the `asof` timestamp changed.
+
+**Live protocol is reverse-engineered:** `refresh/fetch_live.py` drives a
+DevExpress ASPxGridView callback protocol that is not documented anywhere;
+the wire format (c0: prefix, KV/FR/CT/GB segments, envelope stateObject)
+is in the spec above. If it breaks, nothing is lost — the fetch fails
+softly and the page degrades to official-only. Don't "simplify" the
+callback param; every segment is load-bearing.
 
 **Don't print the remote:** `git remote -v` leaks the PAT embedded in
 the origin URL.

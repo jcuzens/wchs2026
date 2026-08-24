@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 """asof policy: the page's 'Updated' timestamp only changes when the data
-actually changes - a plain rebuild around unchanged data must keep it."""
+actually changes - a plain rebuild around unchanged data must keep it.
+
+The baseline is the first build of this run (not the committed one): the
+local inputs (data.json, live-scores files) may legitimately differ from
+whatever produced the last commit, in which case the first build bumps the
+asof exactly once - which is the policy working, not a bug."""
 import datetime, json, os, re, shutil, subprocess, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -28,30 +33,33 @@ def check(name, cond, extra=""):
     if not cond:
         fails.append(name)
 
-a0 = asof_of(IDX)
+# Hold the cron lock for the duration of this test so a concurrent cron
+# cycle cannot change the inputs (or the built files) mid-test; the cron
+# then skips that cycle ("previous run still going").
+import fcntl
+_lock = open(os.path.join(os.path.dirname(BUILDER), "cron.lock"), "a+")
+fcntl.flock(_lock.fileno(), fcntl.LOCK_EX)
+
 idx_backup = IDX + ".bak"
 shutil.copyfile(IDX, idx_backup)
 plj_backup = PLJ + ".bak"
 plj_existed = os.path.exists(PLJ)
 if plj_existed:
     shutil.copyfile(PLJ, plj_backup)
-# live-scores files are local intermediates of a different data source;
-# move them aside so the policy under test depends only on data.json
-live_moved = []
-for lf in ("live.json", "live_cache.json"):
-    p = os.path.join(os.path.dirname(BUILDER), lf)
-    if os.path.exists(p):
-        live_moved.append((p, p + ".asofbak"))
-        shutil.move(p, p + ".asofbak")
 try:
-    # 1. plain rebuild, unchanged data -> asof unchanged
+    # 1. baseline build, then an unchanged rebuild: asof must not move
+    #    (the baseline build itself may bump the asof once if the local
+    #    inputs differ from the committed payload - that is the policy)
     build()
-    check("rebuild with unchanged data keeps asof", asof_of(IDX) == a0, asof_of(IDX) + " vs " + a0)
+    a1 = asof_of(IDX)
+    wait_next_minute()   # a broken "always now" implementation would differ here
+    build()
+    check("rebuild with unchanged data keeps asof", asof_of(IDX) == a1, asof_of(IDX) + " vs " + a1)
 
     # 2. changed data -> asof bumped (data.json is a git-ignored intermediate;
     #    back it up and always restore it)
-    if a0 == datetime.datetime.now().strftime('%Y-%m-%d %H:%M'):
-        # same-minute aliasing: a fresh timestamp would be indistinguishable from a0
+    if a1 == datetime.datetime.now().strftime('%Y-%m-%d %H:%M'):
+        # same-minute aliasing: a fresh timestamp would be indistinguishable from a1
         wait_next_minute()
     backup = DATA + ".bak"
     shutil.copyfile(DATA, backup)
@@ -61,8 +69,8 @@ try:
                   "entries": [], "weekday": "Saturday", "period": "Morning", "date": "August 29", "time": "1:00 p.m."})
         json.dump(d, open(DATA, "w"), indent=1)
         build()
-        a1 = asof_of(IDX)
-        check("changed data bumps asof", a1 != a0, a1 + " vs " + a0)
+        a2 = asof_of(IDX)
+        check("changed data bumps asof", a2 != a1, a2 + " vs " + a1)
     finally:
         shutil.move(backup, DATA)
 
@@ -79,8 +87,6 @@ finally:
         shutil.move(plj_backup, PLJ)
     elif os.path.exists(PLJ):
         os.remove(PLJ)
-    for orig, bak in live_moved:
-        shutil.move(bak, orig)
 
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)
