@@ -72,6 +72,10 @@ header { position: sticky; top: 0; z-index: 10; background: #fff; border-bottom:
 header h1 { font-size: 17px; margin: 0; }
 header .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
 header .updated { color: var(--muted); font-size: 12px; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+.ring { flex: none; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 2.5; }
+.ring-track { stroke: var(--line); }
+.ring-fg { stroke: var(--accent); stroke-linecap: round; }
 .actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 .actions button { font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--line); background: #fff; border-radius: 8px; cursor: pointer; }
 .actions button:active { background: var(--accent-soft); }
@@ -144,7 +148,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
   main { flex: 1; padding: 4px 0 60px; }
 }
 @media print {
-  header .actions, aside, #toast, .chev, .dchev, .call { display: none !important; }
+  header .actions, aside, #toast, .chev, .dchev, .call, .ring { display: none !important; }
   .day .day-body { display: block !important; }
   #printHead { display: block; margin-bottom: 14px; }
   #printHead h1 { font-size: 16pt; margin: 0 0 2px; }
@@ -168,7 +172,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 <header>
   <h1>WCHS 2026 — My Schedule</h1>
   <div class="sub">World's Championship Horse Show · Aug 22–29 · Kentucky State Fair, Louisville</div>
-  <div class="updated" id="updatedLine"><span id="updatedText"></span></div>
+  <div class="updated" id="updatedLine"><svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle class="ring-track" cx="7" cy="7" r="6"></circle><circle class="ring-fg" cx="7" cy="7" r="6"></circle></svg><span id="updatedText"></span></div>
   <div class="actions">
     <button id="filtersBtn">Filters</button>
     <button id="contextBtn" disabled>Context</button>
@@ -583,10 +587,25 @@ const POLL_MS = (typeof window.__POLL_MS === "number") ? window.__POLL_MS : 3000
 const pollingActive = typeof fetch === "function" && location.protocol.indexOf("http") === 0;
 let liveRaw = JSON.stringify(DATA);
 let pollsFailed = 0, pollInFlight = false, pollTimer = null;
+const RING_C = 2 * Math.PI * 6;
+const ringFg = document.querySelector(".ring-fg");
+if (ringFg){
+  ringFg.style.strokeDasharray = RING_C;
+  ringFg.style.strokeDashoffset = RING_C;
+}
+function ringReset(){
+  if (!ringFg) return;
+  ringFg.style.transition = "none";
+  ringFg.style.strokeDashoffset = RING_C;
+  void ringFg.getBoundingClientRect();
+  ringFg.style.transition = "stroke-dashoffset " + POLL_MS + "ms linear";
+  ringFg.style.strokeDashoffset = 0;
+}
 // asof is passed explicitly: while a re-render is focus-deferred, DATA is
 // still the old payload but the header must show the newest asof
 function setUpdatedLine(asof, stale){
   $("#updatedText").textContent = "Updated " + fmtAsof(asof) + (stale ? " · not updating" : "");
+  if (ringFg) ringFg.style.display = stale ? "none" : "";
 }
 function restoreSearch(){
   const keys = ["trainer", "rider", "horse", "owner", "division"];
@@ -618,6 +637,7 @@ async function poll(){
     if (pollsFailed >= 3) setUpdatedLine(DATA.asof, true);
   } finally {
     pollInFlight = false;
+    ringReset();
     clearTimeout(pollTimer);
     pollTimer = setTimeout(poll, POLL_MS);
   }
@@ -632,7 +652,13 @@ applyContextBtn();
 setUpdatedLine(DATA.asof, false);
 renderSchedule();
 if (src) toast("Restored your selection");
-if (pollingActive) pollTimer = setTimeout(poll, POLL_MS);
+if (pollingActive) {
+  ringReset();
+  pollTimer = setTimeout(poll, POLL_MS);
+} else {
+  const ring = document.querySelector(".ring");
+  if (ring) ring.remove();
+}
 </script>
 </body>
 </html>

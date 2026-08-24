@@ -92,6 +92,7 @@ setTimeout(() => {
   const upd = doc.getElementById("updatedLine");
   check("updated line present", !!upd);
   check("updated line formatted", !!upd && /^Updated (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2}, \d{4} · \d{1,2}:\d{2} (AM|PM)$/.test(upd.textContent), upd ? upd.textContent : "missing");
+  check("no ring when polling is inactive", !doc.querySelector(".ring"), "ring present in plain dom");
 
   // (1) filters panel toggle
   const fbtn = doc.getElementById("filtersBtn");
@@ -359,13 +360,22 @@ setTimeout(() => {
           await sleep(150);
           check("live: unchanged payload does not re-render", d4.querySelector("#schedule").firstChild === firstChild);
 
-          // check 4: repeated failures mark the line, recovery clears it
+          // check 4: repeated failures mark the line (+ hide the ring), recovery clears
           w4.__live.fail = true;
           await sleep(250);
           check("live: 3+ failures show not-updating marker", upd4.textContent.endsWith(" · not updating"), upd4.textContent);
+          const ringFg5 = d4.querySelector(".ring-fg");
+          check("live: ring hidden while not updating", !!ringFg5 && ringFg5.style.display === "none", ringFg5 ? ringFg5.style.display : "missing");
           w4.__live.fail = false;
           await sleep(150);
           check("live: recovery clears marker", !upd4.textContent.includes("not updating"), upd4.textContent);
+          check("live: recovery shows ring again", !!ringFg5 && ringFg5.style.display === "");
+
+          // check 5: ring present, dasharray = circumference, transition spans one cycle
+          check("live: ring present when polling", !!ringFg5);
+          const dash = ringFg5 ? ringFg5.style.strokeDasharray : "";
+          check("live: ring dasharray = circumference (2π·6 ≈ 37.7)", Math.abs(parseFloat(dash) - 2 * Math.PI * 6) < 0.1, dash);
+          check("live: ring transition spans one poll cycle", !!ringFg5 && ringFg5.style.transition.indexOf("50ms") !== -1, ringFg5 ? ringFg5.style.transition : "missing");
 
           console.log("\n" + (checks - failures) + "/" + checks + " checks passed" + (failures ? "  —  " + failures + " FAILURES" : "  —  ALL TESTS PASSED"));
           process.exit(failures ? 1 : 0);
