@@ -467,6 +467,45 @@ setTimeout(() => {
             check("live: day collapse state survives re-render", JSON.stringify(daysAfter) === JSON.stringify(daysBefore), JSON.stringify(daysAfter) + " vs " + JSON.stringify(daysBefore));
           }
 
+          // check 9: live pill + live-filled place + up-next follows merged data
+          // (scope mode so every class card is rendered regardless of filters)
+          d4.getElementById("scopeBtn").click();
+          const p4 = JSON.parse(JSON.stringify(w4.__live.current));
+          const f4 = orderedClassesOf(p4.classes).find(c => !isDone(c));
+          if (f4){
+            if (f4.e.length) f4.e[0][6] = "1";   // live places the frontier class's first entry
+            f4.live = 12;                        // fresh live activity (minutes ago)
+            p4.asof = "2026-08-25 11:15";
+            w4.__live.current = p4;
+            await sleep(200);
+            const P4_LIVE_NUMS = p4.classes.filter(c => c.live != null).map(c => c.n).sort();
+            const pills = [...d4.querySelectorAll("main .cls .clive")]
+              .map(n => n.closest(".cls").querySelector(".cnum").textContent).sort();
+            check("live: pill rendered exactly for live classes",
+                  JSON.stringify(pills) === JSON.stringify(P4_LIVE_NUMS),
+                  pills.join() + " vs " + P4_LIVE_NUMS.join());
+            const card4 = [...d4.querySelectorAll("main .cls")]
+              .find(x => x.querySelector(".cnum").textContent === f4.n);
+            if (card4 && f4.e.length){
+              card4.querySelector(".cls-head").click();
+              const en4 = String(f4.e[0][0]);
+              const row4 = [...card4.querySelectorAll(".erow")]
+                .find(r => r.querySelector(".eentry")
+                           && r.querySelector(".eentry").textContent.trim() === en4);
+              check("live: live-filled place renders on its entry row",
+                    !!row4 && !!row4.querySelector(".place")
+                    && row4.querySelector(".place").textContent.includes("1st"),
+                    row4 ? row4.textContent.trim() : "row missing");
+            }
+            const P4_FRONT = orderedClassesOf(p4.classes).find(c => !isDone(c));
+            const nowCard4 = d4.querySelector("main .cls.now");
+            check("live: up-next follows merged data",
+                  P4_FRONT
+                    ? (!!nowCard4 && nowCard4.querySelector(".cnum").textContent === P4_FRONT.n)
+                    : !nowCard4,
+                  (nowCard4 && nowCard4.querySelector(".cnum").textContent) + " vs " + (P4_FRONT && P4_FRONT.n));
+          }
+
           console.log("\n" + (checks - failures) + "/" + checks + " checks passed" + (failures ? "  —  " + failures + " FAILURES" : "  —  ALL TESTS PASSED"));
           process.exit(failures ? 1 : 0);
         })();
