@@ -340,7 +340,8 @@ setTimeout(() => {
           const P2 = w4.__live.current;
           const P2_FRONTIER = orderedClassesOf(P2.classes).find(c => !isDone(c));
           const P2_FRONTIER_NUM = P2_FRONTIER ? P2_FRONTIER.n : null;
-          check("live: selection keeps its chip after re-render", !!(gT4.querySelector(".chip") && gT4.querySelector(".chip").textContent.includes(TRAINER)));
+          const gT4a = d4.querySelectorAll("#filters .fgroup")[0];
+          check("live: selection keeps its chip after re-render", !!(gT4a.querySelector(".chip") && gT4a.querySelector(".chip").textContent.includes(TRAINER)));
           check("live: context still shows all classes after re-render", d4.querySelectorAll("main .cls").length === TOTAL, "got " + d4.querySelectorAll("main .cls").length);
           const cardNb = [...d4.querySelectorAll("main .cls")].find(x => x.querySelector(".cnum").textContent === SCN);
           check("live: opened matched card stays open", !!cardNb && cardNb.classList.contains("open"));

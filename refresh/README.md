@@ -39,7 +39,7 @@ actually changes: a regular build keeps the existing asof when the parsed
 data is identical to what's already embedded, and `--ui-only` never touches
 it. The same policy applies to `payload.json`.
 
-Deploy: replace `index.html` at the repo root and push — GitHub Pages picks it up.
+Deploy: replace `index.html` and `payload.json` at the repo root and push — GitHub Pages picks them up.
 
 ### Auto-refresh (cron)
 

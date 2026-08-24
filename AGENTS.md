@@ -45,8 +45,9 @@ exactly. Do not skip this step.
 ## What this is
 
 A static, personal schedule site for WCHS 2026 (Aug 22–29, 2026, Kentucky
-State Fair). The entire site is a single generated file, `index.html`,
-served by GitHub Pages from the `main` branch. The page shell polls the
+State Fair). The site is two generated files — `index.html` (page shell)
+and `payload.json` (live data) — served by GitHub Pages from the `main`
+branch. The page shell polls the
 published `payload.json` every 30 s and re-renders in place (no manual
 refresh); the embedded snapshot in `index.html` is the first-paint/offline
 fallback. `refresh/` is the pipeline

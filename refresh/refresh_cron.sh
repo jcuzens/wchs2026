@@ -37,7 +37,7 @@ fi
 cd "$HERE" || die "cannot cd to $HERE"
 git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || die "not a git repo"
 if [ -n "$(git -C "$ROOT" status --porcelain -- index.html payload.json)" ]; then
-  log "WARNING: index.html has uncommitted local changes; rebuild will overwrite them"
+  log "WARNING: index.html/payload.json has uncommitted local changes; rebuild will overwrite them"
 fi
 
 # --- fetch phase
@@ -99,7 +99,7 @@ fi
 # --- build + publish (asof only changes when the data changed)
 python3 build_page.py || die "build failed"
 if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json; then
-  log "index.html unchanged; nothing to publish"
+  log "index.html + payload.json unchanged; nothing to publish"
 else
   git -C "$ROOT" add index.html payload.json || die "git add failed"
   git -C "$ROOT" commit -m "Refresh entries $(date +%F)" || die "git commit failed"
