@@ -837,7 +837,7 @@ function applyDataUpdate(p){
   renderFilters();
   restoreSearch();
   renderSchedule();
-  setUpdatedLine(false);
+  setUpdatedLine(p.asof, false);
   if (aside) aside.scrollTop = asy;
   if (x || y) window.scrollTo(x, y);
 }
