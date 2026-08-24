@@ -105,6 +105,11 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .session h3 { font-size: 13.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--gold); margin: 12px 0 6px; }
 .cls { background: #fff; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
 .cls.muted { opacity: .55; border-style: dashed; }
+.cls.done { background: #d1fae5; border-color: #6ee7b7; }
+.cls.done .cls-head { background: transparent; }
+.cls.now { background: #fffbeb; border: 2px solid #f59e0b; }
+.cls.now .cls-head { background: transparent; }
+.cnow { background: #f59e0b; color: #fff; border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
 .cls-head { width: 100%; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border: none; background: #fff; font: inherit; text-align: left; cursor: pointer; }
 .cls-head:active { background: var(--accent-soft); }
 .cnum { font-weight: 700; color: var(--accent); flex: none; font-size: 13.5px; min-width: 34px; }
@@ -118,10 +123,10 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .cls.open .chev { transform: rotate(90deg); }
 .cls-entries { display: none; border-top: 1px solid var(--line); }
 .cls.open .cls-entries { display: block; }
-.erow { display: grid; grid-template-columns: 34px 1fr; gap: 2px 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.erow { display: grid; grid-template-columns: 40px 1fr; gap: 2px 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
 .erow:last-child { border-bottom: none; }
-.erow .estart { grid-row: span 2; align-self: start; color: var(--muted); font-size: 12px; padding-top: 1px; }
-.erow .estart b { color: var(--ink); font-size: 14px; }
+.erow .eentry { grid-row: span 2; align-self: start; color: var(--muted); font-size: 12px; padding-top: 1px; }
+.erow .eentry b { color: var(--ink); font-size: 14px; font-variant-numeric: tabular-nums; }
 .ehorse { font-weight: 600; }
 .eppl { grid-column: 2; color: var(--muted); font-size: 12.5px; }
 .eppl .place { color: var(--gold); font-weight: 600; }
@@ -298,6 +303,19 @@ function buildSchedule(){
   }
   return [...byDay.values()].sort((a,b)=>parseInt(a.day.slice(-2))-parseInt(b.day.slice(-2)));
 }
+// the "current" class: first class in displayed order (day -> session -> number)
+// that has no rating yet. null once every class has a place.
+function frontierNum(){
+  for (const d of buildSchedule()){
+    const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
+    for (const [, cs] of secs){
+      for (const c of cs.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
+        if (!isDone(c)) return c.n;
+      }
+    }
+  }
+  return null;
+}
 
 // ---- rendering
 const $ = s => document.querySelector(s);
@@ -384,6 +402,7 @@ function renderSchedule(){
   main.textContent = "";
   const days = buildSchedule();
   const on = active();
+  const front = frontierNum();
   let rendered = 0;
   for (const d of days){
     const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
@@ -403,7 +422,10 @@ function renderSchedule(){
     for (const [per, cls] of secs){
       const list = cls.filter(c => !view.doneHidden || !isDone(c));
       const matched = on ? list.filter(clsMatches) : list;
-      const vis = (on && view.context) ? list : matched;
+      let vis = (on && view.context) ? list : matched;
+      if (on && !view.context && front && list.some(c => c.n === front) && !vis.some(c => c.n === front)){
+        vis = [...vis, list.find(c => c.n === front)];
+      }
       if (!vis.length) continue;
       dShown += matched.length;
       dRendered += vis.length;
@@ -412,7 +434,7 @@ function renderSchedule(){
       for (const c of vis.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
         const m = matched.includes(c);
         rendered++;
-        sEl.appendChild(makeClass(c, m));
+        sEl.appendChild(makeClass(c, m, c.n === front));
       }
       body.appendChild(sEl);
     }
@@ -433,7 +455,7 @@ function renderSchedule(){
 }
 function namesDisp(key,k){ const m = NAMES[key] && NAMES[key][k]; return m ? m.d : k; }
 
-function makeClass(c, isMatch){
+function makeClass(c, isMatch, isFrontier){
   const on = active();
   const visE = on ? c.e.filter(eMatches) : c.e;
   const showFiltered = on && isMatch;
@@ -446,9 +468,9 @@ function makeClass(c, isMatch){
   const buildRows = (box, entries) => {
     for (const e of sortE(entries)){
       const row = el("div","erow");
-      const st = el("span","estart");
-      st.innerHTML = e[5]!=null ? "st&nbsp;<b>"+e[5]+"</b>" : "—";
-      row.appendChild(st);
+      const en = el("span","eentry");
+      en.innerHTML = e[0] ? "<b>"+e[0]+"</b>" : "—";
+      row.appendChild(en);
       row.appendChild(el("span","ehorse", e[1]));
       const ppl = el("span","eppl");
       if (e[6]!=null) ppl.appendChild(el("span","place", e[6]+placeSuf(e[6]) + "  "));
@@ -457,11 +479,12 @@ function makeClass(c, isMatch){
       box.appendChild(row);
     }
   };
-  const d = el("div","cls" + (on && !isMatch ? " muted" : ""));
+  const d = el("div","cls" + (on && !isMatch && !isFrontier ? " muted" : "") + (isDone(c) ? " done" : "") + (isFrontier ? " now" : ""));
   const head = el("button","cls-head");
   head.appendChild(el("span","cnum", c.n));
   head.appendChild(el("span","cname", c.name));
   if (isDone(c)) head.appendChild(el("span","cdone","done ✓"));
+  if (isFrontier) head.appendChild(el("span","cnow","up next"));
   head.appendChild(el("span","cdiv", c.div));
   const call = canToggle ? el("span","call") : null;
   if (call) head.appendChild(call);

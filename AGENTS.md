@@ -153,9 +153,9 @@ print("asof:", re.search(r'"asof":"([^"]*)"', s).group(1))
 EOF
 ```
 
-The jsdom smoke suite (64 checks: filters, context/done toggles, day
-collapse, per-class show-all, persistence, mobile default) lives in
-`tests/test.js` and runs against the freshly built `index.html`:
+The jsdom smoke suite (76 checks: filters, context/done toggles, day
+collapse, per-class show-all, entry numbers, persistence, mobile default)
+lives in `tests/test.js` and runs against the freshly built `index.html`:
 
 ```bash
 npm --prefix tests test

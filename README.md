@@ -18,8 +18,9 @@ Open the link on your phone:
   encoded in the URL) — handy for the barn you're not at.
 - **Print** produces a day-by-day schedule of only your classes, with a
   page break per day.
-- Under each class you'll see the **start order and placings**; a blank
-  slot means that class hasn't been judged yet.
+- Under each class you'll see the **entry number and placings** (entries
+  are listed in start order); a blank slot means that class hasn't been
+  judged yet.
 
 The data snapshot date is in the page footer. Entries and placings change
 during the show — refresh it before the day your riders go (below).
