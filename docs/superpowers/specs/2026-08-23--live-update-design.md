@@ -34,6 +34,10 @@ itself from it.
 - **Countdown indicator:** a circular progress ring next to the "Updated"
   line, filling over each 30 s poll cycle (user chose a circular bar over
   ticking text).
+- **No view bounce:** a data refresh must never yank the user's view —
+  scroll position, focus (and mobile keyboard), day collapse state, and
+  filter-list scroll are preserved; while the user has focus inside a
+  re-rendered control, the body re-render is deferred to blur.
 
 ## Key existing fact
 
@@ -107,9 +111,12 @@ the re-render from fresh data produces the behavior.
   4. On success: `pollsFailed = 0`; `raw = JSON.stringify(p)`;
      - `raw === liveRaw` → do nothing except clear the stale marker
        (update the Updated line, cheap textContent set).
-     - else → `liveRaw = raw; DATA = p; buildIndexes(); renderFilters();
-       restoreSearch(); renderSchedule();` and update the Updated line.
-       Scroll position is preserved (see below).
+     - else → if focus is inside a re-rendered region (see "No view
+       bounce") → store `pendingPayload = p`, update the header (Updated
+       line + ring) only; else → `liveRaw = raw; DATA = p;
+       buildIndexes(); renderFilters(); restoreSearch();
+       renderSchedule();` and update the Updated line, with all view
+       state preserved (see "No view bounce").
   5. On failure: `pollsFailed++`; when `pollsFailed >= 3` and
      `location.protocol` starts with `http`, append " · not updating" to
      the Updated line (cleared on next success).
@@ -118,22 +125,47 @@ the re-render from fresh data produces the behavior.
   while hidden); tab visible again → poll immediately, then resume the
   schedule.
 
-### State preservation across a re-render
+### No view bounce (state preservation across a re-render)
 
-Survive a data update unchanged: filter selection (`state`), view toggles
-(`view`), open class cards (`openCls`), day collapse state (`dayState`),
-filter search texts, scroll position.
+A data refresh must not move the user's view. Survive a data update
+unchanged: filter selection (`state`), view toggles (`view`), open class
+cards (`openCls`), day collapse state (`dayState`), filter search texts,
+window scroll, filter-list scroll, and focus.
 
-- `renderFilters()` recreates all filter groups. The options lists already
-  re-filter from the module-level `search` object inside `makeGroup`, so
-  only the search input *text* must be restored:
+- **Window scroll:** capture `x = window.scrollX`, `y = window.scrollY`
+  before the re-render; after, `window.scrollTo(x, y)` only when
+  `x || y` is non-zero (jsdom's scroll positions are always 0, so tests
+  never trigger jsdom's "not implemented" noise; at the top of the page
+  there is nothing to restore).
+- **Filter-list scroll:** capture/restore `#filters` (the scrollable
+  aside) `scrollTop` the same way (skip when 0).
+- **Focus — defer the re-render while a control is in use.** If
+  `document.activeElement` is inside `#filters` or `#schedule` when an
+  update arrives (user typing in a search box, keyboard up on mobile, etc.),
+  do **not** re-render the body this cycle:
+  - the new payload is stored as `pendingPayload` (latest wins if several
+    arrive); `DATA`, indexes, and the body DOM keep showing the old
+    payload, so the view never shows a half-updated mix;
+  - the header ("Updated" line + ring) **is** updated — it is outside the
+    re-rendered region and is precisely the freshness indicator;
+  - on `blur` of the focused element, or on the next poll in which focus
+    has left the re-rendered regions, `applyDataUpdate(pendingPayload)`
+    runs for real.
+- **Day collapse never re-decides.** `renderSchedule()` computes each
+  day's default from `isPastDay(day)` (the midnight boundary flips it).
+  On any *re-render* (not the initial load), first seed
+  `dayState[d.day]` from the live DOM for every day not yet explicitly
+  toggled (`dayState[d.day] == null` → current collapsed/expanded state).
+  So a day the user has never touched keeps exactly the state it is
+  showing; only explicit header clicks change it. Initial-load behavior is
+  unchanged (`isPastDay` default — the pinned-clock jsdom tests depend on
+  this).
+- **Search text:** `renderFilters()` recreates all filter groups. The
+  options lists already re-filter from the module-level `search` object
+  inside `makeGroup`, so only the search input *text* must be restored:
   `restoreSearch()` sets each `#filters .fsearch` value from
   `search[key]` (group order: trainer, rider, horse, owner, division).
   No event dispatch needed.
-- Scroll: capture `y = window.scrollY` before `renderSchedule()`; after,
-  call `window.scrollTo(0, y)` only when `y > 0` (jsdom's scrollY is always
-  0, so tests never trigger jsdom's "not implemented" noise; at the top of
-  the page there is nothing to restore).
 - Known accepted limitation: a per-card "Show all"/"Show mine" toggle
   resets to the default filtered view on a data change (the card itself
   stays open per `openCls`).
@@ -221,6 +253,18 @@ filter search texts, scroll position.
     5. Ring: present in this dom; progress circle `stroke-dasharray` ≈ 37.7
        (2π·6); `stroke-dashoffset` returns to C (empty) after the first
        poll's cycle reset.
+    6. No view bounce — scroll: `beforeParse` sets
+       `Object.defineProperty(w, "scrollY", {value: 123, configurable: true})`
+       and replaces `w.scrollTo` with a recording spy; after the first
+       re-render, `scrollTo(0, 123)` was called.
+    7. No view bounce — focus deferral: focus the trainer search input
+       (with text in it), serve one more mutated payload, wait a cycle →
+       body unchanged (schedule first child is the same DOM node, done
+       count unchanged) while the Updated line shows the newest asof;
+       then `blur()` → the re-render applies (fresh nodes, updated done
+       count).
+    8. No view bounce — days: every `.day` section's collapsed state after
+       the re-render equals the state before it.
 
 ### `tests/test_payload.py` (new, modeled on `test_asof.py`)
 
