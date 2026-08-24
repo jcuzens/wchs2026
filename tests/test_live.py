@@ -86,5 +86,70 @@ for s, want in [("53 min", 53), ("1 hour, 51 min", 111), ("2 hours, 2 min", 122)
 check("minutes: empty -> None",
       ls.updated_to_minutes(None) is None and ls.updated_to_minutes("") is None)
 
+# --- protocol strings (what fetch_live.py sends)
+state = {"keys": ["aaaa", "bbbb"], "callbackState": "xyz", "groupLevelState": "{}"}
+p = ls.build_param(state, "bbbb")
+check("param: c0 KV FR CT GB shape",
+      p == "c0:KV|15;[\"aaaa\",\"bbbb\"];FR|1;0;CT|2;{};GB|22;13|SHOWDETAILROW4|bbbb;", p)
+name, val = ls.grid_state_field("GRID", state)
+check("state field: name is the grid uniqueID", name == "GRID")
+check("state field: html-escaped compact json",
+      val == ("{&quot;keys&quot;:[&quot;aaaa&quot;,&quot;bbbb&quot;],"
+              "&quot;groupLevelState&quot;:{},&quot;callbackState&quot;:&quot;xyz&quot;,"
+              "&quot;focusedRow&quot;:0,&quot;selection&quot;:&quot;&quot;,"
+              "&quot;toolbar&quot;:&quot;{}&quot;}"), val)
+
+# --- merge rule: official wins, live fills gaps
+def mcls(n, entries):    # entries: [(entry, place_or_None)]
+    return {"n": n, "name": "t", "e": [[e, "h", "r", "t", "o", None, p] for e, p in entries]}
+def mcache(num, places): # places: {entry: place}
+    return {num: {str(k): {"p": v, "at": "2026-08-24 09:20"} for k, v in places.items()}}
+
+d = [mcls("48", [("1158", None), ("958", "1")]), mcls("49", [("1", None)])]
+ls.merge_live_places(d, mcache("48", {"1158": 1, "958": 5}))
+check("merge: live fills the gap", d[0]["e"][0][6] == "1")
+check("merge: official place wins over live", d[0]["e"][1][6] == "1")
+check("merge: class not in cache untouched", d[1]["e"][0][6] is None)
+d2 = [mcls("48", [("1158", "2")])]
+ls.merge_live_places(d2, mcache("48", {"1158": 7}))
+check("merge: never overwrites an official place", d2[0]["e"][0][6] == "2")
+d3 = [mcls("48", [("1158", None)])]
+ls.merge_live_places(d3, {})
+check("merge: empty cache is a no-op", d3[0]["e"][0][6] is None)
+
+# --- cache: accumulate across runs, idempotent
+c = {}
+live1 = {"fetched": "2026-08-24 09:20",
+         "classes": [{"num": "48", "entries": [["1158", "H", "R", 1]]}]}
+live2 = {"fetched": "2026-08-24 09:28",
+         "classes": [{"num": "48", "entries": [["958", "H", "R", 2]]},
+                     {"num": "49", "entries": [["1", "H", "R", 3]]}]}
+ls.fold_live_cache(c, live1)
+ls.fold_live_cache(c, live2)
+check("cache: accumulates across runs",
+      c["48"]["1158"]["p"] == 1 and c["48"]["958"]["p"] == 2 and c["49"]["1"]["p"] == 3)
+check("cache: run timestamp stamped", c["48"]["958"]["at"] == "2026-08-24 09:28")
+snapshot = json.loads(json.dumps(c))
+ls.fold_live_cache(c, live2)
+check("cache: idempotent on re-run", c == snapshot)
+
+# --- parse_live.py CLI (temp files; the repo's live files are never touched)
+import tempfile
+tmp = tempfile.mkdtemp(prefix="livetest_")
+lp, cp = os.path.join(tmp, "live.json"), os.path.join(tmp, "cache.json")
+json.dump(live2, open(lp, "w"))
+r = subprocess.run([sys.executable, os.path.join(ROOT, "refresh", "parse_live.py"), lp, cp],
+                   capture_output=True, text=True)
+check("cli: exits 0", r.returncode == 0, r.stderr.strip())
+c1 = json.load(open(cp))
+check("cli: wrote the folded cache", c1["48"]["958"]["p"] == 2 and c1["49"]["1"]["p"] == 3)
+r = subprocess.run([sys.executable, os.path.join(ROOT, "refresh", "parse_live.py"), lp, cp],
+                   capture_output=True, text=True)
+check("cli: re-run is idempotent", json.load(open(cp)) == c1)
+r = subprocess.run([sys.executable, os.path.join(ROOT, "refresh", "parse_live.py"),
+                    os.path.join(tmp, "nope.json"), cp], capture_output=True, text=True)
+check("cli: missing live.json -> non-zero, cache untouched",
+      r.returncode != 0 and json.load(open(cp)) == c1, r.stderr.strip())
+
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

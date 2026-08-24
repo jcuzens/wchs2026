@@ -5,6 +5,7 @@ I/O here: fetch_live.py drives the requests, build_page.py does the merge.
 Protocol details: docs/superpowers/specs/2026-08-24--live-scores-design.md
 (section "Callback protocol")."""
 import html as H
+import json
 import re
 
 GRID_TR = re.compile(r'<tr id="[^"]*_grMain_DX[A-Za-z]')
@@ -167,6 +168,49 @@ def parse_get_page(page):
         "callbackState": cb2.group(1),
         "groupLevelState": gl_m.group(1) if gl_m else "{}",
     }
+
+def grid_state_field(callback_id, state):
+    """(name, value) for the grid's hidden state input. The grid renders
+    this hidden input (named with its uniqueID) at JS runtime; the server
+    needs it on every callback. Value is HTML-escaped compact JSON."""
+    gs = H.escape(json.dumps({"keys": state["keys"],
+                              "groupLevelState": json.loads(state["groupLevelState"]),
+                              "callbackState": state["callbackState"],
+                              "focusedRow": 0, "selection": "", "toolbar": "{}"},
+                             separators=(',', ':')), quote=True)
+    return (callback_id, gs)
+
+def build_param(state, key):
+    """__CALLBACKPARAM for a SHOWDETAILROW callback on row key `key`.
+    The c0: prefix and the FR/CT segments are required by the server."""
+    kv = json.dumps(state["keys"], separators=(',', ':'))
+    ser = "13|SHOWDETAILROW%d|%s" % (len(key), key)
+    return ("c0:" + "KV|%d;%s;" % (len(kv), kv)
+            + "FR|1;0;" + "CT|2;{};" + "GB|%d;%s;" % (len(ser), ser))
+
+def merge_live_places(classes, cache):
+    """In place: fill e[6] from the live cache where the official place is
+    missing. Official places are never overwritten; class numbers absent
+    from the cache (including live sub-classes the page doesn't know) are
+    untouched."""
+    for c in classes:
+        cc = cache.get(c["n"])
+        if not cc:
+            continue
+        for e in c["e"]:
+            if e[6] is None and e[0] in cc:
+                e[6] = str(cc[e[0]]["p"])
+    return classes
+
+def fold_live_cache(cache, live):
+    """In place: fold a live.json payload into the accumulating cache.
+    Grows only — no deletes during the show; re-folding is idempotent."""
+    fetched = live.get("fetched", "")
+    for c in live.get("classes", []):
+        cls = cache.setdefault(c["num"], {})
+        for entry, _horse, _rider, place in c.get("entries", []):
+            cls[str(entry)] = {"p": place, "at": fetched}
+    return cache
 
 def updated_to_minutes(s):
     """'53 min' -> 53; '1 hour, 51 min' -> 111; '2 hours, 2 min' -> 122;
