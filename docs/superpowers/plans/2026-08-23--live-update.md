@@ -27,8 +27,9 @@
 | 3 `let DATA` + `buildIndexes()` | done | `ddd66e3` |
 | 4 poller core | done | `c4c613b` (note: cron 33a861e already committed `payload.json` tracking at 22:00) |
 | 5 countdown ring | done | `ec1e06d` (SVG kept single-line: multi-line markup would put whitespace text nodes in `#updatedLine`.textContent and break the exact-text checks) |
-| 6 no view bounce | not started | — |
-| 7 docs + final verification | not started | — |
+| 6 no view bounce | done | `a6929d3` (cron e100d49 shipped it) |
+| 7 docs + final verification | done | `4a49a6a` |
+| final whole-branch review + fix batch | done | review clean (no blockers); fixes `bfab947` (test_asof payload restore, hidden-tab poll, malformed-shape guard, tautological chip check, doc/log wording). RED-phase crash in test_payload.py kept (cosmetic, historical). |
 
 ## Global Constraints
 
