@@ -31,6 +31,9 @@ itself from it.
   the snapshot is at most one deploy cycle stale until the first poll.
 - **Poll interval:** 30 s. No manual refresh button, no toast per update
   (the "Updated" line moving is the indicator).
+- **Countdown indicator:** a circular progress ring next to the "Updated"
+  line, filling over each 30 s poll cycle (user chose a circular bar over
+  ticking text).
 
 ## Key existing fact
 
@@ -135,13 +138,38 @@ filter search texts, scroll position.
   resets to the default filtered view on a data change (the card itself
   stays open per `openCls`).
 
-### Updated line
+### Updated line + countdown ring
 
-- Initial render unchanged: `"Updated " + fmtAsof(DATA.asof)`.
-- On accepted update: same, with the new asof. On 3+ consecutive failures
+- `#updatedLine` is restructured: an inline SVG ring followed by
+  `<span id="updatedText">`. All text writes (including the failure marker)
+  go to the span; existing text-based tests keep passing unchanged.
+- Text: initial render unchanged (`"Updated " + fmtAsof(DATA.asof)`); on
+  accepted update, same with the new asof; on 3+ consecutive failures
   (http(s) origins only): `"Updated <asof> · not updating"`.
 - The print header line (`#phSub`) is rebuilt inside `renderSchedule()` and
   therefore follows the new asof automatically.
+- Ring markup (14 px, starts at 12 o'clock):
+  `<svg class="ring" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">`
+  with a track circle (stroke `var(--line)`, fill none, r=6) and a progress
+  circle (stroke `var(--accent)`, fill none, r=6, `stroke-linecap: round`),
+  both `cx=7 cy=7`; the SVG rotated `-90deg` via CSS.
+  Progress circle: `stroke-dasharray = C` where `C = 2 * Math.PI * 6`
+  (≈ 37.7, computed in JS at init).
+- Animation (no recurring timer): after each completed poll
+  (success or failure), reset the progress circle:
+  `transition = "none"; stroke-dashoffset = C` → force reflow
+  (`void el.getBoundingClientRect()`) →
+  `transition = "stroke-dashoffset <POLL_MS>ms linear"; stroke-dashoffset = 0`.
+  The browser animates the fill over the whole cycle; the next poll's reset
+  restarts it. A hidden tab leaves the transition behind, but the
+  visibilitychange poll on return resets the ring immediately.
+- Visibility rules:
+  - Polling inactive (no `fetch` or non-http origin) → the ring element is
+    removed at init (no fake countdown on file:// / offline shells).
+  - Failure marker active ("not updating") → ring hidden (`display: none`);
+    restored on the next successful poll.
+  - `@media print`: the ring is hidden (added to the existing print
+    hide-list).
 
 ## Section 3 — Docs
 
@@ -153,7 +181,8 @@ filter search texts, scroll position.
   too big for GitHub MCP file tools — keep pushing via git); Verification
   (add `tests/test_payload.py`); Tips (payload line is now `let DATA`).
 - `README.md`: the page now updates itself ~every 30 s — no manual refresh
-  needed; the header's "Updated" line shows data freshness; file table
+  needed; the header's "Updated" line shows data freshness and a small
+  circular ring shows the countdown to the next check; file table
   gains `payload.json`; the "one self-contained HTML file — works offline"
   bullet is reworded (embedded snapshot keeps it working offline for the
   snapshot's data).
@@ -166,7 +195,9 @@ filter search texts, scroll position.
 
 - Payload-line regex: `/^(?:const|let) DATA = (.*);$/m`.
 - All existing checks keep passing unmodified (embedded payload line stays;
-  jsdom has no `fetch`, so the poller is inert via the guard).
+  `#updatedText` carries the same text so the updated-line regex is
+  unaffected; jsdom has no `fetch`, so the poller is inert via the guard and
+  the ring is removed at init — the plain dom has no `.ring`).
 - New live-update section (a fourth JSDOM instance, built after the existing
   mobile-default checks, before the summary):
   - `beforeParse`: pin the clock (existing `pinDate`), set
@@ -185,7 +216,11 @@ filter search texts, scroll position.
     3. No-op poll: stub returns the already-accepted payload → the
        schedule's first child node is the *same* DOM node (no re-render).
     4. Failure path: stub rejects → after 3 polls the Updated line contains
-       "not updating"; stub recovers → marker clears.
+       "not updating" and the ring is hidden; stub recovers → marker
+       clears and the ring is visible again.
+    5. Ring: present in this dom; progress circle `stroke-dasharray` ≈ 37.7
+       (2π·6); `stroke-dashoffset` returns to C (empty) after the first
+       poll's cycle reset.
 
 ### `tests/test_payload.py` (new, modeled on `test_asof.py`)
 
