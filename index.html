@@ -71,10 +71,10 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .cls.open .chev { transform: rotate(90deg); }
 .cls-entries { display: none; border-top: 1px solid var(--line); }
 .cls.open .cls-entries { display: block; }
-.erow { display: grid; grid-template-columns: 34px 1fr; gap: 2px 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.erow { display: grid; grid-template-columns: 40px 1fr; gap: 2px 8px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
 .erow:last-child { border-bottom: none; }
-.erow .estart { grid-row: span 2; align-self: start; color: var(--muted); font-size: 12px; padding-top: 1px; }
-.erow .estart b { color: var(--ink); font-size: 14px; }
+.erow .eentry { grid-row: span 2; align-self: start; color: var(--muted); font-size: 12px; padding-top: 1px; }
+.erow .eentry b { color: var(--ink); font-size: 14px; font-variant-numeric: tabular-nums; }
 .ehorse { font-weight: 600; }
 .eppl { grid-column: 2; color: var(--muted); font-size: 12.5px; }
 .eppl .place { color: var(--gold); font-weight: 600; }
@@ -416,9 +416,9 @@ function makeClass(c, isMatch, isFrontier){
   const buildRows = (box, entries) => {
     for (const e of sortE(entries)){
       const row = el("div","erow");
-      const st = el("span","estart");
-      st.innerHTML = e[5]!=null ? "st&nbsp;<b>"+e[5]+"</b>" : "—";
-      row.appendChild(st);
+      const en = el("span","eentry");
+      en.innerHTML = e[0] ? "<b>"+e[0]+"</b>" : "—";
+      row.appendChild(en);
       row.appendChild(el("span","ehorse", e[1]));
       const ppl = el("span","eppl");
       if (e[6]!=null) ppl.appendChild(el("span","place", e[6]+placeSuf(e[6]) + "  "));
