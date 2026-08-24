@@ -5,6 +5,31 @@
 **Tech Stack:** Python 3 stdlib, bash, vanilla JS in a generated single-file page, jsdom (dev-only) for page tests.
 **Spec:** `docs/superpowers/specs/2026-08-23--live-update-design.md`
 
+## Execution state (update as tasks complete)
+
+- Mode: **serial** subagent-driven development — exactly one subagent
+  dispatched at a time (user constraint: no concurrent agents, VRAM limit).
+  Continuous execution per the subagent-driven-development skill; review
+  between tasks; no pausing for check-ins.
+- Workspace: work directly in `/home/jcuzens/dev/test` (no worktree): the
+  production cron runs in this very directory every 8 min, and git-ignored
+  intermediates (`entries/`, `data.json`) would need duplication in a
+  worktree with an `index.html` merge conflict on top. Mid-edit template
+  state is a short risk window for a cron rebuild; the cron's safety checks
+  bound it.
+- **Do not push** until the user explicitly says so (Task 7 Step 6).
+- Progress (BASE before Task 1: `81254d5`):
+
+| Task | Status | Commit |
+|---|---|---|
+| 1 payload.json in the build | not started | — |
+| 2 cron commits both files | not started | — |
+| 3 `let DATA` + `buildIndexes()` | not started | — |
+| 4 poller core | not started | — |
+| 5 countdown ring | not started | — |
+| 6 no view bounce | not started | — |
+| 7 docs + final verification | not started | — |
+
 ## Global Constraints
 
 - `index.html` is **generated** — all page markup/CSS/JS lives in the raw-string template in `refresh/build_page.py`; never hand-edit `index.html`. Keep the `r"""..."""` raw prefix on the template.
