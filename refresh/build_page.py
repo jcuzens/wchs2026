@@ -12,7 +12,7 @@ if "--ui-only" in sys.argv[1:]:
         s = open(idx).read()
     except OSError:
         sys.exit("build_page.py: --ui-only needs an existing index.html at the repo root")
-    m = re.search(r"^const DATA = (\{.*\});\s*$", s, re.M)
+    m = re.search(r"^(?:const|let) DATA = (\{.*\});\s*$", s, re.M)
     if not m:
         sys.exit("build_page.py: no embedded payload found in index.html (is it a build of this template?)")
     payload = m.group(1)
@@ -38,7 +38,7 @@ else:
     asof = None
     idx = os.path.join(ROOT, "index.html")
     try:
-        prev = re.search(r"^const DATA = (\{.*\});\s*$", open(idx).read(), re.M)
+        prev = re.search(r"^(?:const|let) DATA = (\{.*\});\s*$", open(idx).read(), re.M)
         if prev:
             prev_obj = json.loads(prev.group(1))
             if json.dumps(prev_obj.get("classes"), separators=(',', ':')) == json.dumps(classes, separators=(',', ':')):
@@ -49,6 +49,9 @@ else:
         asof = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
 
     payload = json.dumps({"asof": asof, "classes": classes}, separators=(',', ':'))
+    with open(os.path.join(ROOT, "payload.json"), "w") as f:
+        f.write(payload + "\n")
+    print(f"payload.json: {os.path.getsize(os.path.join(ROOT, 'payload.json'))/1024:.0f} KB")
 
 html = r"""<!DOCTYPE html>
 <html lang="en">
