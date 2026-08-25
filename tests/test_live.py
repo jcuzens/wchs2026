@@ -166,10 +166,9 @@ check("cli: missing live.json -> non-zero, cache untouched",
 import shutil
 tmp = tempfile.mkdtemp(prefix="livebuild_")
 os.makedirs(os.path.join(tmp, "refresh"))
-shutil.copyfile(os.path.join(ROOT, "refresh", "build_page.py"),
-                os.path.join(tmp, "refresh", "build_page.py"))
-shutil.copyfile(os.path.join(ROOT, "refresh", "live_scores.py"),
-                os.path.join(tmp, "refresh", "live_scores.py"))
+for fn in ("build_page.py", "live_scores.py", "predict.py", "select_frontier.py"):
+    shutil.copyfile(os.path.join(ROOT, "refresh", fn),
+                    os.path.join(tmp, "refresh", fn))
 mini = [{"num": "48", "name": "Equitation", "type": None, "division": "EQ",
          "weekday": "Saturday", "period": "Morning", "date": "August 22",
          "time": "10:00 a.m.",
