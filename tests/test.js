@@ -17,11 +17,13 @@ const PIN_MS = Date.parse("2026-08-25T10:00:00");
 function pinDate(w){
   const shift = PIN_MS - Date.now();
   const Real = w.Date;
+  let adv = 0;
   class D extends Real {
-    constructor(...a){ a.length ? super(...a) : super(Real.now() + shift); }
-    static now(){ return Real.now() + shift; }
+    constructor(...a){ a.length ? super(...a) : super(Real.now() + shift + adv); }
+    static now(){ return Real.now() + shift + adv; }
   }
   w.Date = D;
+  w.__advance = ms => { adv += ms; };   // tick test: move the pinned clock
 }
 function makeDom(opts){
   return new JSDOM(HTML, Object.assign({
@@ -420,6 +422,44 @@ setTimeout(() => {
         const P1_HOT_NUM = P1_HOT ? P1_HOT.n : null;
 
         (async () => {
+          // tick: the predicted pills advance in place (no re-render).
+          // A dedicated dom: __TICK_MS=50 set in beforeParse + the pinDate
+          // clock seam. (This dom has no fetch stub, so no polling runs.)
+          const tickDom = makeDom({
+            url: "https://example.com/index.html",
+            beforeParse: wt => { pinDate(wt); wt.__TICK_MS = 50; },
+          });
+          const w5 = tickDom.window, d5 = w5.document;
+          w5.addEventListener("error", e => { console.log("WINDOW ERROR (tick):", e.message); failures++; });
+          const firstChild5 = d5.querySelector("#schedule").firstChild;
+          const tHot = upNextOf(DATA.classes, PIN_MS);
+          if (tHot && tHot.pe != null){
+            const hotCard = [...d5.querySelectorAll("main .cls")].find(x => x.dataset.num === tHot.n);
+            check("tick: hot card highlighted at pinned clock",
+                  !!hotCard && hotCard.classList.contains("now"));
+            const delta = tHot.pe * 1000 - PIN_MS + 60000;
+            w5.__advance(delta);
+            await sleep(300);   // several 50 ms ticks at the advanced clock
+            const nowMs2 = PIN_MS + delta;
+            const tHot2 = upNextOf(DATA.classes, nowMs2);
+            check("tick: no re-render (first child identity)",
+                  d5.querySelector("#schedule").firstChild === firstChild5);
+            check("tick: old hot card lost .now", !!hotCard && !hotCard.classList.contains("now"));
+            check("tick: old hot card gained awaiting pill",
+                  !!hotCard && !!hotCard.querySelector(".cpend"));
+            if (tHot2){
+              const hotCard2 = [...d5.querySelectorAll("main .cls")].find(x => x.dataset.num === tHot2.n);
+              check("tick: highlight moved to the next class",
+                    !!hotCard2 && hotCard2.classList.contains("now") && !!hotCard2.querySelector(".cnow"));
+            } else {
+              check("tick: no future class -> no highlight",
+                    d5.querySelectorAll("main .cls.now").length === 0);
+            }
+          } else {
+            check("tick: no hot at pinned clock -> no highlight",
+                  d5.querySelectorAll("main .cls.now").length === 0);
+          }
+
           await sleep(250);   // several 50 ms polls have landed
 
           // check 1: the page re-rendered from the fetched data

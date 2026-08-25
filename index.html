@@ -692,8 +692,9 @@ function flushPending(){
 }
 document.addEventListener("focusout", flushPending);
 document.addEventListener("visibilitychange", () => {
+  clearTimeout(tickTimer);
   if (document.hidden) { clearTimeout(pollTimer); }
-  else { clearTimeout(pollTimer); poll(); }
+  else { clearTimeout(pollTimer); poll(); scheduleTick(); }
 });
 async function poll(){
   flushPending();
@@ -727,6 +728,39 @@ async function poll(){
   }
 }
 
+// ---- status tick (predicted pills advance in place; never re-renders)
+const TICK_MS = (typeof window.__TICK_MS === "number") ? window.__TICK_MS : 60000;
+let tickTimer = null;
+function refreshStatus(){
+  if (focusInBody()) return;   // deferred; the next tick picks it up
+  const nowMs = Date.now();
+  const hot = upNextCls(DATA.classes, nowMs);
+  const hotNum = hot ? hot.n : null;
+  const byNum = new Map(DATA.classes.map(c => [c.n, c]));
+  for (const card of document.querySelectorAll("#schedule .cls")){
+    const c = byNum.get(card.dataset.num);
+    if (!c) continue;
+    const want = classPill(c, nowMs, hotNum);
+    const wantNow = !!(want && want.clsNow);
+    if (card.classList.contains("now") !== wantNow) card.classList.toggle("now", wantNow);
+    const cur = card.querySelector(".cnow, .cpend");
+    if (!want){ if (cur) cur.remove(); continue; }
+    if (cur && cur.classList.contains(want.tag)
+        && cur.textContent === want.text && (cur.title || "") === want.title) continue;
+    if (cur) cur.remove();
+    const p = el("span", want.tag, want.text);
+    if (want.title) p.title = want.title;
+    const head = card.querySelector(".cls-head");
+    head.insertBefore(p, head.querySelector(".clive") || head.querySelector(".cdiv"));
+  }
+}
+function scheduleTick(){
+  clearTimeout(tickTimer);
+  tickTimer = setTimeout(() => {
+    if (!document.hidden){ refreshStatus(); scheduleTick(); }
+  }, TICK_MS);
+}
+
 // ---- init
 const src = load();
 renderFilters();
@@ -736,6 +770,7 @@ applyScopeBtn();
 applyTheme();
 setUpdatedLine(DATA.asof, false);
 renderSchedule();
+scheduleTick();
 if (src) toast("Restored your selection");
 if (pollingActive) {
   ringReset();
