@@ -70,11 +70,13 @@ for f in sorted(glob.glob('entries/*.html')):
     wc = classes.get(num)
     parent = num.split('.')[0]
     sc = sched_lookup.get(num) or sched_lookup.get(parent)
+    # class metadata comes from the show site's HTML and is entity-escaped
+    # there, like the entry cells above
     rec = {
         "num": num,
-        "name": wc["name"] if wc else None,
-        "type": wc["type"] if wc else None,
-        "division": wc["division"] if wc else None,
+        "name": h.unescape(wc["name"]) if wc and wc["name"] else None,
+        "type": h.unescape(wc["type"]) if wc and wc["type"] else None,
+        "division": h.unescape(wc["division"]) if wc and wc["division"] else None,
         "entries": entries,
     }
     if sc:
