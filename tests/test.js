@@ -115,6 +115,41 @@ setTimeout(() => {
     check("current card never muted", !doc.querySelector("main .cls.now.muted"));
   }
 
+  // (11) predicted-pace helpers (synthetic classes; the page's own fns)
+  const C = (n, ps, pe, done, day, per) => ({
+    n, day: day || "August 25", per: per || "Morning", ps, pe,
+    e: done ? [["1","H","R","T","O","1","1"]] : [["1","H","R","T","O","1",null]],
+  });
+  const T0 = 1000000;
+  const mOn = x => w.onNowCls(x, T0);
+  check("onNow: inside window", mOn([C("1", T0/1000-10, T0/1000+10)]).n === "1");
+  check("onNow: at ps boundary is on", mOn([C("1", T0/1000, T0/1000+10)]).n === "1");
+  check("onNow: at pe boundary is off", mOn([C("1", T0/1000-10, T0/1000)]) === null);
+  check("onNow: overlap -> latest ps wins",
+        mOn([C("1", T0/1000-100, T0/1000+50), C("2", T0/1000-10, T0/1000+60)]).n === "2");
+  check("onNow: done class never on", mOn([C("1", T0/1000-10, T0/1000+10, true)]) === null);
+  check("onNow: missing ps -> null",
+        mOn([{n:"1", day:"August 25", per:"Morning", pe:T0/1000+10, e:[["1","H","R","T","O","1",null]]}]) === null);
+  const mUp = x => w.upNextCls(x, T0);
+  check("upNext: on-now class wins",
+        mUp([C("1", T0/1000-10, T0/1000+10), C("2", T0/1000+20, T0/1000+30)]).n === "1");
+  check("upNext: first future in display order",
+        mUp([C("10", T0/1000+200, T0/1000+210, false, "August 26"),
+             C("3", T0/1000+20, T0/1000+30, false, "August 25", "Night"),
+             C("2", T0/1000+10, T0/1000+12)]).n === "2");
+  check("upNext: done classes skipped",
+        mUp([C("1", T0/1000+20, T0/1000+30, true), C("2", T0/1000+40, T0/1000+50)]).n === "2");
+  check("upNext: all past or done -> null",
+        mUp([C("1", T0/1000-100, T0/1000-90), C("2", T0/1000-50, T0/1000-40, true)]) === null);
+  const mPend = x => w.isPendingCls(x, T0);
+  check("pending: at pe is pending", mPend(C("1", T0/1000-10, T0/1000)) === true);
+  check("pending: before pe is not", mPend(C("1", T0/1000-10, T0/1000+1)) === false);
+  check("pending: done never pending", mPend(C("1", T0/1000-10, T0/1000-5, true)) === false);
+  check("pending: missing pe is not",
+        mPend({n:"1", day:"August 25", per:"Morning", ps:T0/1000-10, e:[["1","H","R","T","O","1",null]]}) === false);
+  const f0 = Date.UTC(2026, 7, 25, 23, 15) / 1000;   // 7:15 PM on show day (EDT)
+  check("fmtShowTime: show-zone wall clock", w.fmtShowTime(f0) === "7:15 PM", w.fmtShowTime(f0));
+
   // (8) past days auto-collapsed (pinned Aug 25)
   const dayOf = d => [...doc.querySelectorAll("main .day")].find(el => el.querySelector("h2").textContent.includes(d));
   const ipd = d => typeof w.isPastDay === "function" && w.isPastDay(d, new w.Date(2026, 7, 25));

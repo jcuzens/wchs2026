@@ -393,6 +393,63 @@ function frontierNum(){
   return null;
 }
 
+// ---- predicted-pace status (unit-tested)
+// ps/pe are UTC epoch seconds predicted at build time (refresh/predict.py);
+// official placings always beat the model.
+function displayOrderOf(cls){
+  const byDay = new Map();
+  for (const c of cls){
+    if (!byDay.has(c.day)) byDay.set(c.day, {day:c.day, sessions:new Map()});
+    const d = byDay.get(c.day);
+    if (!d.sessions.has(c.per)) d.sessions.set(c.per, []);
+    d.sessions.get(c.per).push(c);
+  }
+  const days = [...byDay.values()].sort((a,b)=>parseInt(a.day.slice(-2))-parseInt(b.day.slice(-2)));
+  const out = [];
+  for (const d of days){
+    const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
+    for (const [, cs] of secs) out.push(...cs.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n)));
+  }
+  return out;
+}
+function onNowCls(classes, nowMs){
+  let best = null;
+  for (const c of classes){
+    if (isDone(c) || c.ps == null || c.pe == null) continue;
+    if (c.ps * 1000 <= nowMs && nowMs < c.pe * 1000 && (!best || c.ps > best.ps)) best = c;
+  }
+  return best;
+}
+function upNextCls(classes, nowMs){
+  const on = onNowCls(classes, nowMs);
+  if (on) return on;
+  for (const c of displayOrderOf(classes))
+    if (!isDone(c) && c.ps != null && c.ps * 1000 > nowMs) return c;
+  return null;
+}
+function isPendingCls(c, nowMs){
+  return !isDone(c) && c.pe != null && nowMs >= c.pe * 1000;
+}
+const SHOW_TZ = "America/New_York";
+function fmtShowTime(epochSec){
+  try {
+    return new Intl.DateTimeFormat("en-US", {timeZone: SHOW_TZ, hour: "numeric", minute: "2-digit"}).format(new Date(epochSec * 1000));
+  } catch(e){ return ""; }
+}
+// {tag, text, title, clsNow} for a card's predicted-status pill; null when
+// the card has none (done classes, or a future class outside its window).
+function classPill(c, nowMs, hotNum){
+  if (isDone(c)) return null;
+  if (c.n === hotNum){
+    if (c.ps != null && c.ps * 1000 <= nowMs && nowMs < c.pe * 1000)
+      return {tag:"cnow", text:"on now \u00b7 est " + fmtShowTime(c.pe), title:"", clsNow:true};
+    return {tag:"cnow", text:"up next \u00b7 est " + fmtShowTime(c.ps), title:"", clsNow:true};
+  }
+  if (isPendingCls(c, nowMs))
+    return {tag:"cpend", text:"awaiting results", title:"est done " + fmtShowTime(c.pe) + " (predicted)", clsNow:false};
+  return null;
+}
+
 // ---- rendering
 const $ = s => document.querySelector(s);
 function el(tag, cls, txt){ const n = document.createElement(tag); if (cls) n.className = cls; if (txt!=null) n.textContent = txt; return n; }
