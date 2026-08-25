@@ -68,12 +68,30 @@ function orderedClassesOf(cls){
   return out;
 }
 const orderedClasses = () => orderedClassesOf(DATA.classes);
-const FRONTIER = orderedClasses().find(c => !isDone(c));
-const FRONTIER_NUM = FRONTIER ? FRONTIER.n : null;
-const FRONTIER_MATCHED = FRONTIER ? matchTrainer(FRONTIER) : false;
-const FRONTIER_EXTRA = FRONTIER_NUM && !FRONTIER_MATCHED ? 1 : 0;   // card injected beyond matches
-const FILTERED_SHOWN = MATCHED_COUNT + FRONTIER_EXTRA;
-const MUTED_SHOWN = TOTAL - MATCHED_COUNT - FRONTIER_EXTRA;         // frontier never muted
+// mirror of the page's up-next logic; the DOM identity checks cross-check
+// it against the page's own upNextCls, while the mirror keeps count
+// expectations computable before the dom exists
+function onNowOf(cls, nowMs){
+  let best = null;
+  for (const c of cls){
+    if (isDone(c) || c.ps == null || c.pe == null) continue;
+    if (c.ps * 1000 <= nowMs && nowMs < c.pe * 1000 && (!best || c.ps > best.ps)) best = c;
+  }
+  return best;
+}
+function upNextOf(cls, nowMs){
+  const on = onNowOf(cls, nowMs);
+  if (on) return on;
+  for (const c of orderedClassesOf(cls))
+    if (!isDone(c) && c.ps != null && c.ps * 1000 > nowMs) return c;
+  return null;
+}
+const HOT = upNextOf(DATA.classes, PIN_MS);
+const HOT_NUM = HOT ? HOT.n : null;
+const HOT_MATCHED = HOT ? matchTrainer(HOT) : false;
+const HOT_EXTRA = HOT_NUM && !HOT_MATCHED ? 1 : 0;   // card injected beyond matches
+const FILTERED_SHOWN = MATCHED_COUNT + HOT_EXTRA;
+const MUTED_SHOWN = TOTAL - MATCHED_COUNT - HOT_EXTRA;         // hot card never muted
 
 const dom = makeDom({ beforeParse: pinDate });
 const w = dom.window, doc = w.document;
@@ -101,19 +119,39 @@ setTimeout(() => {
   const dfo = x => typeof w.defaultFiltersOpen === "function" && w.defaultFiltersOpen(x);
   check("defaultFiltersOpen unit", dfo(375) === false && dfo(900) === true && dfo(1024) === true);
 
-  // (6) completed-class treatment
+  // (6) completed-class treatment + predicted-pace status
   check("done pills rendered for placed classes", doc.querySelectorAll(".cdone").length === DONE_COUNT, doc.querySelectorAll(".cdone").length + " vs " + DONE_COUNT);
   check("done cards tinted", doc.querySelectorAll("main .cls.done").length === DONE_COUNT, "got " + doc.querySelectorAll("main .cls.done").length);
-  check("current card count matches expected", doc.querySelectorAll("main .cls.now").length === (FRONTIER_NUM ? 1 : 0), "got " + doc.querySelectorAll("main .cls.now").length);
-  if (FRONTIER_NUM){
+  const pageHot = w.upNextCls(DATA.classes, PIN_MS);
+  check("mirror matches the page's upNextCls",
+        (pageHot ? pageHot.n : null) === HOT_NUM, (pageHot && pageHot.n) + " vs " + HOT_NUM);
+  check("current card count matches expected",
+        doc.querySelectorAll("main .cls.now").length === (HOT_NUM ? 1 : 0), "got " + doc.querySelectorAll("main .cls.now").length);
+  if (HOT_NUM){
     const nowCard = doc.querySelector("main .cls.now");
-    check("current card is expected frontier", !!nowCard && nowCard.querySelector(".cnum").textContent === FRONTIER_NUM, (nowCard && nowCard.querySelector(".cnum").textContent) + " vs " + FRONTIER_NUM);
-    check("current card has up-next pill", !!nowCard && !!nowCard.querySelector(".cnow"));
+    check("current card is expected up-next",
+          !!nowCard && nowCard.querySelector(".cnum").textContent === (pageHot ? pageHot.n : HOT_NUM),
+          (nowCard && nowCard.querySelector(".cnum").textContent) + " vs " + HOT_NUM);
+    const pillTxt = nowCard ? (nowCard.querySelector(".cnow").textContent || "") : "";
+    const pillRe = (pageHot && pageHot.ps * 1000 <= PIN_MS && PIN_MS < pageHot.pe * 1000)
+      ? /on now · est \d{1,2}:\d{2} (AM|PM)/ : /up next · est \d{1,2}:\d{2} (AM|PM)/;
+    check("current card pill shows a predicted time", !!nowCard && pillRe.test(pillTxt), pillTxt);
     const cards = [...doc.querySelectorAll("main .cls")];
     const nowIdx = cards.findIndex(x => x.classList.contains("now"));
-    check("all classes before current are done", nowIdx >= 0 && cards.slice(0, nowIdx).every(x => x.classList.contains("done")), "idx " + nowIdx);
+    check("cards before current are done, awaiting, or in-window",
+          nowIdx >= 0 && cards.slice(0, nowIdx).every(x => {
+            const c = DATA.classes.find(cc => cc.n === x.querySelector(".cnum").textContent);
+            return x.classList.contains("done") || x.querySelector(".cpend") ||
+              (c && c.pe != null && c.ps * 1000 <= PIN_MS && PIN_MS < c.pe * 1000);
+          }), "idx " + nowIdx);
     check("current card never muted", !doc.querySelector("main .cls.now.muted"));
   }
+  const PENDING_EXPECT = DATA.classes.filter(c => !isDone(c) && c.pe != null && c.pe * 1000 <= PIN_MS).length;
+  check("awaiting-results pills match expectation",
+        doc.querySelectorAll("main .cpend").length === PENDING_EXPECT,
+        doc.querySelectorAll("main .cpend").length + " vs " + PENDING_EXPECT);
+  const fnote = doc.querySelector("main .footnote");
+  check("pace footnote present", !!fnote && fnote.textContent.includes("predictions"), fnote ? fnote.textContent : "missing");
 
   // (11) predicted-pace helpers (synthetic classes; the page's own fns)
   const C = (n, ps, pe, done, day, per) => ({
@@ -181,9 +219,8 @@ setTimeout(() => {
   if (dbtn) dbtn.click();
   check("hide done removes placed classes", doc.querySelectorAll("main .cls").length === TOTAL - DONE_COUNT, "got " + doc.querySelectorAll("main .cls").length);
   check("no done pills when hidden", doc.querySelectorAll(".cdone").length === 0);
-  if (FRONTIER_NUM){
+  if (HOT_NUM){
     check("current card visible with done hidden", !!doc.querySelector("main .cls.now"));
-    check("current card first when done hidden", doc.querySelector("main .cls") === doc.querySelector("main .cls.now"));
   }
   check("done button label flips", !!dbtn && dbtn.textContent === "Show done" && dbtn.classList.contains("on"));
   check("view state persisted (done hidden)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").doneHidden === true);
@@ -227,7 +264,7 @@ setTimeout(() => {
   check("found target trainer checkbox", !!target);
   if (target) target.click();
   check("schedule filtered to matching classes", doc.querySelectorAll("main .cls").length === FILTERED_SHOWN, "got " + doc.querySelectorAll("main .cls").length + " vs " + FILTERED_SHOWN);
-  if (FRONTIER_NUM){
+  if (HOT_NUM){
     check("current card shown when filtered", !!doc.querySelector("main .cls.now"), "got " + doc.querySelectorAll("main .cls.now").length);
     check("current card not muted when filtered", !doc.querySelector("main .cls.now.muted"));
   }
@@ -272,7 +309,7 @@ setTimeout(() => {
   check("scope label flips to All classes + on", !!xbtn && xbtn.textContent === "All classes" && xbtn.classList.contains("on"), xbtn ? xbtn.textContent : "missing");
   check("scope shows all classes", doc.querySelectorAll("main .cls").length === TOTAL, "got " + doc.querySelectorAll("main .cls").length);
   check("non-matching classes muted", doc.querySelectorAll("main .cls.muted").length === MUTED_SHOWN, "got " + doc.querySelectorAll("main .cls.muted").length + " vs " + MUTED_SHOWN);
-  if (FRONTIER_NUM) check("current card shown in scope", !!doc.querySelector("main .cls.now"));
+  if (HOT_NUM) check("current card shown in scope", !!doc.querySelector("main .cls.now"));
   check("muted classes not auto-open", doc.querySelectorAll("main .cls.muted.open").length === 0);
   check("view state persisted (scope on)", JSON.parse(w.localStorage.getItem("wchs2026.view.v1") || "{}").scope === true);
   const muted = doc.querySelector("main .cls.muted");
@@ -311,10 +348,10 @@ setTimeout(() => {
     const divsShown = new Set([...d2.querySelectorAll("main .cls .cdiv")].map(n => n.textContent));
     // expectations include the injected "current" card when it is not a Roadster Pony class
     const rp = norm("Roadster Pony");
-    const fInRp = FRONTIER_NUM && DATA.classes.some(c => c.n === FRONTIER_NUM && norm(c.div) === rp);
+    const fInRp = HOT_NUM && DATA.classes.some(c => c.n === HOT_NUM && norm(c.div) === rp);
     const expectedDivs = new Set(DATA.classes.filter(c => norm(c.div) === rp).map(c => c.div));
-    if (FRONTIER_NUM && !fInRp) expectedDivs.add(FRONTIER.div);
-    const expectedN = DATA.classes.filter(c => norm(c.div) === rp).length + (FRONTIER_NUM && !fInRp ? 1 : 0);
+    if (HOT_NUM && !fInRp) expectedDivs.add(HOT.div);
+    const expectedN = DATA.classes.filter(c => norm(c.div) === rp).length + (HOT_NUM && !fInRp ? 1 : 0);
     check("division filter works", classes5 === expectedN && divsShown.size === expectedDivs.size && [...expectedDivs].every(x => divsShown.has(x)), [...divsShown].join() + " / " + classes5);
 
     // ---------- (1) mobile default: filters collapsed ----------
@@ -361,9 +398,9 @@ setTimeout(() => {
             Object.defineProperty(w, "scrollY", { value: 123, configurable: true });
             w.__scrollCalls = [];
             w.scrollTo = (x, y) => w.__scrollCalls.push([x, y]);
-            // phase-1 payload: settle the current frontier class, bump asof
+            // phase-1 payload: settle the current up-next class, bump asof
             const p1 = JSON.parse(JSON.stringify(DATA));
-            const f1 = p1.classes.find(c => c.n === FRONTIER_NUM);
+            const f1 = p1.classes.find(c => c.n === HOT_NUM);
             if (f1 && f1.e.length) f1.e[0][6] = "1";
             p1.asof = P1_ASOF;
             w.__live = { current: p1, fail: false };
@@ -376,11 +413,11 @@ setTimeout(() => {
         const w4 = liveDom.window, d4 = w4.document;
         w4.addEventListener("error", e => { console.log("WINDOW ERROR (live):", e.message); failures++; });
         // expectations computed from the fetched payload (the show may be over
-        // when this runs: FRONTIER_NUM can be null, then p1 differs only by asof)
+        // when this runs: HOT_NUM can be null, then p1 differs only by asof)
         const P1 = w4.__live.current;
         const P1_DONE = P1.classes.filter(isDone).length;
-        const P1_FRONTIER = orderedClassesOf(P1.classes).find(c => !isDone(c));
-        const P1_FRONTIER_NUM = P1_FRONTIER ? P1_FRONTIER.n : null;
+        const P1_HOT = upNextOf(P1.classes, PIN_MS);
+        const P1_HOT_NUM = P1_HOT ? P1_HOT.n : null;
 
         (async () => {
           await sleep(250);   // several 50 ms polls have landed
@@ -388,10 +425,10 @@ setTimeout(() => {
           // check 1: the page re-rendered from the fetched data
           check("live: done count matches fetched data", d4.querySelectorAll(".cdone").length === P1_DONE, "got " + d4.querySelectorAll(".cdone").length + " vs " + P1_DONE);
           check("live: done cards tinted", d4.querySelectorAll("main .cls.done").length === P1_DONE, "got " + d4.querySelectorAll("main .cls.done").length);
-          check("live: up-next card count", d4.querySelectorAll("main .cls.now").length === (P1_FRONTIER_NUM ? 1 : 0), "got " + d4.querySelectorAll("main .cls.now").length);
-          if (P1_FRONTIER_NUM){
+          check("live: up-next card count", d4.querySelectorAll("main .cls.now").length === (P1_HOT_NUM ? 1 : 0), "got " + d4.querySelectorAll("main .cls.now").length);
+          if (P1_HOT_NUM){
             const nowCard = d4.querySelector("main .cls.now");
-            check("live: up-next moved to expected class", !!nowCard && nowCard.querySelector(".cnum").textContent === P1_FRONTIER_NUM, (nowCard && nowCard.querySelector(".cnum").textContent) + " vs " + P1_FRONTIER_NUM);
+            check("live: up-next moved to expected class", !!nowCard && nowCard.querySelector(".cnum").textContent === P1_HOT_NUM, (nowCard && nowCard.querySelector(".cnum").textContent) + " vs " + P1_HOT_NUM);
           }
           const upd4 = d4.getElementById("updatedLine");
           check("live: updated line shows fetched asof", /^Updated Aug 25, 2026 · 11:00 AM$/.test(upd4.textContent), upd4 ? upd4.textContent : "missing");
@@ -417,16 +454,16 @@ setTimeout(() => {
           check("live: context shows muted classes", !!muted4);
           const MNUM = muted4.querySelector(".cnum").textContent;
           muted4.querySelector(".cls-head").click();
-          // serve one more update: settle the next frontier class
+          // serve one more update: settle the next up-next class
           const p2 = JSON.parse(JSON.stringify(w4.__live.current));
-          const f2 = p2.classes.find(c => c.n === P1_FRONTIER_NUM);
+          const f2 = p2.classes.find(c => c.n === P1_HOT_NUM);
           if (f2 && f2.e.length) f2.e[0][6] = "1";
           p2.asof = "2026-08-25 11:05";
           w4.__live.current = p2;
           await sleep(200);
           const P2 = w4.__live.current;
-          const P2_FRONTIER = orderedClassesOf(P2.classes).find(c => !isDone(c));
-          const P2_FRONTIER_NUM = P2_FRONTIER ? P2_FRONTIER.n : null;
+          const P2_HOT = upNextOf(P2.classes, PIN_MS);
+          const P2_HOT_NUM = P2_HOT ? P2_HOT.n : null;
           const gT4a = d4.querySelectorAll("#filters .fgroup")[0];
           check("live: selection keeps its chip after re-render", !!(gT4a.querySelector(".chip") && gT4a.querySelector(".chip").textContent.includes(TRAINER)));
           check("live: context still shows all classes after re-render", d4.querySelectorAll("main .cls").length === TOTAL, "got " + d4.querySelectorAll("main .cls").length);
@@ -435,12 +472,12 @@ setTimeout(() => {
           const mutedNb = [...d4.querySelectorAll("main .cls.muted")].find(x => x.querySelector(".cnum").textContent === MNUM);
           check("live: opened muted card stays open (openCls survives)", !!mutedNb && mutedNb.classList.contains("open"));
           const nowCard2 = d4.querySelector("main .cls.now");
-          check("live: up-next reflects new data", !P2_FRONTIER_NUM ? !nowCard2 : (!!nowCard2 && nowCard2.querySelector(".cnum").textContent === P2_FRONTIER_NUM), (nowCard2 && nowCard2.querySelector(".cnum").textContent) + " vs " + P2_FRONTIER_NUM);
+          check("live: up-next reflects new data", !P2_HOT_NUM ? !nowCard2 : (!!nowCard2 && nowCard2.querySelector(".cnum").textContent === P2_HOT_NUM), (nowCard2 && nowCard2.querySelector(".cnum").textContent) + " vs " + P2_HOT_NUM);
           // back to the filtered view: the count now follows the new data
           d4.getElementById("scopeBtn").click();
           const P2_MATCHED = P2.classes.filter(c => c.e.some(e => norm(e[3]) === tNorm)).length;
-          const P2_FRONTIER_MATCHED = P2_FRONTIER ? P2_FRONTIER.e.some(e => norm(e[3]) === tNorm) : false;
-          const P2_FILTERED = P2_MATCHED + (P2_FRONTIER_NUM && !P2_FRONTIER_MATCHED ? 1 : 0);
+          const P2_HOT_MATCHED = P2_HOT ? P2_HOT.e.some(e => norm(e[3]) === tNorm) : false;
+          const P2_FILTERED = P2_MATCHED + (P2_HOT_NUM && !P2_HOT_MATCHED ? 1 : 0);
           check("live: filtered count follows new data", d4.querySelectorAll("main .cls").length === P2_FILTERED, "got " + d4.querySelectorAll("main .cls").length + " vs " + P2_FILTERED);
 
           // check 3: an unchanged payload does not re-render (node identity)
@@ -471,30 +508,30 @@ setTimeout(() => {
           // check 7: re-render deferred while a control has focus
           // (in filtered view the settled frontier may be filtered out, so
           //  assert via the up-next pill, not the done count)
-          if (P2_FRONTIER_NUM){
+          if (P2_HOT_NUM){
             const si4b = d4.querySelectorAll("#filters .fgroup")[0].querySelector(".fsearch");
             si4b.focus();
             check("live: search input can take focus", d4.activeElement === si4b);
             const firstChildBefore = d4.querySelector("#schedule").firstChild;
             const daysBefore = [...d4.querySelectorAll("main .day")].map(el => el.classList.contains("collapsed"));
-            // serve one more update: settle the next frontier class
+            // serve one more update: settle the next up-next class
             const p3 = JSON.parse(JSON.stringify(w4.__live.current));
-            const f3 = p3.classes.find(c => c.n === P2_FRONTIER_NUM);
+            const f3 = p3.classes.find(c => c.n === P2_HOT_NUM);
             if (f3 && f3.e.length) f3.e[0][6] = "1";
             p3.asof = "2026-08-25 11:10";
-            const P3_FRONTIER = orderedClassesOf(p3.classes).find(c => !isDone(c));
-            const P3_FRONTIER_NUM = P3_FRONTIER ? P3_FRONTIER.n : null;
+            const P3_HOT = upNextOf(p3.classes, PIN_MS);
+            const P3_HOT_NUM = P3_HOT ? P3_HOT.n : null;
             w4.__live.current = p3;
             await sleep(200);
             const nowWhileDeferred = d4.querySelector("main .cls.now");
             check("live: re-render deferred while focused (body unchanged)", d4.querySelector("#schedule").firstChild === firstChildBefore);
-            check("live: body still shows old frontier while deferred", !!nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent === P2_FRONTIER_NUM, (nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent) + " vs " + P2_FRONTIER_NUM);
+            check("live: body still shows old frontier while deferred", !!nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent === P2_HOT_NUM, (nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent) + " vs " + P2_HOT_NUM);
             check("live: header still shows newest asof while deferred", /^Updated Aug 25, 2026 · 11:10 AM/.test(upd4.textContent), upd4.textContent);
             si4b.blur();
             await sleep(100);
             const nowAfter = d4.querySelector("main .cls.now");
             check("live: blur applies the deferred update", d4.querySelector("#schedule").firstChild !== firstChildBefore);
-            check("live: up-next advanced after deferred apply", !P3_FRONTIER_NUM ? !nowAfter : (!!nowAfter && nowAfter.querySelector(".cnum").textContent === P3_FRONTIER_NUM), (nowAfter && nowAfter.querySelector(".cnum").textContent) + " vs " + P3_FRONTIER_NUM);
+            check("live: up-next advanced after deferred apply", !P3_HOT_NUM ? !nowAfter : (!!nowAfter && nowAfter.querySelector(".cnum").textContent === P3_HOT_NUM), (nowAfter && nowAfter.querySelector(".cnum").textContent) + " vs " + P3_HOT_NUM);
             const gT4b = d4.querySelectorAll("#filters .fgroup")[0];
             check("live: selection survives the deferred re-render", !!(gT4b.querySelector(".chip") && gT4b.querySelector(".chip").textContent.includes(TRAINER)));
             // check 8: day collapse state survives the re-render
@@ -537,13 +574,13 @@ setTimeout(() => {
                     && row4.querySelector(".place").textContent.includes("1st"),
                     row4 ? row4.textContent.trim() : "row missing");
             }
-            const P4_FRONT = orderedClassesOf(p4.classes).find(c => !isDone(c));
+            const P4_HOT = upNextOf(p4.classes, PIN_MS);
             const nowCard4 = d4.querySelector("main .cls.now");
             check("live: up-next follows merged data",
-                  P4_FRONT
-                    ? (!!nowCard4 && nowCard4.querySelector(".cnum").textContent === P4_FRONT.n)
+                  P4_HOT
+                    ? (!!nowCard4 && nowCard4.querySelector(".cnum").textContent === P4_HOT.n)
                     : !nowCard4,
-                  (nowCard4 && nowCard4.querySelector(".cnum").textContent) + " vs " + (P4_FRONT && P4_FRONT.n));
+                  (nowCard4 && nowCard4.querySelector(".cnum").textContent) + " vs " + (P4_HOT && P4_HOT.n));
           }
 
           console.log("\n" + (checks - failures) + "/" + checks + " checks passed" + (failures ? "  —  " + failures + " FAILURES" : "  —  ALL TESTS PASSED"));

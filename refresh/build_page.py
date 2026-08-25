@@ -169,6 +169,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .cls.now { background: var(--now-bg); border: 2px solid var(--now-line); }
 .cls.now .cls-head { background: transparent; }
 .cnow { background: #f59e0b; color: #fff; border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
+.cpend { background: var(--now-bg); border: 1px dashed var(--now-line); color: var(--gold); border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
 .clive { display: inline-flex; align-items: center; gap: 4px; background: var(--now-bg); color: var(--gold); border: 1px solid var(--now-line); border-radius: 6px; font-size: 11px; font-weight: 600; padding: 1px 6px; flex: none; }
 .clivedot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: clivepulse 2s ease-in-out infinite; }
 @keyframes clivepulse { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
@@ -379,20 +380,6 @@ function buildSchedule(){
   }
   return [...byDay.values()].sort((a,b)=>parseInt(a.day.slice(-2))-parseInt(b.day.slice(-2)));
 }
-// the "current" class: first class in displayed order (day -> session -> number)
-// that has no rating yet. null once every class has a place.
-function frontierNum(){
-  for (const d of buildSchedule()){
-    const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
-    for (const [, cs] of secs){
-      for (const c of cs.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
-        if (!isDone(c)) return c.n;
-      }
-    }
-  }
-  return null;
-}
-
 // ---- predicted-pace status (unit-tested)
 // ps/pe are UTC epoch seconds predicted at build time (refresh/predict.py);
 // official placings always beat the model.
@@ -535,7 +522,9 @@ function renderSchedule(){
   main.textContent = "";
   const days = buildSchedule();
   const on = active();
-  const front = frontierNum();
+  const nowMs = Date.now();
+  const hot = upNextCls(DATA.classes, nowMs);
+  const hotNum = hot ? hot.n : null;
   let rendered = 0;
   for (const d of days){
     const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
@@ -557,8 +546,8 @@ function renderSchedule(){
       const list = cls.filter(c => !view.doneHidden || !isDone(c));
       const matched = on ? list.filter(clsMatches) : list;
       let vis = (on && view.scope) ? list : matched;
-      if (on && !view.scope && front && list.some(c => c.n === front) && !vis.some(c => c.n === front)){
-        vis = [...vis, list.find(c => c.n === front)];
+      if (on && !view.scope && hotNum && list.some(c => c.n === hotNum) && !vis.some(c => c.n === hotNum)){
+        vis = [...vis, list.find(c => c.n === hotNum)];
       }
       if (!vis.length) continue;
       dShown += matched.length;
@@ -568,7 +557,7 @@ function renderSchedule(){
       for (const c of vis.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
         const m = matched.includes(c);
         rendered++;
-        sEl.appendChild(makeClass(c, m, c.n === front));
+        sEl.appendChild(makeClass(c, m, hotNum));
       }
       body.appendChild(sEl);
     }
@@ -580,6 +569,7 @@ function renderSchedule(){
   if (!rendered){
     main.appendChild(el("div","fnote","Nothing matches your selection. Try removing a filter."));
   }
+  main.appendChild(el("div","footnote",'"est" times are predictions from an average class pace (~13.5 min); actual order may vary.'));
   const sub = $("#phSub");
   if (sub){
     const parts = FIELDS.filter(f=>state[f.key].size).map(f=>f.label+": "+[...state[f.key]].map(k=>namesDisp(f.key,k)).join(", "));
@@ -589,7 +579,8 @@ function renderSchedule(){
 }
 function namesDisp(key,k){ const m = NAMES[key] && NAMES[key][k]; return m ? m.d : k; }
 
-function makeClass(c, isMatch, isFrontier){
+function makeClass(c, isMatch, hotNum){
+  const isHot = c.n === hotNum;
   const on = active();
   const visE = on ? c.e.filter(eMatches) : c.e;
   const showFiltered = on && isMatch;
@@ -616,12 +607,18 @@ function makeClass(c, isMatch, isFrontier){
       box.appendChild(row);
     }
   };
-  const d = el("div","cls" + (on && !isMatch && !isFrontier ? " muted" : "") + (isDone(c) ? " done" : "") + (isFrontier ? " now" : ""));
+  const d = el("div","cls" + (on && !isMatch && !isHot ? " muted" : "") + (isDone(c) ? " done" : "") + (isHot ? " now" : ""));
+  d.dataset.num = c.n;
   const head = el("button","cls-head");
   head.appendChild(el("span","cnum", c.n));
   head.appendChild(el("span","cname", c.name));
   if (isDone(c)) head.appendChild(el("span","cdone","done ✓"));
-  if (isFrontier) head.appendChild(el("span","cnow","up next"));
+  const pill = classPill(c, Date.now(), hotNum);
+  if (pill){
+    const p = el("span", pill.tag, pill.text);
+    if (pill.title) p.title = pill.title;
+    head.appendChild(p);
+  }
   if (c.live != null){
     const lv = el("span","clive");
     lv.appendChild(el("span","clivedot"));
