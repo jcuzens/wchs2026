@@ -204,12 +204,19 @@ def merge_live_places(classes, cache):
 
 def fold_live_cache(cache, live):
     """In place: fold a live.json payload into the accumulating cache.
-    Grows only — no deletes during the show; re-folding is idempotent."""
+    Grows only — no deletes during the show; re-folding is idempotent.
+    "at" is the FIRST-seen fetch timestamp (kept on re-folds so it stays
+    stable; the predicted-pace model anchors on it); "p" tracks the latest
+    place (re-scoring can change it)."""
     fetched = live.get("fetched", "")
     for c in live.get("classes", []):
         cls = cache.setdefault(c["num"], {})
         for entry, _horse, _rider, place in c.get("entries", []):
-            cls[str(entry)] = {"p": place, "at": fetched}
+            e = cls.get(str(entry))
+            if e is None:
+                cls[str(entry)] = {"p": place, "at": fetched}
+            else:
+                e["p"] = place
     return cache
 
 def updated_to_minutes(s):

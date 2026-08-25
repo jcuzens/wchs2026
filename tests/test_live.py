@@ -133,6 +133,17 @@ snapshot = json.loads(json.dumps(c))
 ls.fold_live_cache(c, live2)
 check("cache: idempotent on re-run", c == snapshot)
 
+# first-seen timestamp is stable across re-folds (the predicted-pace model
+# anchors on it; a moving stamp would wobble the asof stamp)
+live3 = {"fetched": "2026-08-24 09:36",
+         "classes": [{"num": "48", "entries": [["1158", "H", "R", 3]]}]}
+c_snap = json.loads(json.dumps(c))
+ls.fold_live_cache(c, live3)
+check("cache: re-score updates the place", c["48"]["1158"]["p"] == 3)
+check("cache: first-seen at kept on re-fold", c["48"]["1158"]["at"] == "2026-08-24 09:20")
+check("cache: other entries untouched",
+      c["48"]["958"] == c_snap["48"]["958"] and c["49"] == c_snap["49"])
+
 # --- parse_live.py CLI (temp files; the repo's live files are never touched)
 import tempfile
 tmp = tempfile.mkdtemp(prefix="livetest_")
