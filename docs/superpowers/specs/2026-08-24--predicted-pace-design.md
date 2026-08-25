@@ -36,9 +36,10 @@ as a prediction:
 - **Champion equitation:** 25 minutes per class (user-chosen). Detected by
   class name matching both *equitation* and *champion*
   (currently #146 Senior, #158 Junior).
-- **Anchor:** the session holding the newest live-grid observation is the
+- **Anchor:** the session holding the newest live observation (the class
+  whose last placing first appeared most recently in the live cache) is the
   "hot" session; its whole timeline is shifted so that observed class's
-  predicted end equals the observed time. Positive shift capped at
+  predicted end equals the observed end. Positive shift capped at
   **+180 min**. All other sessions run pure schedule.
 - **Evaluation:** client-side from the user's clock; the payload carries
   per-class predicted start/end; a 60 s tick advances the badges in place.
@@ -54,10 +55,16 @@ as a prediction:
   therefore one sequential timeline per session. If the show ever splits a
   session across rings, the model degrades gracefully: official placings
   still win, windows are just less accurate.
-- **Observation signal:** the live grid's per-class "Updated Xm ago"
-  column (`updated` → `updated_min` in `live.json`). Absolute observed
-  time = `fetched − updated_min`. Stable across fetches (both advance
-  together while the secretary doesn't re-touch the row).
+- **Observation signal:** the first-seen `at` timestamps in
+  `live_cache.json` (per entry; `fold_live_cache` keeps the first stamp on
+  re-folds, so they are immutable once folded). A class's observed end is
+  the **latest** first-seen `at` across its entries (when its last placing
+  first appeared). The live grid's "Updated Xm ago" column
+  (`updated_min` in `live.json`) is deliberately NOT the anchor: it is a
+  rounded relative string, so `fetched − updated_min` jitters by up to a
+  minute across fetches and would wobble the asof stamp (and gain spurious
+  "Refresh entries" commits) on every cron cycle. `fetched` is stamped in
+  America/New_York (`fetch_live.py`), matching the model's zone.
 - **Session starts:** `schedule.json` (11:00 a.m., 9:00 a.m., 12:00 Noon,
   6:30 p.m., 7:00 p.m.); `data.json`/payload classes carry the joined
   session slot (`weekday`, `period`, `date`, `time`); sub-classes
@@ -98,15 +105,17 @@ Functions:
 
 - `is_champion_equitation(name)` — name is not None and matches both
   `equit` and `champion` (case-insensitive).
-- `session_key(c)` — `(c["date"], c["period"], c["time"])`; a class
-  missing any of the three is excluded from windows (defensive).
+- `session_key(c)` — `(c.get("day"), c.get("per"), c.get("time"))`
+  (payload keys); a class missing any of the three is excluded from
+  windows (defensive).
 - `num_order(n)` — `tuple(int(p) for p in n.split("."))`
   (so 45 < 45.1 < 45.2 < 46).
-- `parse_session_start(date_str, time_str)` — epoch seconds. Time forms:
-  "H:MM a.m." / "H:MM p.m." / "12:00 Noon". Month from the date string,
-  year `SHOW_YEAR`, zone `TZ`.
-- `build_windows(classes, live=None)` — returns `{num: (ps, pe)}` in UTC
-  epoch seconds.
+- `parse_session_start(date_str, time_str)` — UTC epoch seconds. Delegates
+  the month/time formats ("H:MM a.m." / "H:MM p.m." / "12:00 Noon") to
+  `select_frontier.parse_session_time(..., SHOW_YEAR)`, then attaches `TZ`;
+  None when unparseable.
+- `build_windows(classes, cache=None)` — returns `{num: (ps, pe)}` in UTC
+  epoch seconds (ints). `cache` is the `live_cache.json` dict.
 
 Algorithm:
 
@@ -116,28 +125,28 @@ Algorithm:
 3. Walk each group from its published start: `ps[0] = start`,
    `pe[k] = ps[k] + dur[k]`, `ps[k+1] = pe[k]` (contiguous). Sub-classes
    are independent slots (they run separately; live `ord` confirms).
-4. Anchor — only when `live` is a valid dict with `fetched` and
-   `classes`:
-   - For each live class with `updated_min` not None:
-     `obs = fetched_epoch − updated_min * 60`.
-   - Take the newest observation (ties → later class number).
-   - Hot session = the session containing that class number. Classes in
-     `live` whose number has no model window are ignored.
-   - `shift = obs − model_pe(that class)`; clamp: `shift ≤ MAX_SHIFT_MIN`
-     (negative shift is uncapped — it is naturally bounded).
+4. Anchor — only when `cache` is a non-empty dict:
+   - For each cache class that has a model window and at least one
+     parseable entry `at`: `end_obs = max(epoch(at) over its entries)`
+     (show-local minute stamps in `TZ`; immutable per entry).
+   - Take the newest `end_obs` (ties → later class number).
+   - Hot session = the session containing that class.
+   - `shift = end_obs − model_pe(that class)`; clamp: `shift ≤
+     MAX_SHIFT_MIN` (negative shift is uncapped — it is naturally bounded).
    - Add `shift` to every window in the hot session.
-5. `live` missing/invalid → pure schedule (identical output to no live
-   data).
+5. `cache` missing/empty → pure schedule (identical output to no cache).
+   A deleted cache degrades this way for at most one cron cycle (it
+   re-accumulates from `live.json` on the next fold).
 6. **Determinism:** the model never reads wall-clock "now"; same inputs
    always give the same `ps`/`pe`. The asof policy and `--ui-only` are
    therefore untouched.
 
 ## Section 2 — Build integration (`refresh/build_page.py`)
 
-- Read `live.json` once (replacing the current inline read for
-  `live_fresh`); derive `live_fresh` from it as today (`updated_min < 60`).
+- The existing `live.json` read (gold "live" pill, `updated_min < 60`) and
+  the `live_cache.json` read (live merge) are unchanged.
 - After the live merge, compute `wins = predict.build_windows(classes,
-  live)` and add `"ps"`, `"pe"` to each class dict that has a window
+  cache)` and add `"ps"`, `"pe"` to each class dict that has a window
   (defensive: omit if absent). Insertion order is fixed, so the JSON
   shape is stable.
 - `--ui-only` path: unchanged (re-embeds the existing payload).
@@ -220,15 +229,27 @@ TICK_MS = window.__TICK_MS (number) or 60000
    published start epoch; `pe[k] == ps[k+1]` throughout.
 2. Champion equitation: a name matching equitation+champion gets a 25-min
    slot; plain equitation gets 13.5.
-3. Sub-class ordering: 45 < 45.1 < 45.2 < 46 in the cumulative walk.
-4. Hot-session anchor: synthetic `live` with a newest observation — the
-   observed class's `pe` equals the observed epoch exactly; other classes
-   in that session shift by the same delta; other sessions unchanged.
-5. Cap: observation 5 h after the model's end → shift clamped to 180 min.
-6. Degrade: `live` None / `{}` / missing `fetched` / corrupt → output
-   identical to the pure-schedule result.
+3. Sub-class ordering: 4 < 5.1 < 5.2 < 6 in the cumulative walk; a
+   class's observed end is the LATEST first-seen `at` across its entries.
+4. Hot-session anchor: synthetic cache whose newest first-seen `at`
+   belongs to a night-session class — that class's `pe` equals the
+   observed epoch exactly; other classes in that session shift by the same
+   delta; other sessions unchanged.
+5. Cap: observation ~16 h after the model's end → shift clamped to 180
+   min; a negative shift (early start) is not capped. A tie on observed
+   end → the later class number anchors.
+6. Degrade: cache None / `{}` / corrupt `at` strings / cache class with no
+   model window → output identical to the pure-schedule result; a class
+   without a session slot gets no window and doesn't affect the rest.
 7. Determinism: two calls, same inputs → equal output.
-8. Unknown live class numbers are ignored (no crash, no shift error).
+8. Session-start parsing (a.m. / Noon / p.m. / garbage) via
+   `parse_session_start`.
+
+`tests/test_live.py` (extended):
+
+- `fold_live_cache` keeps the first-seen `at` when an entry is re-folded
+  (a re-score updates `p` only); a new entry is stamped with the fetch
+  time. (This is what makes the anchor stable — see Observation signal.)
 
 `tests/test.js` (updated; still runs against the freshly built
 `index.html`, still self-consistent as the live show progresses):
@@ -258,8 +279,10 @@ TICK_MS = window.__TICK_MS (number) or 60000
 `tests/test_payload.py` (extended):
 
 - Every class has integer `ps`/`pe` with `pe > ps`.
-- Within each (day, period) group in display order, `ps` is
-  non-decreasing.
+- Within each (day, period, time) session group, `ps` is non-decreasing in
+  class-number order.
+- The payload's windows equal `predict.build_windows(payload_classes,
+  live_cache)` exactly (build wiring + anchor + cap in one invariant).
 - Existing asof / ui-only / frontier suites pass unchanged (the asof
   comparison includes `ps`/`pe` automatically; they're stable across
   rebuilds with unchanged inputs).
@@ -277,7 +300,9 @@ TICK_MS = window.__TICK_MS (number) or 60000
 - Rollback / failure modes: the model is display-only — it never touches
   placings, the live merge, or the cron frontier fetch
   (`select_frontier.py` stays results-based). A broken `live.json`
-  degrades to pure schedule (spec'd in the model). A model *exception*
+  degrades to pure schedule (spec'd in the model); a deleted/absent live
+  cache degrades the same way, for at most one cron cycle. A model
+  *exception*
   propagates and fails the build: the cron then commits nothing and the
   published site keeps the last good payload — a model bug should be
   loud, not silent. The only silent path is a class missing a session
@@ -292,3 +317,5 @@ TICK_MS = window.__TICK_MS (number) or 60000
 - No server-side status computation; the client evaluates.
 - No auto-hiding of awaiting-results classes, no per-class confidence.
 - No changes to the cron frontier fetch, the live merge, or the live pill.
+- No anchor hysteresis or state file: the first-`at` signal is immutable
+  per entry, so the anchor is stable without extra state.
