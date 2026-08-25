@@ -768,20 +768,12 @@
   "entries": "16"
  },
  {
-  "num": "114",
-  "name": "Equitation - Open Walk Trot Rider 8 Years Old & U",
-  "guid": "e4c8c796-6ea3-4eac-a859-b45200d578d6",
-  "type": "EQUITATION",
-  "division": "Equitation",
-  "entries": "15"
- },
- {
   "num": "115",
   "name": "ASB Country Pleasure Driving Div I",
   "guid": "03f0613c-3384-46fe-9a5f-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "17"
+  "entries": "9"
  },
  {
   "num": "116",
@@ -800,20 +792,12 @@
   "entries": "11"
  },
  {
-  "num": "118",
-  "name": "ASB Walk-Trot Show Pleasure, Rider 12 Years & Undr",
-  "guid": "2da51481-64ff-444a-ab7c-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "ASB",
-  "entries": "20"
- },
- {
   "num": "119",
   "name": "ASB Country Pleasure Driving Div II",
   "guid": "2611a6c1-7552-4618-ab3a-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": null
+  "entries": "8"
  },
  {
   "num": "120",
@@ -829,7 +813,7 @@
   "guid": "5936110c-13f7-4775-80b1-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "17"
+  "entries": "9"
  },
  {
   "num": "122",
@@ -856,28 +840,12 @@
   "entries": "21"
  },
  {
-  "num": "125",
-  "name": "Amateur Ladies Roadster to Bike",
-  "guid": "81f95b1f-ffc1-4437-87ea-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "Roadster",
-  "entries": "19"
- },
- {
-  "num": "126",
-  "name": "Junior Exhibitor Roadster Pony Under Saddle",
-  "guid": "90530a00-209b-4dd8-a93d-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "Roadster Pony",
-  "entries": "17"
- },
- {
   "num": "127",
   "name": "ASB Adult Show Pleasure Driving Div II",
   "guid": "d077dbb9-32c5-42b3-9d40-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": null
+  "entries": "8"
  },
  {
   "num": "128",
@@ -1870,5 +1838,69 @@
   "type": "UNDERSADDLE",
   "division": "ASB",
   "entries": "2"
+ },
+ {
+  "num": "114.1",
+  "name": "Equitation 8 & Under Walk/Trot Section 1",
+  "guid": "e4c8c796-6ea3-4eac-a859-b45200d578d6",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "9"
+ },
+ {
+  "num": "114.2",
+  "name": "Equitation 8 & Under Walk/Trot Section 2",
+  "guid": "c5771971-2273-454f-be51-b4b1013bbf3e",
+  "type": "EQUITATION",
+  "division": "Equitation",
+  "entries": "6"
+ },
+ {
+  "num": "118.1",
+  "name": "ASB Walk/Trot Pl. 12 & Under Section 1",
+  "guid": "2da51481-64ff-444a-ab7c-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "118.2",
+  "name": "ASB Walk/Trot Pl. 12 & Under Section 2",
+  "guid": "8f42f496-33c2-4f70-afa6-b4b1013bbf3e",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "10"
+ },
+ {
+  "num": "125.1",
+  "name": "Amateur Ladies Roadster to Bike Section 1",
+  "guid": "81f95b1f-ffc1-4437-87ea-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "12"
+ },
+ {
+  "num": "125.2",
+  "name": "Amateur Ladies Roadster to Bike Section 2",
+  "guid": "8d985d08-fe6b-4176-9f0d-b4b1013bbf3e",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "7"
+ },
+ {
+  "num": "126.1",
+  "name": "Jr Exhib Road Pony Under Saddle Section 1",
+  "guid": "90530a00-209b-4dd8-a93d-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "9"
+ },
+ {
+  "num": "126.2",
+  "name": "Jr Exhib Road Pony Under Saddle Section 2",
+  "guid": "82b8327c-58aa-48ac-925b-b4b1013bbf3e",
+  "type": "UNDERSADDLE",
+  "division": "Roadster Pony",
+  "entries": "8"
  }
 ]
