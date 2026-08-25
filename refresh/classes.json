@@ -797,7 +797,7 @@
   "guid": "93631376-0c78-454a-a5f8-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "Hackney/Harness",
-  "entries": "9"
+  "entries": "11"
  },
  {
   "num": "118",
@@ -981,7 +981,7 @@
   "guid": "53ecfa50-41e2-4dc4-8497-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "20"
+  "entries": "21"
  },
  {
   "num": "141",
@@ -1381,7 +1381,7 @@
   "guid": "ae4d38e7-44f3-4330-bdf7-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "Roadster",
-  "entries": "7"
+  "entries": "8"
  },
  {
   "num": "192",
@@ -1541,7 +1541,7 @@
   "guid": "b3493564-8d08-42a7-b091-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "26"
+  "entries": "27"
  },
  {
   "num": "212",
@@ -1861,7 +1861,7 @@
   "guid": "0b53d8f5-378f-44a1-9dd7-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "22"
+  "entries": "32"
  },
  {
   "num": "104.2",
@@ -1869,6 +1869,6 @@
   "guid": "7f699988-e843-46a5-9296-b4b100f9ca3f",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "12"
+  "entries": "2"
  }
 ]
