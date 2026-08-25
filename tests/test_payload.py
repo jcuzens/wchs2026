@@ -55,6 +55,39 @@ try:
           open(PLJ).read().rstrip("\n") == embedded_payload(IDX))
     a0 = asof_of_payload(open(PLJ).read())
 
+    # 1b. predicted windows: integer ps/pe per class, ordered within a
+    #     session, and equal to the pure model's output (wiring check)
+    sys.path.insert(0, os.path.dirname(BUILDER))
+    import predict as pr
+    pl = json.loads(open(PLJ).read())
+    missing = [c["n"] for c in pl["classes"]
+               if not (isinstance(c.get("ps"), int)
+                       and isinstance(c.get("pe"), int) and c["pe"] > c["ps"])]
+    check("every class has integer ps/pe with pe > ps",
+          not missing, ",".join(missing[:5]))
+    groups = {}
+    for c in pl["classes"]:
+        groups.setdefault((c.get("day"), c.get("per"), c.get("time")), []).append(c)
+    bad_sessions = []
+    for key, cs in groups.items():
+        if any(v is None for v in key):
+            continue
+        seq = [c["ps"] for c in sorted(cs, key=lambda c: float(c["n"]))]
+        if any(a > b for a, b in zip(seq, seq[1:])):
+            bad_sessions.append(key)
+    check("predicted starts non-decreasing within a session",
+          not bad_sessions, str(bad_sessions))
+    cache_p = os.path.join(os.path.dirname(BUILDER), "live_cache.json")
+    try:
+        cache = json.load(open(cache_p))
+    except (OSError, ValueError):
+        cache = None
+    wins = pr.build_windows(pl["classes"], cache)
+    bad_wins = [c["n"] for c in pl["classes"]
+                if c["n"] in wins and (c.get("ps"), c.get("pe")) != wins[c["n"]]]
+    check("payload windows equal the pure model output",
+          not bad_wins, ",".join(bad_wins[:5]))
+
     # 2. rebuild with unchanged data -> byte-identical (asof policy holds)
     p_before = open(PLJ).read()
     build()

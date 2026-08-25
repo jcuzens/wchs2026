@@ -59,6 +59,18 @@ else:
             if c["n"] in live_fresh:
                 c["live"] = live_fresh[c["n"]]
 
+    # Predicted windows: per-session pace model + hot-session anchor from
+    # the live cache's first-seen timestamps. Pure function of
+    # (classes, cache) — the asof policy is untouched (same inputs ->
+    # same ps/pe).
+    # See docs/superpowers/specs/2026-08-24--predicted-pace-design.md
+    import predict as pr
+    wins = pr.build_windows(classes, cache)
+    for c in classes:
+        w = wins.get(c["n"])
+        if w:
+            c["ps"], c["pe"] = w
+
     # The "Updated" timestamp only changes when the data actually changes:
     # if index.html already embeds this exact data, keep its asof.
     asof = None
