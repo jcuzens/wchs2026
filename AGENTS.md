@@ -60,6 +60,7 @@ Run from the repo root:
 
 ```bash
 refresh/fetch_entries.sh                    # resumable; uses refresh/jar.txt session cookie
+python3 refresh/class_list.py refresh/entries/<page>.html   # refresh classes.json from the live master grid (rc 3 = changed)
 python3 refresh/parse_entries.py
 python3 refresh/build_page.py               # data -> index.html + payload.json (asof only changes if the data changed)
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
@@ -73,6 +74,8 @@ python3 tests/test_frontier.py              # frontier/lookahead selection (cron
 python3 tests/test_predict.py               # predicted-pace model (synthetic sessions)
 python3 tests/test_payload.py               # verifies payload.json follows the asof policy
 python3 tests/test_live.py                  # live protocol/parse/merge tests (fixtures)
+python3 tests/test_class_list.py            # live class list: master-grid parse + update semantics
+python3 tests/test_parse_entries.py         # entry-page parse (page label wins, section slot inheritance)
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
 git add index.html payload.json && git commit -m "Refresh entries <date>" && git push
 ```
@@ -85,6 +88,12 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
 `refresh/refresh_cron.sh` runs on cron every 8 minutes
 (`*/8 * * * * /path/to/repo/refresh/refresh_cron.sh`). Each run:
 
+- refreshes the **live class list** (`class_list.py` on the newest fetched
+  page): the master grid on any class page is the show's current class
+  universe — split sections (89.1/89.2) are separate classes, each with
+  its own ClassGUID, and classes can be added mid-show. It rewrites
+  `classes.json` only when the list changed (rc 3), in which case the
+  resumable fetcher downloads the new pages;
 - decides what to fetch: if `refresh/entries/` is missing/empty it does the
   full resumable fetch; otherwise it re-fetches the **results frontier** —
   the first class in schedule order without placings, walking forward class
@@ -157,9 +166,21 @@ cannot clobber good data.
 - **Class number is the join key** across all data sources. Sub-classes
   use `x.y` numbering (e.g. `45.1`) and inherit the parent's schedule
   slot. Some classes legitimately have zero entries — don't "fix" them.
-- `classes.json` / `schedule.json` only change if the show itself changes
-  (classes added/removed, sessions re-timed). They are not part of a
-  routine entry refresh.
+- **Split sections are their own classes.** The show splits overloaded
+  classes into `x.1`/`x.2` sections mid-show; each section is a real
+  class with its own ClassGUID, entry page, card, and pace slot (the
+  live scoreboard already used section numbers). The authoritative class
+  list is the master grid (`grMaster`) on any class-results page, not a
+  pre-show snapshot — `class_list.py` parses it and refreshes
+  `classes.json` (exit 3 = changed). Each entry page carries its own
+  `Class: N` label, which `parse_entries.py` trusts over the filename;
+  section pages are plain `ClassResults.aspx?ClassGUID=<row key>` GETs.
+  `predict.py` / `select_frontier.py` / the live merge already treat
+  `x.y` as independent classes — no changes needed there.
+- `schedule.json` only changes if the show re-times sessions.
+  `classes.json` is now refreshed by the cron each run from the live
+  master grid (rewritten only on change, committed with the rebuild);
+  a mid-show class addition/split is picked up automatically.
 
 ## Secrets & credentials
 
@@ -235,6 +256,12 @@ purpose — don't "fix" it to the latest.
 
 **Don't print the remote:** `git remote -v` leaks the PAT embedded in
 the origin URL.
+
+**The master grid is the class universe:** every class page embeds the
+show's full current class list (with ClassGUID row keys). If a class's
+data looks wrong (e.g. "missing" entries), check whether it was split
+into `x.1`/`x.2` sections — the old parent number no longer exists, and
+the old parent page now serves section 1.
 
 **Stay dependency-free:** the page must remain one HTML file with no
 external requests, and the pipeline must remain Python stdlib + curl.

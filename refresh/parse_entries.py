@@ -1,15 +1,5 @@
 import re, json, glob, html as h
 
-classes = {c['num']: c for c in json.load(open('classes.json'))}
-sched = json.load(open('schedule.json'))
-
-# build schedule lookup: num -> session info
-sched_lookup = {}
-for s in sched:
-    sess = {"weekday": s["weekday"], "period": s["period"], "date": s["date"], "time": s["time"]}
-    for c in s["classes"]:
-        sched_lookup[c["num"]] = {**sess, "sched_name": c["name"]}
-
 def cell_text(td):
     t = re.sub(r'<[^>]+>', '', td)
     return h.unescape(t).replace('\xa0', ' ').strip()
@@ -32,16 +22,19 @@ def parse_rows(page, grid):
                     "rider_guid": rg.group(1) if rg else None})
     return out
 
-all_entries = []
-problems = []
-for f in sorted(glob.glob('entries/*.html')):
-    num = f.split('/')[-1][:-5]
-    page = open(f, encoding='utf-8', errors='replace').read()
-    if 'grPlacing_DXDataRow' not in page and 'grNonPlacing_DXDataRow' not in page:
-        if 'No entries' in page or 'no data' in page.lower():
-            continue
-        problems.append(num)
-        continue
+def page_class_num(page):
+    """The class number from the page's own detail title ('Class: 89.2').
+    A split section's page labels itself with the section number; the file
+    name may be the parent's. None when the page has no expanded detail
+    (no-entries / failed page)."""
+    m = re.search(r'Class:\s*(\d+(?:\.\d+)?)', page)
+    return m.group(1) if m else None
+
+def parse_page(page, fallback_num, classes, sched_lookup):
+    """One fetched class page -> a data.json record. The page's own
+    'Class: N' label wins over fallback_num (the file name). Class metadata
+    comes from the class list entry for N; the schedule slot falls back to
+    the parent's when N is a section (x.y)."""
     placed = parse_rows(page, 'grPlacing')
     nonpl = parse_rows(page, 'grNonPlacing')
     entries = []
@@ -67,6 +60,7 @@ for f in sorted(glob.glob('entries/*.html')):
             "score": c[8] if len(c) > 8 else None,
             "entry_guid": r["entry_guid"], "horse_guid": r["horse_guid"], "rider_guid": r["rider_guid"],
         })
+    num = page_class_num(page) or fallback_num
     wc = classes.get(num)
     parent = num.split('.')[0]
     sc = sched_lookup.get(num) or sched_lookup.get(parent)
@@ -82,15 +76,41 @@ for f in sorted(glob.glob('entries/*.html')):
     if sc:
         rec.update({k: sc[k] for k in ("weekday", "period", "date", "time")})
         rec["sched_name"] = sc["sched_name"]
-    all_entries.append(rec)
+    return rec
 
-json.dump(all_entries, open('data.json', 'w'), indent=1)
-print(f"classes with data: {len(all_entries)}")
-print(f"total entries: {sum(len(c['entries']) for c in all_entries)}")
-print(f"no schedule slot: {[c['num'] for c in all_entries if 'weekday' not in c]}")
-print(f"problems: {problems}")
-n = len(all_entries)
-print(f"avg entries/class: {sum(len(c['entries']) for c in all_entries)/max(n,1):.1f}")
-# data size
-import os
-print(f"data.json size: {os.path.getsize('data.json')/1024:.0f} KB")
+def main():
+    classes = {c['num']: c for c in json.load(open('classes.json'))}
+    sched = json.load(open('schedule.json'))
+
+    # build schedule lookup: num -> session info
+    sched_lookup = {}
+    for s in sched:
+        sess = {"weekday": s["weekday"], "period": s["period"], "date": s["date"], "time": s["time"]}
+        for c in s["classes"]:
+            sched_lookup[c["num"]] = {**sess, "sched_name": c["name"]}
+
+    all_entries = []
+    problems = []
+    for f in sorted(glob.glob('entries/*.html')):
+        fname = f.split('/')[-1][:-5]
+        page = open(f, encoding='utf-8', errors='replace').read()
+        if 'grPlacing_DXDataRow' not in page and 'grNonPlacing_DXDataRow' not in page:
+            if 'No entries' in page or 'no data' in page.lower():
+                continue
+            problems.append(fname)
+            continue
+        all_entries.append(parse_page(page, fname, classes, sched_lookup))
+
+    json.dump(all_entries, open('data.json', 'w'), indent=1)
+    print(f"classes with data: {len(all_entries)}")
+    print(f"total entries: {sum(len(c['entries']) for c in all_entries)}")
+    print(f"no schedule slot: {[c['num'] for c in all_entries if 'weekday' not in c]}")
+    print(f"problems: {problems}")
+    n = len(all_entries)
+    print(f"avg entries/class: {sum(len(c['entries']) for c in all_entries)/max(n,1):.1f}")
+    # data size
+    import os
+    print(f"data.json size: {os.path.getsize('data.json')/1024:.0f} KB")
+
+if __name__ == '__main__':
+    main()

@@ -47,7 +47,8 @@ while the page is open.
 | `index.html` | The page. **Generated — don't edit by hand.** Served by GitHub Pages. |
 | `payload.json` | Live data the page polls every ~30 s. **Generated — don't edit by hand.** |
 | `refresh/build_page.py` | Generator: page template + data → `index.html` |
-| `refresh/classes.json` | Class grid (scraped from horseshowsonline.com) |
+| `refresh/classes.json` | Class list (auto-refreshed by cron from the show's live master grid) |
+| `refresh/class_list.py` | Updates `classes.json` from the master grid on a class page (pick up split sections / new classes) |
 | `refresh/schedule.json` | Session schedule (parsed from the 2026 Premium Book PDF) |
 | `refresh/fetch_entries.sh` | Downloads all class entry pages (resumable) |
 | `refresh/parse_entries.py` | Parses the entry pages → `refresh/data.json` |

@@ -8,9 +8,10 @@
 #
 #   cron: */8 * * * *  <repo>/refresh/refresh_cron.sh
 #
-# All output goes to refresh/cron.log. Only index.html and payload.json
-# are ever committed; the git-ignored intermediates (entries/, data.json,
-# jar.txt) stay local.
+# All output goes to refresh/cron.log. Only index.html, payload.json and
+# (when the live class list changed) refresh/classes.json are ever
+# committed; the git-ignored intermediates (entries/, data.json, jar.txt)
+# stay local.
 set -u
 export PATH=/usr/local/bin:/usr/bin:/bin
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -38,6 +39,26 @@ cd "$HERE" || die "cannot cd to $HERE"
 git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || die "not a git repo"
 if [ -n "$(git -C "$ROOT" status --porcelain -- index.html payload.json)" ]; then
   log "WARNING: index.html/payload.json has uncommitted local changes; rebuild will overwrite them"
+fi
+
+# --- live class list
+# The master grid on any class page is the show's current class universe:
+# split sections (89.1/89.2) are separate classes, each with its own
+# ClassGUID, and classes can be added mid-show. Refresh classes.json from
+# the newest fetched page; when the list changed, fetch the new pages
+# (resumable: only the missing ones are downloaded).
+newest=$(ls -t entries/*.html 2>/dev/null | head -1)
+if [ -n "$newest" ]; then
+  python3 class_list.py "$newest"; rc=$?
+  case $rc in
+    0) ;;
+    3)
+      log "class list changed -> fetching new class pages"
+      bash fetch_entries.sh || log "WARNING: new-class fetch had failures (resumable; retries next run)"
+      python3 parse_entries.py >/dev/null
+      ;;
+    *) log "WARNING: class list refresh failed (kept old classes.json; rc=$rc)" ;;
+  esac
 fi
 
 # --- fetch phase
@@ -102,10 +123,11 @@ fi
 
 # --- build + publish (asof only changes when the data changed)
 python3 build_page.py || die "build failed"
-if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json; then
+if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json refresh/classes.json; then
   log "index.html + payload.json unchanged; nothing to publish"
 else
-  git -C "$ROOT" add index.html payload.json || die "git add failed"
+  # classes.json is a no-op in the add when the list did not change
+  git -C "$ROOT" add index.html payload.json refresh/classes.json || die "git add failed"
   git -C "$ROOT" commit -m "Refresh entries $(date +%F)" || die "git commit failed"
   git -C "$ROOT" push || die "git push failed"
   log "committed and pushed"
