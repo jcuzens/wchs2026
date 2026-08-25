@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json, datetime, os, re, sys
+from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -71,7 +72,8 @@ else:
     except (OSError, ValueError):
         pass
     if not asof:
-        asof = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+        # Show time (Kentucky is Eastern; DST handled by the zone).
+        asof = datetime.datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M')
 
     payload = json.dumps({"asof": asof, "classes": classes}, separators=(',', ':'))
     with open(os.path.join(ROOT, "payload.json"), "w") as f:

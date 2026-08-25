@@ -8,6 +8,7 @@ whose session started more than FORCE_DONE_HOURS ago with no results is
 presumed skipped, so a void class cannot stall the frontier forever.
 """
 import argparse, datetime, json, os
+from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SHOW_YEAR = 2026
@@ -92,7 +93,10 @@ def main():
     sched = json.load(open(a.sched))
     cj = {c["num"] for c in json.load(open(a.classes))}
     data = json.load(open(a.data))
-    now = datetime.datetime.fromisoformat(a.now) if a.now else datetime.datetime.now()
+    # Session times in schedule.json are Kentucky (Eastern) wall time, so the
+    # default clock must be Eastern too, whatever the machine's timezone is.
+    # Naive on purpose: it is compared against the naive parsed session times.
+    now = datetime.datetime.fromisoformat(a.now) if a.now else datetime.datetime.now(ZoneInfo("America/New_York")).replace(tzinfo=None)
     if a.cmd == "frontier":
         f = frontier_num(sched, cj, data, now)
         if f:

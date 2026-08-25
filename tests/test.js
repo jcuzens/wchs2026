@@ -487,7 +487,12 @@ setTimeout(() => {
             const card4 = [...d4.querySelectorAll("main .cls")]
               .find(x => x.querySelector(".cnum").textContent === f4.n);
             if (card4 && f4.e.length){
-              card4.querySelector(".cls-head").click();
+              // matched cards auto-open in the trainer view (showing only the
+              // matched rows), so make the state deterministic instead of
+              // assuming a closed card with all rows
+              if (!card4.classList.contains("open")) card4.querySelector(".cls-head").click();
+              const callEl4 = card4.querySelector(".call");
+              if (callEl4) callEl4.click();   // "Show all N" -> every entry row renders
               const en4 = String(f4.e[0][0]);
               const row4 = [...card4.querySelectorAll(".erow")]
                 .find(r => r.querySelector(".eentry")

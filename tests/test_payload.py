@@ -4,6 +4,7 @@ asof policy as the embedded payload: written by a regular build,
 byte-identical across rebuilds around unchanged data, asof bumped when the
 data changes, untouched by --ui-only. Restores repo state at the end."""
 import datetime, json, os, re, shutil, subprocess, sys, time
+from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -61,7 +62,7 @@ try:
           open(PLJ).read() == p_before, asof_of_payload(open(PLJ).read()) + " vs " + a0)
 
     # 3. changed data -> asof bumps (same pattern as test_asof.py)
-    if a0 == datetime.datetime.now().strftime('%Y-%m-%d %H:%M'):
+    if a0 == datetime.datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M'):
         wait_next_minute()
     backup = DATA + ".bak"
     shutil.copyfile(DATA, backup)

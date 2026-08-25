@@ -7,6 +7,7 @@ local inputs (data.json, live-scores files) may legitimately differ from
 whatever produced the last commit, in which case the first build bumps the
 asof exactly once - which is the policy working, not a bug."""
 import datetime, json, os, re, shutil, subprocess, sys, time
+from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -58,7 +59,7 @@ try:
 
     # 2. changed data -> asof bumped (data.json is a git-ignored intermediate;
     #    back it up and always restore it)
-    if a1 == datetime.datetime.now().strftime('%Y-%m-%d %H:%M'):
+    if a1 == datetime.datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M'):
         # same-minute aliasing: a fresh timestamp would be indistinguishable from a1
         wait_next_minute()
     backup = DATA + ".bak"

@@ -25,6 +25,7 @@ import time
 import urllib.parse
 import urllib.request
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -144,7 +145,7 @@ def main():
     if not out_classes:
         sys.exit("fetch_live.py: no classes parsed (page layout change?)")
     with open(LIVE_JSON, 'w') as f:
-        json.dump({"fetched": datetime.now().strftime('%Y-%m-%d %H:%M'),
+        json.dump({"fetched": datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M'),
                    "classes": out_classes}, f, separators=(',', ':'))
     cj.save(ignore_discard=True, ignore_expires=True)
     print("live.json: %d classes, %d placings"
