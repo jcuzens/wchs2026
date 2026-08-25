@@ -565,7 +565,7 @@ setTimeout(() => {
             await sleep(200);
             const nowWhileDeferred = d4.querySelector("main .cls.now");
             check("live: re-render deferred while focused (body unchanged)", d4.querySelector("#schedule").firstChild === firstChildBefore);
-            check("live: body still shows old frontier while deferred", !!nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent === P2_HOT_NUM, (nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent) + " vs " + P2_HOT_NUM);
+            check("live: body still shows old up-next while deferred", !!nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent === P2_HOT_NUM, (nowWhileDeferred && nowWhileDeferred.querySelector(".cnum").textContent) + " vs " + P2_HOT_NUM);
             check("live: header still shows newest asof while deferred", /^Updated Aug 25, 2026 · 11:10 AM/.test(upd4.textContent), upd4.textContent);
             si4b.blur();
             await sleep(100);

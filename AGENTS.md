@@ -133,8 +133,8 @@ cannot clobber good data.
   `refresh/live_cache.json`; `build_page.py` merges them: **official
   class-results placings always win, live fills gaps only**, and classes
   with live activity fresher than 60 min get a gold **live pill** on the
-   page. If the live source fails or the files are missing, the page is
-   byte-identical to official-only.
+  page. If the live source fails or the files are missing, the page is
+  byte-identical to official-only.
 - **Predicted pace:** `refresh/predict.py` is a pure per-session pace
   model (13.5 min/class, 25 min champion equitation — constants in that
   file). The session holding the newest live observation is the "hot"
