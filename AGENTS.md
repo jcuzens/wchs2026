@@ -70,6 +70,7 @@ npm --prefix tests test                     # page smoke suite (runs against the
 python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
 python3 tests/test_asof.py                  # verifies the asof only changes when the data changes
 python3 tests/test_frontier.py              # frontier/lookahead selection (cron refresh)
+python3 tests/test_predict.py               # predicted-pace model (synthetic sessions)
 python3 tests/test_payload.py               # verifies payload.json follows the asof policy
 python3 tests/test_live.py                  # live protocol/parse/merge tests (fixtures)
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
@@ -132,8 +133,17 @@ cannot clobber good data.
   `refresh/live_cache.json`; `build_page.py` merges them: **official
   class-results placings always win, live fills gaps only**, and classes
   with live activity fresher than 60 min get a gold **live pill** on the
-  page. If the live source fails or the files are missing, the page is
-  byte-identical to official-only.
+   page. If the live source fails or the files are missing, the page is
+   byte-identical to official-only.
+- **Predicted pace:** `refresh/predict.py` is a pure per-session pace
+  model (13.5 min/class, 25 min champion equitation — constants in that
+  file). The session holding the newest live observation is the "hot"
+  session, shifted so that class's predicted end matches it (positive
+  shift capped at +180 min). The build stamps each payload class with
+  `ps`/`pe` (UTC epoch seconds); the page evaluates "on now" / "up next" /
+  "awaiting results" client-side on the user's clock and ticks every 60 s
+  in place. **Official placings always beat the model.** The model never
+  reads wall-clock time, so the asof policy is untouched.
 - **asof policy: the "Updated" stamp changes only when the data
   actually changes** (both in `index.html` and `payload.json`). The
   regular build compares the new `classes`
@@ -216,6 +226,12 @@ the wire format (c0: prefix, KV/FR/CT/GB segments, envelope stateObject)
 is in the spec above. If it breaks, nothing is lost — the fetch fails
 softly and the page degrades to official-only. Don't "simplify" the
 callback param; every segment is load-bearing.
+
+**The pace anchor is the live cache's first-seen `at`**, not live.json's
+"Updated Xm ago": the latter is a rounded relative string whose absolute
+value jitters by a minute across fetches and would wobble the asof stamp on
+every cron cycle. `fold_live_cache` keeps the first `at` per entry on
+purpose — don't "fix" it to the latest.
 
 **Don't print the remote:** `git remote -v` leaks the PAT embedded in
 the origin URL.

@@ -199,16 +199,16 @@ check("is_champion_equitation needs both words",
 # 3. observed end = the LATEST first-seen at across a class's entries
 w = pr.build_windows(ALL, {"4": {"1": {"p": 1, "at": "2026-08-22 18:35"},
                                  "2": {"p": 2, "at": "2026-08-22 18:41"}}})
-check("observed end = latest first-seen at", w["4"][1] == B_START + 6 * 60, str(w["4"]))
+check("observed end = latest first-seen at", w["4"][1] == B_START + 41 * 60, str(w["4"]))
 
 # 4. hot-session anchor: observed class pe = observed end, the rest of the
 #    hot session shifts by the same delta, other sessions untouched
 w = pr.build_windows(ALL, {"4": {"1": {"p": 1, "at": "2026-08-22 18:35"}}})
-check("anchor: observed class pe = observed end", w["4"][1] == B_START + 5 * 60, str(w["4"]))
+check("anchor: observed class pe = observed end", w["4"][1] == B_START + 35 * 60, str(w["4"]))
 check("anchor: hot session shifted by the same delta",
-      w["4"][0] == B_START + 5 * 60
-      and w["5.1"][0] == B_START + 5 * 60 + PACE
-      and w["6"][1] == B_START + 5 * 60 + 4 * PACE, str(w))
+      w["4"][0] == B_START + 1290          # 21.5-min shift (18:35 - 18:13:30)
+      and w["5.1"][0] == w["4"][1]
+      and w["6"][1] == w["4"][1] + 3 * PACE, str(w))
 check("anchor: other sessions unchanged",
       w["1"] == base["1"] and w["2"] == base["2"], str(w))
 

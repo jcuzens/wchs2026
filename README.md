@@ -25,6 +25,11 @@ Open the link on your phone:
 - Under each class you'll see the **entry number and placings** (entries
   are listed in start order); a blank slot means that class hasn't been
   judged yet.
+- The highlighted card shows where the show is: **"on now · est H:MM"** or
+  **"up next · est H:MM"**. Those times are *predictions* from an average
+  class pace (~13.5 min, anchored to the live scoreboard) — actual order
+  may vary. Classes the model has passed but that still lack official
+  results are marked **"awaiting results"**.
 
 Entries and placings change during the show — the page picks them up on
 its own (the "Updated" time in the header tells you how fresh the data
