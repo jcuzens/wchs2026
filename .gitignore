@@ -1,4 +1,5 @@
 .aistack/
+.playwright-mcp/
 tests/node_modules/
 refresh/entries/
 refresh/data.json
