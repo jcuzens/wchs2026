@@ -98,6 +98,7 @@ html = r"""<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WCHS 2026 — My Schedule</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%90%8E%3C%2Ftext%3E%3C%2Fsvg%3E">
 <style>
 :root {
   --ink: #1a1a2e; --muted: #6b7280; --line: #e5e7eb;
