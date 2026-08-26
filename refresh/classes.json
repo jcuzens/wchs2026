@@ -888,14 +888,6 @@
   "entries": "16"
  },
  {
-  "num": "133",
-  "name": "Ladies Five Gaited Gelding",
-  "guid": "8cbebfec-20b7-4bf6-a8eb-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "ASB",
-  "entries": "35"
- },
- {
   "num": "134",
   "name": "Hackney Pony Stallion Gelding Stake",
   "guid": "5bfea84e-7bbc-4539-bcb2-b45200d578d6",
@@ -912,14 +904,6 @@
   "entries": "9"
  },
  {
-  "num": "136",
-  "name": "Amateur Roadster Under Saddle",
-  "guid": "1bbf324e-d282-4af0-a4dd-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "Roadster",
-  "entries": "28"
- },
- {
   "num": "137",
   "name": "Ladies Five Gaited Mare",
   "guid": "2ed6497c-8ff3-4e16-bcdb-b45200d578d6",
@@ -934,14 +918,6 @@
   "type": "UNDERSADDLE",
   "division": "ASB",
   "entries": "14"
- },
- {
-  "num": "139",
-  "name": "Roadster to Bike Stallion or Gelding Stake",
-  "guid": "a0b8b3b7-528e-44e0-8161-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "Roadster",
-  "entries": "24"
  },
  {
   "num": "140",
@@ -1125,7 +1101,7 @@
   "guid": "2623b669-9722-4553-b252-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "Hackney/Harness",
-  "entries": "6"
+  "entries": "7"
  },
  {
   "num": "163",
@@ -1557,7 +1533,7 @@
   "guid": "afa863f7-95ba-4562-8e2a-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "Hackney/Harness",
-  "entries": "10"
+  "entries": "11"
  },
  {
   "num": "218",
@@ -1901,6 +1877,54 @@
   "guid": "82b8327c-58aa-48ac-925b-b4b1013bbf3e",
   "type": "UNDERSADDLE",
   "division": "Roadster Pony",
+  "entries": "8"
+ },
+ {
+  "num": "133.1",
+  "name": "Ladies Five Gaited Gelding Section 1",
+  "guid": "8cbebfec-20b7-4bf6-a8eb-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "24"
+ },
+ {
+  "num": "133.2",
+  "name": "Ladies Five Gaited Gelding Section 1",
+  "guid": "f80085a6-461f-40ba-bef6-b4b200f8a24e",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "11"
+ },
+ {
+  "num": "136.1",
+  "name": "Amateur Roadster Under Saddle Section 1",
+  "guid": "1bbf324e-d282-4af0-a4dd-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "16"
+ },
+ {
+  "num": "136.2",
+  "name": "Amateur Roadster Under Saddle Section 1",
+  "guid": "c63c7070-7b6d-4764-9a71-b4b200f8a24e",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "12"
+ },
+ {
+  "num": "139.1",
+  "name": "Roadster to Bike Stallion or Gelding Stake Sec 1",
+  "guid": "a0b8b3b7-528e-44e0-8161-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
+  "entries": "16"
+ },
+ {
+  "num": "139.2",
+  "name": "Roadster to Bike Stallion or Gelding Stake Sec 2",
+  "guid": "0c7773df-a304-4c1a-99e8-b4b200f8a24e",
+  "type": "UNDERSADDLE",
+  "division": "Roadster",
   "entries": "8"
  }
 ]
