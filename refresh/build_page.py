@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, datetime, os, re, sys
+import hashlib, json, datetime, os, re, sys
 from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -87,9 +87,15 @@ else:
         # Show time (Kentucky is Eastern; DST handled by the zone).
         asof = datetime.datetime.now(ZoneInfo("America/New_York")).strftime('%Y-%m-%d %H:%M')
 
-    payload = json.dumps({"asof": asof, "classes": classes}, separators=(',', ':'))
+    # h: fingerprint of the data. The page polls a tiny check.json carrying
+    # this and only fetches the full payload.json when it changes. Pure
+    # function of the data -> the asof policy is untouched.
+    h = hashlib.sha1(json.dumps(classes, separators=(',', ':')).encode()).hexdigest()[:12]
+    payload = json.dumps({"asof": asof, "h": h, "classes": classes}, separators=(',', ':'))
     with open(os.path.join(ROOT, "payload.json"), "w") as f:
         f.write(payload + "\n")
+    with open(os.path.join(ROOT, "check.json"), "w") as f:
+        f.write(json.dumps({"asof": asof, "h": h}, separators=(',', ':')) + "\n")
     print(f"payload.json: {os.path.getsize(os.path.join(ROOT, 'payload.json'))/1024:.0f} KB")
 
 html = r"""<!DOCTYPE html>
@@ -725,7 +731,9 @@ $("#copyBtn").addEventListener("click", async ()=>{
 let toastT;
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2200); }
 
-// ---- live update (polls payload.json; the embedded DATA is first paint)
+// ---- live update (polls check.json — asof + data hash — every cycle;
+// fetches the full payload.json only when the hash changed; the embedded
+// DATA is first paint and carries the same h)
 const POLL_MS = (typeof window.__POLL_MS === "number") ? window.__POLL_MS : 30000;
 const pollingActive = typeof fetch === "function" && location.protocol.indexOf("http") === 0;
 let liveRaw = JSON.stringify(DATA);
@@ -796,20 +804,30 @@ async function poll(){
   if (pollInFlight) return;
   pollInFlight = true;
   try {
-    const r = await fetch("payload.json?ts=" + Date.now(), {cache: "no-store"});
+    const r = await fetch("check.json?ts=" + Date.now(), {cache: "no-store"});
     if (!r.ok) throw new Error("http " + r.status);
-    const p = await r.json();
-    if (!p || !Array.isArray(p.classes) || !p.classes.every(c => Array.isArray(c.e))) throw new Error("bad payload");
-    pollsFailed = 0;
-    const raw = JSON.stringify(p);
-    if (raw !== liveRaw){
-      if (focusInBody()){
-        pendingPayload = p;
-        setUpdatedLine(p.asof, false);
+    const chk = await r.json();
+    if (!chk || typeof chk.h !== "string" || !chk.asof) throw new Error("bad check");
+    if (chk.h !== DATA.h){
+      // data changed (or the embedded payload predates check.json): fetch it
+      const pr = await fetch("payload.json?ts=" + Date.now(), {cache: "no-store"});
+      if (!pr.ok) throw new Error("http " + pr.status);
+      const p = await pr.json();
+      if (!p || !Array.isArray(p.classes) || !p.classes.every(c => Array.isArray(c.e))) throw new Error("bad payload");
+      pollsFailed = 0;
+      const raw = JSON.stringify(p);
+      if (raw !== liveRaw){
+        if (focusInBody()){
+          pendingPayload = p;
+          setUpdatedLine(p.asof, false);
+        } else {
+          applyDataUpdate(p);
+        }
       } else {
-        applyDataUpdate(p);
+        setUpdatedLine(DATA.asof, false);
       }
     } else {
+      pollsFailed = 0;
       setUpdatedLine(DATA.asof, false);
     }
   } catch (e) {

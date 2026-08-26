@@ -4,14 +4,15 @@
 # Every run: re-fetch the results frontier (classes from the last one with
 # placings, until the first whose results are not posted yet), plus a
 # lookahead of upcoming classes to keep entry lists fresh; rebuild
-# index.html + payload.json; commit and push only when data changed.
+# index.html + payload.json + check.json; commit and push only when data
+# changed.
 #
 #   cron: */8 * * * *  <repo>/refresh/refresh_cron.sh
 #
-# All output goes to refresh/cron.log. Only index.html, payload.json and
-# (when the live class list changed) refresh/classes.json are ever
-# committed; the git-ignored intermediates (entries/, data.json, jar.txt)
-# stay local.
+# All output goes to refresh/cron.log. Only index.html, payload.json,
+# check.json and (when the live class list changed) refresh/classes.json
+# are ever committed; the git-ignored intermediates (entries/, data.json,
+# jar.txt) stay local.
 set -u
 export PATH=/usr/local/bin:/usr/bin:/bin
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -37,8 +38,8 @@ fi
 
 cd "$HERE" || die "cannot cd to $HERE"
 git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || die "not a git repo"
-if [ -n "$(git -C "$ROOT" status --porcelain -- index.html payload.json)" ]; then
-  log "WARNING: index.html/payload.json has uncommitted local changes; rebuild will overwrite them"
+if [ -n "$(git -C "$ROOT" status --porcelain -- index.html payload.json check.json)" ]; then
+  log "WARNING: index.html/payload.json/check.json has uncommitted local changes; rebuild will overwrite them"
 fi
 
 # --- live class list
@@ -123,11 +124,11 @@ fi
 
 # --- build + publish (asof only changes when the data changed)
 python3 build_page.py || die "build failed"
-if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json refresh/classes.json; then
-  log "index.html + payload.json unchanged; nothing to publish"
+if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json check.json refresh/classes.json; then
+  log "index.html + payload.json + check.json unchanged; nothing to publish"
 else
   # classes.json is a no-op in the add when the list did not change
-  git -C "$ROOT" add index.html payload.json refresh/classes.json || die "git add failed"
+  git -C "$ROOT" add index.html payload.json check.json refresh/classes.json || die "git add failed"
   git -C "$ROOT" commit -m "Refresh entries $(date +%F)" || die "git commit failed"
   git -C "$ROOT" push || die "git push failed"
   log "committed and pushed"

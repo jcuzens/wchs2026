@@ -45,13 +45,15 @@ exactly. Do not skip this step.
 ## What this is
 
 A static, personal schedule site for WCHS 2026 (Aug 22–29, 2026, Kentucky
-State Fair). The site is two generated files — `index.html` (page shell)
-and `payload.json` (live data) — served by GitHub Pages from the `main`
+State Fair). The site is three generated files — `index.html` (page shell),
+`payload.json` (live data) and `check.json` (tiny poll probe: asof + data
+hash) — served by GitHub Pages from the `main`
 branch. The page shell polls the
-published `payload.json` every 30 s and re-renders in place (no manual
+published `check.json` every 30 s and only fetches the full
+`payload.json` when the hash changed; it then re-renders in place (no manual
 refresh); the embedded snapshot in `index.html` is the first-paint/offline
 fallback. `refresh/` is the pipeline
-that regenerates it from live show data. README.md has the user-facing
+that regenerates them from live show data. README.md has the user-facing
 story.
 
 ## Commands
@@ -62,7 +64,7 @@ Run from the repo root:
 refresh/fetch_entries.sh                    # resumable; uses refresh/jar.txt session cookie
 python3 refresh/class_list.py refresh/entries/<page>.html   # refresh classes.json from the live master grid (rc 3 = changed)
 python3 refresh/parse_entries.py
-python3 refresh/build_page.py               # data -> index.html + payload.json (asof only changes if the data changed)
+python3 refresh/build_page.py               # data -> index.html + payload.json + check.json (asof only changes if the data changed)
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
 python3 refresh/fetch_live.py               # live scores fetch -> refresh/live.json
 python3 refresh/parse_live.py               # fold live.json into refresh/live_cache.json
@@ -73,11 +75,12 @@ python3 tests/test_asof.py                  # verifies the asof only changes whe
 python3 tests/test_frontier.py              # frontier/lookahead selection (cron refresh)
 python3 tests/test_predict.py               # predicted-pace model (synthetic sessions)
 python3 tests/test_payload.py               # verifies payload.json follows the asof policy
+python3 tests/test_check.py                 # verifies check.json follows the asof policy
 python3 tests/test_live.py                  # live protocol/parse/merge tests (fixtures)
 python3 tests/test_class_list.py            # live class list: master-grid parse + update semantics
 python3 tests/test_parse_entries.py         # entry-page parse (page label wins, section slot inheritance)
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
-git add index.html payload.json && git commit -m "Refresh entries <date>" && git push
+git add index.html payload.json check.json && git commit -m "Refresh entries <date>" && git push
 ```
 
 `build_page.py` resolves its inputs and output relative to its own file
@@ -103,8 +106,8 @@ location, so `cd refresh && python3 build_page.py` is equivalent.
   placings land minutes after scoring) into `refresh/live.json` and folds
   it into the accumulating `refresh/live_cache.json`; a live failure is a
   warning only — the page degrades to official-only data;
-- rebuilds `index.html` + `payload.json`, and commits + pushes **only when the data
-  actually changed** (the asof policy makes an unchanged rebuild
+- rebuilds `index.html` + `payload.json` + `check.json`, and commits + pushes **only
+  when the data actually changed** (the asof policy makes an unchanged rebuild
   byte-identical, so `git diff` against HEAD is the no-change signal).
 
 The frontier needs no state file: "done" is the page's own rule (a class has
@@ -125,15 +128,21 @@ cannot clobber good data.
   and JS live in the raw-string template (`html = r"""..."""`) inside
   `refresh/build_page.py`. Change the template, rebuild, commit.
 - The payload is embedded by replacing the `__PAYLOAD__` placeholder with
-  compact JSON: `{"asof":"<local time>","classes":[...]}`.
+  compact JSON: `{"asof":"<local time>","h":"<sha1-12 of the classes
+  JSON>","classes":[...]}`.
 - `payload.json` (repo root) is the same compact payload as a committed
-  file, served by Pages; the page fetches it every 30 s (`?ts=` +
-  `cache: "no-store"`) and re-renders when it changes. Re-renders preserve
-  the user's view (selection, open cards, day collapse, scroll, focus — a
-  re-render is deferred while a control has focus); a ring in the header
-  counts down to the next check.
+  file, served by Pages. The page polls the tiny `check.json` (repo root,
+  ~50 B: `{"asof":...,"h":...}`) every 30 s (`?ts=` + `cache: "no-store"`
+  — the buster defeats Pages' 600 s edge cache; ETag/304 revalidation is
+  not an option because freshness must stay ~30 s) and fetches the full
+  `payload.json` only when its `h` differs from the page's current one;
+  the embedded snapshot carries the same `h`, so first paint needs no
+  fetch. Re-renders preserve the user's view (selection, open cards, day
+  collapse, scroll, focus — a re-render is deferred while a control has
+  focus); a ring in the header counts down to the next check.
 - Data flow: `classes.json` + `schedule.json` + `entries/*.html`
-  → `parse_entries.py` → `data.json` → `build_page.py` → `index.html`.
+  → `parse_entries.py` → `data.json` → `build_page.py` →
+  `index.html` + `payload.json` + `check.json`.
 - **Live scores:** `LiveScoring.aspx` (same session as the entry fetcher)
   is a second, faster data source. `fetch_live.py` walks its
   reverse-engineered DevExpress callback protocol (see the spec
@@ -154,11 +163,14 @@ cannot clobber good data.
   in place. **Official placings always beat the model.** The model never
   reads wall-clock time, so the asof policy is untouched.
 - **asof policy: the "Updated" stamp changes only when the data
-  actually changes** (both in `index.html` and `payload.json`). The
+  actually changes** (in `index.html`, `payload.json` and `check.json`).
+  The
   regular build compares the new `classes`
   against the payload already embedded in `index.html` and keeps the old
-  `asof` when they're identical. `--ui-only` re-embeds that same payload,
-  so template/UI rebuilds never touch the stamp.
+  `asof` when they're identical. `h` (and therefore `check.json`) is a
+  pure function of the classes, so it follows the same policy. `--ui-only`
+  re-embeds that same payload, so template/UI rebuilds never touch the
+  stamp.
 - `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `refreshlist.txt`,
   `cron.log`, `cron.lock`, `live.json`, `live_cache.json`,
   `tests/node_modules/` are git-ignored
@@ -196,9 +208,10 @@ cannot clobber good data.
 
 - GitHub Pages deploys from `main` (root folder). A push to `main`
   publishes https://jcuzens.github.io/wchs2026/ within 1–2 minutes.
-- `index.html` (~385 KB) and `payload.json` (~370 KB) must go through
-  `git push`. The GitHub MCP tools take file contents inline and truncate
-  above ~40 KB — do not attempt to push either file through them.
+- `index.html` (~385 KB), `payload.json` (~370 KB) and `check.json`
+  (50 B) are published together as one commit. The two big ones must go
+  through `git push`. The GitHub MCP tools take file contents inline and
+  truncate above ~40 KB — do not attempt to push either file through them.
 
 ## Verification
 
@@ -211,6 +224,8 @@ s = open('index.html').read()
 print("classes:", len(re.findall(r'"n":"', s)))      # 210 at first snapshot; grows during the show
 print("entries:", len(re.findall(r'\["\d+","', s)))  # 3471 at first snapshot; grows during the show
 print("asof:", re.search(r'"asof":"([^"]*)"', s).group(1))
+import json
+print("check:", open('check.json').read().strip())   # must match the asof above
 EOF
 ```
 

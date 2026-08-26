@@ -405,9 +405,18 @@ setTimeout(() => {
             const f1 = p1.classes.find(c => c.n === HOT_NUM);
             if (f1 && f1.e.length) f1.e[0][6] = "1";
             p1.asof = P1_ASOF;
-            w.__live = { current: p1, fail: false };
-            w.fetch = async () => {
+            // The page polls check.json (tiny: asof + data hash) every cycle
+            // and only fetches payload.json when the hash differs from the
+            // embedded one. "diff-1" guarantees the first poll fetches.
+            w.__live = { check: { asof: P1_ASOF, h: "diff-1" }, current: p1,
+                         fail: false, checkFetches: 0, payloadFetches: 0 };
+            w.fetch = async url => {
               if (w.__live.fail) throw new Error("network down");
+              if (String(url).indexOf("check.json") !== -1){
+                w.__live.checkFetches++;
+                return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(w.__live.check)) };
+              }
+              w.__live.payloadFetches++;
               return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(w.__live.current)) };
             };
           },
@@ -462,6 +471,15 @@ setTimeout(() => {
 
           await sleep(250);   // several 50 ms polls have landed
 
+          // check 0: the first poll went check.json (hash differed from the
+          // embedded one) and only then fetched the full payload
+          check("live: first poll fetched payload after check.json",
+                w4.__live.checkFetches >= 1 && w4.__live.payloadFetches >= 1,
+                "check=" + w4.__live.checkFetches + " payload=" + w4.__live.payloadFetches);
+          // now serve a matching hash: quiescent polls must be check-only
+          w4.__live.check = { asof: P1_ASOF, h: w4.__live.current.h };
+          await sleep(50);   // let any in-flight poll settle on the new hash
+
           // check 1: the page re-rendered from the fetched data
           check("live: done count matches fetched data", d4.querySelectorAll(".cdone").length === P1_DONE, "got " + d4.querySelectorAll(".cdone").length + " vs " + P1_DONE);
           check("live: done cards tinted", d4.querySelectorAll("main .cls.done").length === P1_DONE, "got " + d4.querySelectorAll("main .cls.done").length);
@@ -499,6 +517,7 @@ setTimeout(() => {
           const f2 = p2.classes.find(c => c.n === P1_HOT_NUM);
           if (f2 && f2.e.length) f2.e[0][6] = "1";
           p2.asof = "2026-08-25 11:05";
+          w4.__live.check = { asof: p2.asof, h: "diff-2" };   // hash changed -> refetch
           w4.__live.current = p2;
           await sleep(200);
           const P2 = w4.__live.current;
@@ -520,10 +539,17 @@ setTimeout(() => {
           const P2_FILTERED = P2_MATCHED + (P2_HOT_NUM && !P2_HOT_MATCHED ? 1 : 0);
           check("live: filtered count follows new data", d4.querySelectorAll("main .cls").length === P2_FILTERED, "got " + d4.querySelectorAll("main .cls").length + " vs " + P2_FILTERED);
 
-          // check 3: an unchanged payload does not re-render (node identity)
+          // check 3: a matching check hash does not re-render (node identity)
+          // and does not refetch the full payload
+          w4.__live.check = { asof: p2.asof, h: w4.__live.current.h };
+          await sleep(50);   // let any in-flight poll settle on the new hash
           const firstChild = d4.querySelector("#schedule").firstChild;
+          const payloadFetches3 = w4.__live.payloadFetches;
           await sleep(150);
-          check("live: unchanged payload does not re-render", d4.querySelector("#schedule").firstChild === firstChild);
+          check("live: unchanged check does not re-render", d4.querySelector("#schedule").firstChild === firstChild);
+          check("live: unchanged check does not refetch payload.json",
+                w4.__live.payloadFetches === payloadFetches3,
+                "payload=" + w4.__live.payloadFetches + " was " + payloadFetches3);
 
           // check 4: repeated failures mark the line (+ hide the ring), recovery clears
           w4.__live.fail = true;
@@ -561,6 +587,7 @@ setTimeout(() => {
             p3.asof = "2026-08-25 11:10";
             const P3_HOT = upNextOf(p3.classes, PIN_MS);
             const P3_HOT_NUM = P3_HOT ? P3_HOT.n : null;
+            w4.__live.check = { asof: p3.asof, h: "diff-3" };   // hash changed -> refetch
             w4.__live.current = p3;
             await sleep(200);
             const nowWhileDeferred = d4.querySelector("main .cls.now");
@@ -588,6 +615,7 @@ setTimeout(() => {
             if (f4.e.length) f4.e[0][6] = "1";   // live places the frontier class's first entry
             f4.live = 12;                        // fresh live activity (minutes ago)
             p4.asof = "2026-08-25 11:15";
+            w4.__live.check = { asof: p4.asof, h: "diff-4" };   // hash changed -> refetch
             w4.__live.current = p4;
             await sleep(200);
             const P4_LIVE_NUMS = p4.classes.filter(c => c.live != null).map(c => c.n).sort();
