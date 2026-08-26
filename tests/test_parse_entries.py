@@ -82,5 +82,24 @@ check("no label -> file name used", rec and rec["num"] == "99"
       and rec["name"] == "Plain Class", str(rec and rec["num"]))
 check("no schedule slot -> no weekday keys", rec and "weekday" not in rec)
 
+# 4. a page for a class no longer in the master grid is stale and yields no
+#    record: the grid is the class universe. A pre-split parent page (114,
+#    fetched before the show split it into 114.1/114.2) is exactly this case;
+#    its entries now live in the section pages, and a record for 114 would
+#    carry null name/division.
+PARENT_PAGE = SECTION_PAGE.replace("89.2", "114")
+SPLIT_CLASSES = {
+    "114.1": {"num": "114.1", "name": "ASB Country Pleasure Driving Div I Sec 1",
+              "guid": "g1", "type": "UNDERSADDLE", "division": "ASB", "entries": "9"},
+    "114.2": {"num": "114.2", "name": "ASB Country Pleasure Driving Div I Sec 2",
+              "guid": "g2", "type": "UNDERSADDLE", "division": "ASB", "entries": "6"},
+}
+rec = pe.parse_page(PARENT_PAGE, "114", SPLIT_CLASSES,
+                    {"114": {"weekday": "Wednesday", "period": "Morning",
+                             "date": "August 26", "time": "9:00 a.m.",
+                             "sched_name": "ASB Country Pleasure Driving Div I"}})
+check("class not in master grid -> no record (stale pre-split parent page)",
+      rec is None, str(rec and rec["num"]))
+
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

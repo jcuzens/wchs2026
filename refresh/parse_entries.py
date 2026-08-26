@@ -34,7 +34,8 @@ def parse_page(page, fallback_num, classes, sched_lookup):
     """One fetched class page -> a data.json record. The page's own
     'Class: N' label wins over fallback_num (the file name). Class metadata
     comes from the class list entry for N; the schedule slot falls back to
-    the parent's when N is a section (x.y)."""
+    the parent's when N is a section (x.y). None when N is not in the class
+    list (a stale page for a class no longer in the master grid)."""
     placed = parse_rows(page, 'grPlacing')
     nonpl = parse_rows(page, 'grNonPlacing')
     entries = []
@@ -61,6 +62,13 @@ def parse_page(page, fallback_num, classes, sched_lookup):
             "entry_guid": r["entry_guid"], "horse_guid": r["horse_guid"], "rider_guid": r["rider_guid"],
         })
     num = page_class_num(page) or fallback_num
+    if num not in classes:
+        # The master grid is the class universe: a page for a class that is
+        # no longer in it is stale (e.g. a pre-split parent page, 114, fetched
+        # before the show split it into 114.1/114.2). Its entries now live in
+        # the section pages; a record here would be a ghost with null
+        # name/division.
+        return None
     wc = classes.get(num)
     parent = num.split('.')[0]
     sc = sched_lookup.get(num) or sched_lookup.get(parent)
@@ -91,6 +99,7 @@ def main():
 
     all_entries = []
     problems = []
+    stale = []
     for f in sorted(glob.glob('entries/*.html')):
         fname = f.split('/')[-1][:-5]
         page = open(f, encoding='utf-8', errors='replace').read()
@@ -99,12 +108,17 @@ def main():
                 continue
             problems.append(fname)
             continue
-        all_entries.append(parse_page(page, fname, classes, sched_lookup))
+        rec = parse_page(page, fname, classes, sched_lookup)
+        if rec is None:
+            stale.append(fname)
+            continue
+        all_entries.append(rec)
 
     json.dump(all_entries, open('data.json', 'w'), indent=1)
     print(f"classes with data: {len(all_entries)}")
     print(f"total entries: {sum(len(c['entries']) for c in all_entries)}")
     print(f"no schedule slot: {[c['num'] for c in all_entries if 'weekday' not in c]}")
+    print(f"stale (not in class list): {stale}")
     print(f"problems: {problems}")
     n = len(all_entries)
     print(f"avg entries/class: {sum(len(c['entries']) for c in all_entries)/max(n,1):.1f}")
