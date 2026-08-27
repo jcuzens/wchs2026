@@ -269,7 +269,9 @@ setTimeout(() => {
           rows.filter(r => !r.classList.contains("scratch")).length === SCR.e.length - SCR.sc.length);
     check("scratch styling declares background + strikethrough",
           /\.erow\.scratch\s*\{[^}]*background[^}]*\}/.test(css) &&
-          /\.erow\.scratch [^{]*\{[^}]*text-decoration\s*:\s*line-through[^}]*\}/.test(css));
+           /\.erow\.scratch [^{]*\{[^}]*text-decoration\s*:\s*line-through[^}]*\}/.test(css));
+  } else {
+    check("scratch DOM checks skipped (no scratches in payload)", true, "no class has sc; nothing to render");
   }
 
   // ---------- dark mode toggle ----------

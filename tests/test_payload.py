@@ -10,6 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 IDX = os.path.join(ROOT, "index.html")
 PLJ = os.path.join(ROOT, "payload.json")
+CHK = os.path.join(ROOT, "check.json")
 DATA = os.path.join(ROOT, "refresh", "data.json")
 BUILDER = os.path.join(ROOT, "refresh", "build_page.py")
 
@@ -43,10 +44,14 @@ fcntl.flock(_lock.fileno(), fcntl.LOCK_EX)
 
 idx_backup = IDX + ".bak"
 plj_backup = PLJ + ".bak"
+chk_backup = CHK + ".bak"
 plj_existed = os.path.exists(PLJ)
+chk_existed = os.path.exists(CHK)
 shutil.copyfile(IDX, idx_backup)
 if plj_existed:
     shutil.copyfile(PLJ, plj_backup)
+if chk_existed:
+    shutil.copyfile(CHK, chk_backup)
 try:
     # 1. a regular build publishes payload.json equal to the embedded payload
     build()
@@ -127,6 +132,10 @@ finally:
         shutil.move(plj_backup, PLJ)
     elif os.path.exists(PLJ):
         os.remove(PLJ)
+    if chk_existed:
+        shutil.move(chk_backup, CHK)
+    elif os.path.exists(CHK):
+        os.remove(CHK)
 
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

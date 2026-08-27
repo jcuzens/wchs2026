@@ -126,6 +126,9 @@ check("upcoming is empty when everything is settled",
 json.dump(D_UP, open(data_p, "w"))
 rc, out = cli("upcoming")
 check("cli upcoming prints fetchable nums in order", out == "3\n4\n5.1\n5.2", out)
+json.dump(ALL_DONE, open(data_p, "w"))
+rc, out = cli("upcoming")
+check("cli upcoming prints nothing when everything is settled", out == "", repr(out))
 
 # 9. property check against the real committed payload (data evolves during the
 #    show, so assert invariants, not exact numbers)

@@ -163,9 +163,9 @@ never run at once; an overlapping run just skips.
   format) into `refresh/live.json`; `parse_live.py` accumulates placings in
   `refresh/live_cache.json`; `build_page.py` merges them: **official
   class-results placings always win, live fills gaps only**, and classes
-   with live activity fresher than 60 min get a gold **live pill** on the
-   page. If the live source fails or the files are missing, the page is
-   byte-identical to official-only.
+  with live activity fresher than 60 min get a gold **live pill** on the
+  page. If the live source fails or the files are missing, the page is
+  byte-identical to official-only.
 - **Scratch entries:** withdrawn entries sit on the same ClassResults.aspx
   pages the pipeline already fetches, marked on the `<tr>` with
   `background-color:LightPink;…text-decoration: line-through`.

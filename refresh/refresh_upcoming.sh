@@ -75,10 +75,11 @@ fi
 
 # --- build + publish (asof only changes when the data changed)
 python3 build_page.py || die "build failed"
-if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json check.json; then
+if git -C "$ROOT" diff --quiet HEAD -- index.html payload.json check.json refresh/classes.json; then
   log "unchanged; nothing to publish"
 else
-  git -C "$ROOT" add index.html payload.json check.json || die "git add failed"
+  # classes.json is a no-op in the add: this job never modifies it
+  git -C "$ROOT" add index.html payload.json check.json refresh/classes.json || die "git add failed"
   git -C "$ROOT" commit -m "Refresh upcoming entries $(date +%F)" || die "git commit failed"
   git -C "$ROOT" push || die "git push failed"
   log "committed and pushed"
