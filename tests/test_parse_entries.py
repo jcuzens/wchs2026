@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """parse_entries: one record per class, and the class number comes from the
 page's own 'Class: N' detail label (a split section page parsed as 89.2,
-not as its file name). Sections inherit the parent's schedule slot."""
-import os, sys
+not as its file name). Sections inherit the parent's schedule slot. After a
+split, the parent page (114.html) and the section page (114.1.html) can both
+label themselves with the section number: exactly one record is kept."""
+import json, os, re, shutil, sys, tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -100,6 +102,79 @@ rec = pe.parse_page(PARENT_PAGE, "114", SPLIT_CLASSES,
                              "sched_name": "ASB Country Pleasure Driving Div I"}})
 check("class not in master grid -> no record (stale pre-split parent page)",
       rec is None, str(rec and rec["num"]))
+
+# 5. a split class fetched as TWO pages that both label themselves with the
+#    section number: the parent page (114.html, which the site now serves as
+#    section 1) and the section page (114.1.html). One record per class, from
+#    the canonical page (file name == class number), even when the parent
+#    page was fetched more recently.
+PLACED_1141 = SECTION_PAGE.replace("89.2", "114.1")
+LISTONLY_1141 = re.sub(
+    r'<table>\s*<tr id="ctl00_dxdt230_grPlacing_DXDataRow\d+".*?</tr>\s*</table>',
+    '', PLACED_1141, flags=re.S)
+SCHED_114 = [{"weekday": "Wednesday", "period": "Morning", "date": "August 26",
+              "time": "9:00 a.m.",
+              "classes": [{"num": "114",
+                           "name": "ASB Country Pleasure Driving Div I"}]}]
+
+def run_main(tmp, pages, classes, sched, mtimes=None):
+    mtimes = mtimes or {}
+    os.makedirs(os.path.join(tmp, "entries"), exist_ok=True)
+    for name, content in pages.items():
+        p = os.path.join(tmp, "entries", name)
+        open(p, "w").write(content)
+        if name in mtimes:
+            os.utime(p, (mtimes[name], mtimes[name]))
+    open(os.path.join(tmp, "classes.json"), "w").write(
+        json.dumps(list(classes.values())))
+    open(os.path.join(tmp, "schedule.json"), "w").write(json.dumps(sched))
+    cwd = os.getcwd()
+    os.chdir(tmp)
+    try:
+        pe.main()
+        return json.load(open("data.json"))
+    finally:
+        os.chdir(cwd)
+
+tmp = tempfile.mkdtemp(prefix="pe_dup_")
+try:
+    # parent page fetched AFTER the section page (mtime 200 > 100): the
+    # canonical file name must still win, and it carries the placings
+    data = run_main(
+        tmp,
+        {"114.html": LISTONLY_1141, "114.1.html": PLACED_1141,
+         "114.2.html": SECTION_PAGE.replace("89.2", "114.2")},
+        SPLIT_CLASSES, SCHED_114,
+        mtimes={"114.html": 200, "114.1.html": 100, "114.2.html": 100})
+    nums = sorted(c["num"] for c in data)
+    check("parent + section page for the same class -> one record per class",
+          nums == ["114.1", "114.2"], str(nums))
+    r1141 = next((c for c in data if c["num"] == "114.1"), None)
+    check("the kept 114.1 record is the canonical section page (has placings)",
+          r1141 is not None
+          and any(e["place"] == "1" and e["entry"] == "1044" for e in r1141["entries"])
+          and len(r1141["entries"]) == 2, str(r1141 and r1141["entries"]))
+finally:
+    shutil.rmtree(tmp)
+
+tmp = tempfile.mkdtemp(prefix="pe_dup_")
+try:
+    # neither file name is canonical -> the newest fetch wins
+    data = run_main(
+        tmp,
+        {"114.html": PLACED_1141, "999.html": LISTONLY_1141},
+        SPLIT_CLASSES, SCHED_114,
+        mtimes={"114.html": 100, "999.html": 200})
+    nums = sorted(c["num"] for c in data)
+    check("two pages labeled the same class -> one record",
+          nums == ["114.1"], str(nums))
+    r1141 = next((c for c in data if c["num"] == "114.1"), None)
+    check("neither file canonical -> newest fetch wins (no placings here)",
+          r1141 is not None
+          and not any(e["place"] for e in r1141["entries"])
+          and len(r1141["entries"]) == 1, str(r1141 and r1141["entries"]))
+finally:
+    shutil.rmtree(tmp)
 
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

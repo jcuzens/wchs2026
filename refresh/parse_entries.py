@@ -1,4 +1,4 @@
-import re, json, glob, html as h
+import re, json, glob, html as h, os
 
 def cell_text(td):
     t = re.sub(r'<[^>]+>', '', td)
@@ -86,6 +86,20 @@ def parse_page(page, fallback_num, classes, sched_lookup):
         rec["sched_name"] = sc["sched_name"]
     return rec
 
+def dedupe(pairs):
+    """One record per class number. After a split, two fetched pages can
+    label themselves with the same section number: the parent page (133.html,
+    which the site now serves as section 1) and the section page (133.1.html).
+    The page whose file name matches the class number is canonical; any other
+    tie goes to the newest fetch. pairs: (file_name, path, record)."""
+    best = {}
+    for fname, path, rec in pairs:
+        cand = (fname == rec["num"], os.path.getmtime(path))
+        cur = best.get(rec["num"])
+        if cur is None or cand > cur[0]:
+            best[rec["num"]] = (cand, rec)
+    return [rec for _, rec in best.values()]
+
 def main():
     classes = {c['num']: c for c in json.load(open('classes.json'))}
     sched = json.load(open('schedule.json'))
@@ -112,7 +126,12 @@ def main():
         if rec is None:
             stale.append(fname)
             continue
-        all_entries.append(rec)
+        all_entries.append((fname, f, rec))
+
+    records = dedupe(all_entries)
+    if len(records) < len(all_entries):
+        print(f"deduped {len(all_entries) - len(records)} duplicate section record(s)")
+    all_entries = records
 
     json.dump(all_entries, open('data.json', 'w'), indent=1)
     print(f"classes with data: {len(all_entries)}")
@@ -123,7 +142,6 @@ def main():
     n = len(all_entries)
     print(f"avg entries/class: {sum(len(c['entries']) for c in all_entries)/max(n,1):.1f}")
     # data size
-    import os
     print(f"data.json size: {os.path.getsize('data.json')/1024:.0f} KB")
 
 if __name__ == '__main__':
