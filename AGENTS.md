@@ -154,7 +154,8 @@ cannot clobber good data.
   page. If the live source fails or the files are missing, the page is
   byte-identical to official-only.
 - **Predicted pace:** `refresh/predict.py` is a pure per-session pace
-  model (13.5 min/class, 25 min champion equitation — constants in that
+  model (10.125 min/class — 13.5 cut 25% on 2026-08-26 after observed
+  classes ran short — plus 25 min champion equitation; constants in that
   file). The session holding the newest live observation is the "hot"
   session, shifted so that class's predicted end matches it (positive
   shift capped at +180 min). The build stamps each payload class with

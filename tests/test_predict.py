@@ -22,8 +22,13 @@ def ep(y, mo, d, h, mi):
 
 A_START = ep(2026, 8, 22, 10, 0)   # session A: Saturday Morning, 10:00 a.m.
 B_START = ep(2026, 8, 22, 18, 0)   # session B: Saturday Night, 6:00 p.m.
-PACE = int(pr.PACE_MIN * 60)       # 810 s
-CHAMP = int(pr.CHAMP_EQ_MIN * 60)  # 1500 s
+PACE_S = pr.PACE_MIN * 60          # 607.5 s (13.5 reduced 25%)
+CHAMP_S = pr.CHAMP_EQ_MIN * 60     # 1500 s
+
+def at(start, secs):
+    """A window boundary the way build_windows truncates it:
+    int of start + the float cumulative seconds."""
+    return int(start + secs)
 
 def cls(n, name, day="August 22", per="Morning", time="10:00 a.m."):
     return {"n": n, "name": name, "day": day, "per": per, "time": time, "e": []}
@@ -48,10 +53,11 @@ check("contiguous within a session",
       and base["5.1"][1] == base["5.2"][0]
       and base["5.2"][1] == base["6"][0], str(base))
 
-# 2. durations: champion equitation 25 min, everything else 13.5
+# 2. durations: champion equitation 25 min, everything else 10.125 (13.5 cut 25%)
+check("plain class pace reduced 25% from 13.5", pr.PACE_MIN == 13.5 * 0.75, str(pr.PACE_MIN))
 check("champion equitation gets a 25-min slot",
-      base["2"] == (A_START + PACE, A_START + PACE + CHAMP), str(base["2"]))
-check("plain class gets 13.5 min", base["1"] == (A_START, A_START + PACE), str(base["1"]))
+      base["2"] == (at(A_START, PACE_S), at(A_START, PACE_S + CHAMP_S)), str(base["2"]))
+check("plain class gets 10.125 min", base["1"] == (A_START, at(A_START, PACE_S)), str(base["1"]))
 check("is_champion_equitation needs both words",
       pr.is_champion_equitation("Champion Equitation")
       and pr.is_champion_equitation("EQ - Champion Equitation - Senior")
@@ -68,10 +74,11 @@ check("observed end = latest first-seen at", w["4"][1] == B_START + 41 * 60, str
 #    hot session shifts by the same delta, other sessions untouched
 w = pr.build_windows(ALL, {"4": {"1": {"p": 1, "at": "2026-08-22 18:35"}}})
 check("anchor: observed class pe = observed end", w["4"][1] == B_START + 35 * 60, str(w["4"]))
+SHIFT = 35 * 60 - PACE_S   # 1492.5 s: 18:35 - predicted end 18:10:07.5
 check("anchor: hot session shifted by the same delta",
-      w["4"][0] == B_START + 1290          # 21.5-min shift (18:35 - 18:13:30)
+      w["4"][0] == at(B_START, SHIFT)
       and w["5.1"][0] == w["4"][1]
-      and w["6"][1] == w["4"][1] + 3 * PACE, str(w))
+      and w["6"][1] == at(B_START, 4 * PACE_S + SHIFT), str(w))
 check("anchor: other sessions unchanged",
       w["1"] == base["1"] and w["2"] == base["2"], str(w))
 

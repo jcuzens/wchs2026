@@ -576,7 +576,7 @@ function renderSchedule(){
   if (!rendered){
     main.appendChild(el("div","fnote","Nothing matches your selection. Try removing a filter."));
   }
-  main.appendChild(el("div","footnote",'"est" times are predictions from an average class pace (~13.5 min); actual order may vary.'));
+  main.appendChild(el("div","footnote",'"est" times are predictions from an average class pace (~10 min); actual order may vary.'));
   const sub = $("#phSub");
   if (sub){
     const parts = FIELDS.filter(f=>state[f.key].size).map(f=>f.label+": "+[...state[f.key]].map(k=>namesDisp(f.key,k)).join(", "));

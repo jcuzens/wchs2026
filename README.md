@@ -27,7 +27,7 @@ Open the link on your phone:
   judged yet.
 - The highlighted card shows where the show is: **"on now · est H:MM"** or
   **"up next · est H:MM"**. Those times are *predictions* from an average
-  class pace (~13.5 min, anchored to the live scoreboard) — actual order
+  class pace (~10 min, anchored to the live scoreboard) — actual order
   may vary. Classes the model has passed but that still lack official
   results are marked **"awaiting results"**.
 
