@@ -22,7 +22,7 @@ else:
 
     classes = []
     for c in data:
-        classes.append({
+        cc = {
             "n": c["num"],
             "name": c["name"],
             "div": c["division"],
@@ -32,7 +32,12 @@ else:
             "time": c.get("time"),
             "e": [[e["entry"], e["horse"], e["rider"], e["trainer"], e["owner"], e.get("start"), e.get("place")]
                   for e in c["entries"]],
-        })
+        }
+        # scratched (withdrawn) entries, by entry number; key only when non-empty
+        sc = [e["entry"] for e in c["entries"] if e.get("scratch")]
+        if sc:
+            cc["sc"] = sc
+        classes.append(cc)
 
     # Live scores (git-ignored intermediates): official placings win, live
     # fills gaps; classes with fresh live activity (< 60 min) get "live".
@@ -113,6 +118,7 @@ html = r"""<!DOCTYPE html>
   --chip-border: #bfdbfe; --chip-press: #dbeafe;
   --done-bg: #d1fae5; --done-border: #6ee7b7; --done-ink: #15803d; --done-tint: #f0fdf4; --done-tint-border: #bbf7d0;
   --now-bg: #fffbeb; --now-line: #f59e0b;
+  --scratch-bg: #fbd0dc; --scratch-ink: #b91c1c;
   --toast-bg: #1a1a2e; --toast-ink: #fff;
 }
 html.dark {
@@ -122,6 +128,7 @@ html.dark {
   --chip-border: #2d4a78; --chip-press: #24365a;
   --done-bg: #12301f; --done-border: #21694a; --done-ink: #7ddba8; --done-tint: #14332a; --done-tint-border: #245c46;
   --now-bg: #33260a; --now-line: #f59e0b;
+  --scratch-bg: #3b1522; --scratch-ink: #fca5a5;
   --toast-bg: #e5e7eb; --toast-ink: #111827;
 }
 * { box-sizing: border-box; }
@@ -204,6 +211,8 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .erow.other .eentry, .erow.other .eentry b, .erow.other .ehorse, .erow.other .eppl { color: var(--muted); }
 .erow.other .ehorse { font-weight: 400; }
 .erow.other .eppl .place { color: var(--gold); font-weight: 600; }
+.erow.scratch { background: var(--scratch-bg); }
+.erow.scratch .eentry b, .erow.scratch .ehorse, .erow.scratch .eppl { color: var(--scratch-ink); text-decoration: line-through; }
 .eother { display: inline-block; margin-left: 6px; padding: 0 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 9px; font-size: 10.5px; line-height: 1.5; color: var(--muted); vertical-align: 1px; }
 .footnote { color: var(--muted); font-size: 12px; text-align: center; margin-top: 30px; }
 #toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--toast-bg); color: var(--toast-ink); padding: 8px 16px; border-radius: 8px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 50; }
@@ -589,6 +598,7 @@ function namesDisp(key,k){ const m = NAMES[key] && NAMES[key][k]; return m ? m.d
 function makeClass(c, isMatch, hotNum){
   const isHot = c.n === hotNum;
   const on = active();
+  const scr = new Set(c.sc || []);
   const visE = on ? c.e.filter(eMatches) : c.e;
   const showFiltered = on && isMatch;
   const canToggle = showFiltered && visE.length < c.e.length;
@@ -600,7 +610,7 @@ function makeClass(c, isMatch, hotNum){
   const buildRows = (box, entries) => {
     for (const e of sortE(entries)){
       const other = on && !eMatches(e);
-      const row = el("div","erow" + (other ? " other" : ""));
+      const row = el("div","erow" + (other ? " other" : "") + (scr.has(e[0]) ? " scratch" : ""));
       const en = el("span","eentry");
       en.innerHTML = e[0] ? "<b>"+e[0]+"</b>" : "—";
       row.appendChild(en);

@@ -12,6 +12,11 @@ const HTML = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
 const PL = HTML.match(/^(?:const|let) DATA = (.*);$/m);
 if (!PL) { console.error("FAIL  payload line not found in index.html"); process.exit(1); }
 const DATA = JSON.parse(PL[1]);
+const DATA_JSON = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "refresh", "data.json"), "utf8"));
+// classes whose source data has scratched entries -> expected "sc" payload lists
+const SCRATCH_SRC = DATA_JSON
+  .map(c => ({ n: c.num, sc: c.entries.filter(e => e.scratch).map(e => e.entry).sort() }))
+  .filter(x => x.sc.length);
 
 const PIN_MS = Date.parse("2026-08-25T10:00:00");
 function pinDate(w){
@@ -241,6 +246,31 @@ setTimeout(() => {
   // see who placed where; the rest of the row stays muted
   const placeRules = [...css.matchAll(/((?:^|\n)[^{}\n]*erow\.other[^{}\n]*\.place[^{}\n]*)\{([^}]*)\}/g)];
   check("other-row .place stays gold (not muted)", placeRules.length >= 1 && placeRules.every(r => /color\s*:\s*var\(--gold\)/.test(r[2]) && !r[2].includes("var(--muted)")), placeRules.map(r => r[1].trim() + " { " + r[2].trim() + " }").join(" | ").slice(0, 160));
+
+  // ---------- scratch entries (withdrawn before their class) ----------
+  const scrPayload = DATA.classes.map(c => ({ n: c.n, sc: c.sc || [] }));
+  check("payload carries sc for every class with scratched entries",
+        SCRATCH_SRC.length === 0 ||
+        SCRATCH_SRC.every(s => {
+          const p = scrPayload.find(x => x.n === s.n);
+          return p && p.sc.length === s.sc.length && s.sc.every(n => p.sc.includes(n));
+        }),
+        "src " + SCRATCH_SRC.length + " vs payload classes with sc: " + scrPayload.filter(x => x.sc.length).length);
+  const SCR = DATA.classes.find(c => c.sc && c.sc.length);
+  if (SCR){
+    const scrCard = [...doc.querySelectorAll("main .cls")].find(x => x.querySelector(".cnum").textContent === SCR.n);
+    scrCard.querySelector(".cls-head").click();
+    const rows = [...scrCard.querySelectorAll(".erow")];
+    const scrRows = rows.filter(r => r.classList.contains("scratch"));
+    check("scratch entries render with the scratch class",
+          scrRows.length === SCR.sc.length, scrRows.length + " vs " + SCR.sc.length);
+    check("scratch rows are exactly the scratched entry numbers",
+          scrRows.every(r => SCR.sc.includes(r.querySelector(".eentry").textContent.trim())) &&
+          rows.filter(r => !r.classList.contains("scratch")).length === SCR.e.length - SCR.sc.length);
+    check("scratch styling declares background + strikethrough",
+          /\.erow\.scratch\s*\{[^}]*background[^}]*\}/.test(css) &&
+          /\.erow\.scratch [^{]*\{[^}]*text-decoration\s*:\s*line-through[^}]*\}/.test(css));
+  }
 
   // ---------- dark mode toggle ----------
   const tbtn = doc.getElementById("themeBtn");
