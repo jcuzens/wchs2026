@@ -176,5 +176,44 @@ try:
 finally:
     shutil.rmtree(tmp)
 
+# 6. scratch rows: the show site marks withdrawn entries with a LightPink +
+#    line-through <tr> style; exactly those entries are flagged (both grids)
+SCRATCH_PAGE = """
+<html><body>
+<span class="dxeBase bold" id="ctl00_dxdt230_grPlacing_Title_ASPxLabel3" style="font-size:12pt;">Class:       89.2</span>
+<table>
+<tr id="ctl00_dxdt230_grPlacing_DXDataRow0" class="dxgvDataRow_Office2010Blue">
+<td>1</td><td>1044</td><td>WA-SO FAR LUCKY</td><td>WALKER, DARIEN</td><td></td>
+<td>WALKER, DARIEN</td><td>SIMPSON, AMANDA</td><td>$360.00</td><td>$0.00</td>
+<td>6</td><td>0.000</td><td>0.000</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr id="ctl00_dxdt230_grPlacing_DXDataRow1" class="dxgvDataRow_Office2010Blue"
+ style="background-color:LightPink;font-size:8pt;text-decoration: line-through;">
+<td>5</td><td>1060</td><td>SCRATCHED PLACED</td><td>SP, RIDER</td><td></td>
+<td>SP, OWNER</td><td>SP, TRAINER</td><td>$0.00</td><td>$0.00</td>
+<td>4</td><td>0.000</td><td>0.000</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+<span class="dxeBase bold" id="ctl00_dxdt230_grNonPlacing_Title_ASPxLabel3" style="font-size:12pt;">Class:       89.2</span>
+<table>
+<tr id="ctl00_dxdt230_grNonPlacing_DXDataRow0" class="dxgvDataRow_Office2010Blue">
+<td>1050</td><td>HORSE B</td><td>RIDER B</td><td></td><td>OWNER B</td>
+<td>TRAINER B</td><td>$0.00</td><td>7</td><td></td><td></td><td>&nbsp;</td>
+<td>&nbsp;</td></tr>
+<tr id="ctl00_dxdt230_grNonPlacing_DXDataRow1" class="dxgvDataRow_Office2010Blue"
+ style="background-color:LightPink;font-size:8pt;text-decoration: line-through;">
+<td>1055</td><td>SCRATCH HORSE</td><td>SCRATCH RIDER</td><td></td>
+<td>OWNER S</td><td>TRAINER S</td><td>$0.00</td><td>9</td>
+<td></td><td></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+</body></html>
+"""
+rec = pe.parse_page(SCRATCH_PAGE, "89", CLASSES, SCHED_LOOKUP)
+scratched = sorted(e["entry"] for e in rec["entries"] if e.get("scratch") is True)
+check("exactly the line-through rows carry scratch=True",
+      rec is not None and scratched == ["1055", "1060"], str(scratched))
+check("plain rows carry no scratch key",
+      rec is not None and all("scratch" not in e for e in rec["entries"]
+                              if e["entry"] not in ("1055", "1060")),
+      str(rec and rec["entries"]))
+
 print("\n" + ("ALL PASS" if not fails else str(len(fails)) + " FAILURES: " + ", ".join(fails)))
 sys.exit(1 if fails else 0)

@@ -5,10 +5,13 @@ def cell_text(td):
     return h.unescape(t).replace('\xa0', ' ').strip()
 
 def parse_rows(page, grid):
-    pat = re.compile(r'<tr id="[^"]*_' + grid + r'_DXDataRow\d+"[^>]*>(.*?)</tr>', re.S)
+    pat = re.compile(r'<tr id="[^"]*_' + grid + r'_DXDataRow\d+"([^>]*)>(.*?)</tr>', re.S)
     out = []
     for m in pat.finditer(page):
-        row = m.group(1)
+        tag, row = m.group(1), m.group(2)
+        # scratch (withdrawn) rows carry the site's LightPink + line-through
+        # <tr> style; plain rows have none
+        scratch = "line-through" in tag
         # only top-level tds (not nested header tables)
         tds = re.findall(r'<td[^>]*>(?:(?!</td>).)*</td>', row, re.S)
         cells = [cell_text(td) for td in tds]
@@ -16,7 +19,7 @@ def parse_rows(page, grid):
         eg = re.search(r'EntryGUID=([0-9a-f-]{36})', row)
         hg = re.search(r'HorseGUID=([0-9a-f-]{36})', row)
         rg = re.search(r'RiderGUID=([0-9a-f-]{36})', row)
-        out.append({"cells": cells,
+        out.append({"cells": cells, "scratch": scratch,
                     "entry_guid": eg.group(1) if eg else None,
                     "horse_guid": hg.group(1) if hg else None,
                     "rider_guid": rg.group(1) if rg else None})
@@ -43,24 +46,30 @@ def parse_page(page, fallback_num, classes, sched_lookup):
         c = r["cells"]
         # Place Entry Horse Rider Cntry Owner Trainer Prize AddBack Start Score Percent USEF EC
         if len(c) < 12: continue
-        entries.append({
+        e = {
             "place": c[0] or None,
             "entry": c[1], "horse": c[2], "rider": c[3], "country": c[4] or None,
             "owner": c[5], "trainer": c[6], "start": c[9] if len(c) > 9 else None,
             "score": c[10] if len(c) > 10 else None,
             "entry_guid": r["entry_guid"], "horse_guid": r["horse_guid"], "rider_guid": r["rider_guid"],
-        })
+        }
+        if r["scratch"]:
+            e["scratch"] = True
+        entries.append(e)
     for r in nonpl:
         c = r["cells"]
         # Entry Horse Rider Cntry Owner Trainer Prize Start Score Percent USEF EC
         if len(c) < 10: continue
-        entries.append({
+        e = {
             "place": None,
             "entry": c[0], "horse": c[1], "rider": c[2], "country": c[3] or None,
             "owner": c[4], "trainer": c[5], "start": c[7] if len(c) > 7 else None,
             "score": c[8] if len(c) > 8 else None,
             "entry_guid": r["entry_guid"], "horse_guid": r["horse_guid"], "rider_guid": r["rider_guid"],
-        })
+        }
+        if r["scratch"]:
+            e["scratch"] = True
+        entries.append(e)
     num = page_class_num(page) or fallback_num
     if num not in classes:
         # The master grid is the class universe: a page for a class that is
