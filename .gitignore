@@ -6,6 +6,7 @@ refresh/data.json
 refresh/jar.txt
 refresh/fetchlist.txt
 refresh/refreshlist.txt
+refresh/upcominglist.txt
 refresh/cron.log
 refresh/cron.lock
 refresh/live.json
