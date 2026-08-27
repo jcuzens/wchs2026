@@ -80,9 +80,24 @@ def lookahead_nums(sched, cj, data, now, k=8):
         out.extend(fetch_nums_for(num, cj))
     return out
 
+def upcoming_nums(sched, cj, data, now):
+    """All schedule classes not yet settled and not stale, in schedule order,
+    each expanded to its fetchable sections. The 4-hour scratch refresh
+    (refresh_upcoming.sh) fetches exactly these: settled classes' pages
+    already contain every scratch they will ever have, and stale classes are
+    presumed skipped (same rule as the frontier)."""
+    out = []
+    for num in _order(sched):
+        if is_settled(num, cj, data):
+            continue
+        if is_stale(num, sched, now):
+            continue
+        out.extend(fetch_nums_for(num, cj))
+    return out
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["frontier", "frontier-nums", "settled", "lookahead"])
+    ap.add_argument("cmd", choices=["frontier", "frontier-nums", "settled", "lookahead", "upcoming"])
     ap.add_argument("arg", nargs="?")
     ap.add_argument("--sched", default=os.path.join(HERE, "schedule.json"))
     ap.add_argument("--classes", default=os.path.join(HERE, "classes.json"))
@@ -110,6 +125,10 @@ def main():
     elif a.cmd == "lookahead":
         k = int(a.arg) if a.arg else 8
         print("\n".join(lookahead_nums(sched, cj, data, now, k)))
+    elif a.cmd == "upcoming":
+        nums = upcoming_nums(sched, cj, data, now)
+        if nums:
+            print("\n".join(nums))
 
 if __name__ == "__main__":
     main()

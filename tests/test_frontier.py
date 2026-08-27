@@ -110,6 +110,23 @@ check("cli settled exits 1 for the frontier class", rc == 1, str(rc))
 rc, out = cli("lookahead", "2")
 check("cli lookahead prints next fetchable nums", out == "4\n5.1\n5.2", out)
 
+# 8b. upcoming: every not-yet-settled, not-stale schedule class in order,
+#     sections expanded (the 4-hour scratch refresh fetches exactly these)
+D_UP = [rec("1", ["1"]), rec("2", ["1"]), rec("3", [None] * 3), rec("4", [None] * 2),
+        rec("5.1", [None] * 2), rec("5.2", ["1"])]
+check("upcoming lists unsettled non-stale classes in schedule order",
+      sf.upcoming_nums(SCHED, set(CLASSES), D_UP, NOW_A) == ["3", "4", "5.1", "5.2"],
+      str(sf.upcoming_nums(SCHED, set(CLASSES), D_UP, NOW_A)))
+check("upcoming excludes stale (presumed skipped) classes",
+      sf.upcoming_nums(SCHED, set(CLASSES),
+                       [rec("1", ["1"]), rec("2", ["1"]), rec("3", [None] * 2), rec("4", [None] * 2)],
+                       NOW_LATE) == ["4"])
+check("upcoming is empty when everything is settled",
+      sf.upcoming_nums(SCHED, set(CLASSES), ALL_DONE, NOW_A) == [])
+json.dump(D_UP, open(data_p, "w"))
+rc, out = cli("upcoming")
+check("cli upcoming prints fetchable nums in order", out == "3\n4\n5.1\n5.2", out)
+
 # 9. property check against the real committed payload (data evolves during the
 #    show, so assert invariants, not exact numbers)
 sched = json.load(open(os.path.join(ROOT, "refresh", "schedule.json")))
