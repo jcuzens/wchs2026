@@ -68,6 +68,7 @@ python3 refresh/build_page.py               # data -> index.html + payload.json 
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
 python3 refresh/fetch_live.py               # live scores fetch -> refresh/live.json
 python3 refresh/parse_live.py               # fold live.json into refresh/live_cache.json
+bash refresh/refresh_upcoming.sh               # one 4-hour scratch-refresh cycle, manually (cron: 0 */4 * * *)
 npm --prefix tests install                  # once; jsdom dev-only dependency
 npm --prefix tests test                     # page smoke suite (runs against the built index.html)
 python3 tests/test_ui_only.py               # verifies --ui-only preserves the payload
@@ -122,6 +123,18 @@ than half, and the fetcher only replaces a page when the new one looks
 valid (> 50 KB or a legit "No entries" page), so a dead session cookie
 cannot clobber good data.
 
+**Scratch refresh (separate 4-hour cron):** `refresh/refresh_upcoming.sh`
+re-fetches the entry pages of every class that is not settled yet (no
+placings) and rebuilds + publishes on change. Scratch marks (entries
+withdrawn before their class) can appear hours before a class, so the
+8-minute frontier + lookahead alone would miss them further down the
+schedule. The first run after deploy is the one-time full refresh of all
+unsettled classes; settled classes' pages already contain every scratch
+they will ever have (they were re-fetched when their results posted).
+Stale (presumed skipped) classes are excluded, same rule as the frontier.
+It shares `cron.lock` and `cron.log` with the 8-minute job, so the two
+never run at once; an overlapping run just skips.
+
 ## Architecture
 
 - `index.html` is **generated, never hand-edited**. All page markup, CSS,
@@ -150,9 +163,17 @@ cannot clobber good data.
   format) into `refresh/live.json`; `parse_live.py` accumulates placings in
   `refresh/live_cache.json`; `build_page.py` merges them: **official
   class-results placings always win, live fills gaps only**, and classes
-  with live activity fresher than 60 min get a gold **live pill** on the
-  page. If the live source fails or the files are missing, the page is
-  byte-identical to official-only.
+   with live activity fresher than 60 min get a gold **live pill** on the
+   page. If the live source fails or the files are missing, the page is
+   byte-identical to official-only.
+- **Scratch entries:** withdrawn entries sit on the same ClassResults.aspx
+  pages the pipeline already fetches, marked on the `<tr>` with
+  `background-color:LightPink;…text-decoration: line-through`.
+  `parse_entries.py` flags them, `build_page.py` emits a per-class
+  `"sc": [entry numbers]` (only when non-empty), and the page renders
+  those rows with a pink background + strikethrough. No separate source
+  or fetcher — the 4-hour upcoming refresh (above) is the only new
+  moving part.
 - **Predicted pace:** `refresh/predict.py` is a pure per-session pace
   model (10.125 min/class — 13.5 cut 25% on 2026-08-26 after observed
   classes ran short — plus 25 min champion equitation; constants in that
@@ -278,6 +299,12 @@ show's full current class list (with ClassGUID row keys). If a class's
 data looks wrong (e.g. "missing" entries), check whether it was split
 into `x.1`/`x.2` sections — the old parent number no longer exists, and
 the old parent page now serves section 1.
+
+**Scratch marks are on the pages we already fetch:** the line-through
+`<tr>` style on an entry page is the whole signal. Settled classes' pages
+were re-fetched when their results posted, so they already contain all
+their scratches; only unsettled classes need periodic re-fetching (the
+4-hour upcoming refresh).
 
 **Stay dependency-free:** the page must remain one HTML file with no
 external requests, and the pipeline must remain Python stdlib + curl.

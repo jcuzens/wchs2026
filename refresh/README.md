@@ -66,5 +66,12 @@ commits/pushes only when the data changed. The frontier is derived from the payl
 no state file.
 All output goes to `cron.log`. See AGENTS.md for details.
 
+A second job, `refresh_upcoming.sh`, runs every 4 hours and re-fetches the
+pages of every class that is not settled yet — scratch (withdrawn) entries
+can appear hours before a class, and the 8-minute job only keeps the
+frontier + lookahead fresh. It shares the lock and log with `refresh_cron.sh`
+and publishes only when the data changed. Scratch rows render on the page
+with a pink background and strikethrough, like the main site.
+
 After any rebuild, run the smoke tests: `npm --prefix ../tests test`
 (plus `python3 ../tests/test_ui_only.py` for `--ui-only`).
