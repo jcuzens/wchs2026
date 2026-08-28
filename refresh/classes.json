@@ -1088,14 +1088,6 @@
   "entries": "11"
  },
  {
-  "num": "161",
-  "name": "Two Year Old Three Gaited Stallion/Mare/Gelding",
-  "guid": "f31397a6-456e-435e-a770-b45200d578d6",
-  "type": "UNDERSADDLE",
-  "division": "ASB",
-  "entries": "27"
- },
- {
   "num": "162",
   "name": "World's Champion of Champions Junior Harness Pony",
   "guid": "2623b669-9722-4553-b252-b45200d578d6",
@@ -1245,7 +1237,7 @@
   "guid": "722677d4-44dd-4c57-ae13-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "30"
+  "entries": "31"
  },
  {
   "num": "181",
@@ -1493,7 +1485,7 @@
   "guid": "e19c6f13-a0f4-40d2-85df-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "12"
+  "entries": "13"
  },
  {
   "num": "213",
@@ -1926,5 +1918,21 @@
   "type": "UNDERSADDLE",
   "division": "Roadster",
   "entries": "8"
+ },
+ {
+  "num": "161.1",
+  "name": "Two Year Old Three Gaited S/M/G Section 1",
+  "guid": "f31397a6-456e-435e-a770-b45200d578d6",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "18"
+ },
+ {
+  "num": "161.2",
+  "name": "Two Year Old Three Gaited S/M/G Section 2",
+  "guid": "905df0f5-7a80-4612-a8fb-b4b3014efa50",
+  "type": "UNDERSADDLE",
+  "division": "ASB",
+  "entries": "9"
  }
 ]
