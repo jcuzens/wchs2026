@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Judge scorecards: refresh/fetch_scorecards.py parses the show's public
-Google Drive folder page (file rows carry data-id="FILEID" and the file
-name in a title aria-label) into refresh/scorecards.json; build_page.py
+Google Drive folder (embeddedfolderview: <a href=".../file/d/FILEID/view">
++ flip-entry-title per entry) into refresh/scorecards.json; build_page.py
 stamps payload classes with a "card" URL. A parse that finds zero cards
 must never wipe a good cache (login wall / page redesign)."""
 import json, os, shutil, subprocess, sys, tempfile
@@ -17,23 +17,26 @@ def check(name, cond, extra=""):
     if not cond:
         fails.append(name)
 
-# ---- parse_folder_html (fixture shaped like the real folder page) ----
+# ---- parse_folder_html (fixture shaped like the embedded folder view) ----
+# The main /drive/folders/ page lazy-loads and only serves the first ~50
+# rows in the initial HTML; the legacy embeddedfolderview endpoint returns
+# every entry in one plain page: <a href=".../file/d/<ID>/view"> + title.
 import fetch_scorecards as fs
 
-def row(fid, name, kind="PDF"):
-    return ('<tr data-selectable data-id="%s" data-selection-key="0" data-target="doc" '
-            'class="qwPkcb eZp0ce" aria-selected="false" role="row" draggable="true">'
-            '<div class="JxSEve" aria-label="%s %s Shared" data-handled-by-drag-and-drop="true">'
-            '<i role="presentation"></i><i role="presentation"></i></div>'
-            '<span aria-label="Shared"></span><span aria-label="Modified Aug 22"></span>'
-            '</tr>') % (fid, name, kind)
+def entry(fid, name, folder=False):
+    href = ("https://drive.google.com/drive/folders/%s?usp=drive_web#list" % fid
+            if folder else
+            "https://drive.google.com/file/d/%s/view?usp=drive_web" % fid)
+    return ('<div class="flip-entry-info"><a href="%s" target="_blank">'
+            '<div class="flip-entry-visual"></div>'
+            '<div class="flip-entry-title">%s</div></a></div>' % (href, name))
 
-FIX = ('<html><body><table><tbody>' +
-       row("a" * 33, "CLASS 1.pdf") +
-       row("b" * 33, "CLASS 10.1.pdf") +
-       row("c" * 33, "Old Scores", "FOLDER") +
-       row("d" * 33, "Show Program.pdf") +
-       '</tbody></table></body></html>')
+FIX = ('<html><body><div class="flip-entry">' +
+       entry("a" * 33, "CLASS 1.pdf") +
+       entry("b" * 33, "CLASS 10.1.pdf") +
+       entry("c" * 33, "Old Scores", folder=True) +
+       entry("d" * 33, "Show Program.pdf") +
+       '</div></body></html>')
 
 cards = fs.parse_folder_html(FIX)
 check("parse: class numbers from CLASS N.pdf names",
@@ -41,7 +44,7 @@ check("parse: class numbers from CLASS N.pdf names",
 check("parse: folder and non-class files ignored", set(cards) == {"1", "10.1"}, json.dumps(cards))
 check("parse: empty page -> empty dict", fs.parse_folder_html("<html></html>") == {})
 check("parse: name match is case-insensitive",
-      fs.parse_folder_html(row("e" * 33, "class 2.pdf")).get("2") == "e" * 33)
+      fs.parse_folder_html(entry("e" * 33, "class 2.pdf")).get("2") == "e" * 33)
 
 # ---- main(): fetch failure / empty parse must not wipe a good cache ----
 tmp = tempfile.mkdtemp(prefix="wchs-sc-")

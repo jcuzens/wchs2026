@@ -181,9 +181,12 @@ exit when all classes are settled).
   moving part.
 - **Judge scorecards:** the show posts one judge scorecard PDF per class
   in a public Google Drive folder, named `CLASS N.pdf` (split sections
-  included, e.g. `10.1`). `fetch_scorecards.py` lists the folder page
-  (plain GET, no key or session — the rows carry `data-id="FILEID"` and
-  the name in the title aria-label) into `refresh/scorecards.json`
+  included, e.g. `10.1`). `fetch_scorecards.py` lists the folder via the
+  legacy **embeddedfolderview** endpoint (plain GET, no key or session;
+  the main `/drive/folders/` page lazy-loads and only serves the first ~50
+  rows in its initial HTML) — every entry is an
+  `<a href="…/file/d/FILEID/view">` wrapping a `flip-entry-title` — into
+  `refresh/scorecards.json`
   (`{"fetched":..., "cards": {"N": "FILEID"}}`); `build_page.py` stamps
   matching payload classes with `"card": "https://drive.google.com/file/d/<id>/view"`
   and the page renders a `scorecard ↗` chip in the class card header
@@ -328,7 +331,9 @@ their scratches; only unsettled classes need periodic re-fetching (the
 external requests, and the pipeline must remain Python stdlib + curl.
 
 **The Drive folder is public but fragile:** `fetch_scorecards.py` parses
-the human-rendered folder page (file-row `data-id` + title aria-label),
-not an API. If Google changes the markup, the parse finds zero cards and
-the fetcher keeps the old `scorecards.json` (zero-card guard) — the page
-degrades to no chips; fix the regexes, don't wipe the cache.
+the human-rendered **embeddedfolderview** page (entry `<a href>` file id +
+`flip-entry-title`), not an API — and only that endpoint lists ALL files
+(the main folder page lazy-loads the first ~50). If Google changes the
+markup, the parse finds zero cards and the fetcher keeps the old
+`scorecards.json` (zero-card guard) — the page degrades to no chips; fix
+the regexes, don't wipe the cache.

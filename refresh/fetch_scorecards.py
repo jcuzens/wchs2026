@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Fetch the judge scorecard index from the show's public Google Drive folder.
 
-The folder page is public: a plain GET returns the file rows, each
-<tr data-id="FILEID"> carrying the file name in its title aria-label
-("CLASS 12.pdf PDF Shared"). Names matching CLASS N.pdf (N = x or x.y,
-split sections included) map to class numbers. Writes
+The main /drive/folders/<id> page lazy-loads and only serves the first ~50
+file rows in its initial HTML, so we use the legacy embeddedfolderview
+endpoint instead: a plain GET returns EVERY entry in one plain page, each
+entry an <a href="https://drive.google.com/file/d/FILEID/view..."> wrapping
+a flip-entry-title with the file name. Names matching CLASS N.pdf
+(N = x or x.y, split sections included) map to class numbers. Writes
 refresh/scorecards.json: {"fetched": "<local time>",
 "cards": {"12": "FILEID", "12.1": "FILEID"}}.
 
@@ -21,24 +23,23 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FOLDER_URL = "https://drive.google.com/drive/folders/1N59TLwiKCRYBeTqwxT80WfPdguAiLhGy"
+FOLDER_ID = "1N59TLwiKCRYBeTqwxT80WfPdguAiLhGy"
+FOLDER_URL = "https://drive.google.com/embeddedfolderview?id=" + FOLDER_ID
 SCORECARDS_JSON = os.path.join(HERE, "scorecards.json")
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
 
-ROW_RE = re.compile(r'<tr [^>]*?data-id="([A-Za-z0-9_-]{10,})"[^>]*>(.*?)</tr>', re.S)
-NAME_RE = re.compile(r'aria-label="([^"]+) [A-Z]+ Shared"')
+ENTRY_RE = re.compile(
+    r'<a href="https://drive\.google\.com/file/d/([A-Za-z0-9_-]{10,})/view[^"]*"'
+    r'[^>]*>.*?flip-entry-title">([^<]*)</div>', re.S)
 CARD_RE = re.compile(r'^CLASS\s+(\d+(?:\.\d+)?)\.pdf$', re.I)
 
 
 def parse_folder_html(html):
     """Map class number -> Drive file id for every CLASS N.pdf in the page."""
     cards = {}
-    for fid, row in ROW_RE.findall(html):
-        m = NAME_RE.search(row)
-        if not m:
-            continue
-        n = CARD_RE.match(m.group(1).strip())
+    for fid, name in ENTRY_RE.findall(html):
+        n = CARD_RE.match(name.strip())
         if n:
             cards[n.group(1)] = fid
     return cards
