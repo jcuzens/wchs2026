@@ -275,7 +275,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
     <button id="themeBtn">Dark</button>
     <button class="primary" id="printBtn">Print</button>
     <button id="copyBtn">Copy link</button>
-    <button id="clearBtn">Clear selection</button>
+    <button id="clearBtn">Clear</button>
     <button id="paceBtn" disabled>Reset pace</button>
   </div>
 </header>
