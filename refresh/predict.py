@@ -29,7 +29,7 @@ from zoneinfo import ZoneInfo
 import select_frontier as sf
 
 PACE_MIN = 10.125      # wall-clock minutes per class slot (incl. turnover; 13.5 cut 25% on 2026-08-26: observed classes ran short)
-CHAMP_EQ_MIN = 25.0    # champion equitation pattern classes
+CHAMP_EQ_MIN = 45.0    # champion equitation pattern classes (25 -> 45 on 2026-08-27: the senior championship ran ~45 min)
 MAX_SHIFT_MIN = 180.0  # cap on the positive hot-session anchor shift
 TZ = ZoneInfo("America/New_York")
 

@@ -23,7 +23,7 @@ def ep(y, mo, d, h, mi):
 A_START = ep(2026, 8, 22, 10, 0)   # session A: Saturday Morning, 10:00 a.m.
 B_START = ep(2026, 8, 22, 18, 0)   # session B: Saturday Night, 6:00 p.m.
 PACE_S = pr.PACE_MIN * 60          # 607.5 s (13.5 reduced 25%)
-CHAMP_S = pr.CHAMP_EQ_MIN * 60     # 1500 s
+CHAMP_S = pr.CHAMP_EQ_MIN * 60     # 2700 s
 
 def at(start, secs):
     """A window boundary the way build_windows truncates it:
@@ -53,9 +53,10 @@ check("contiguous within a session",
       and base["5.1"][1] == base["5.2"][0]
       and base["5.2"][1] == base["6"][0], str(base))
 
-# 2. durations: champion equitation 25 min, everything else 10.125 (13.5 cut 25%)
+# 2. durations: champion equitation 45 min, everything else 10.125 (13.5 cut 25%)
 check("plain class pace reduced 25% from 13.5", pr.PACE_MIN == 13.5 * 0.75, str(pr.PACE_MIN))
-check("champion equitation gets a 25-min slot",
+check("champion equitation slot is 45 min", pr.CHAMP_EQ_MIN == 45.0, str(pr.CHAMP_EQ_MIN))
+check("champion equitation gets a 45-min slot",
       base["2"] == (at(A_START, PACE_S), at(A_START, PACE_S + CHAMP_S)), str(base["2"]))
 check("plain class gets 10.125 min", base["1"] == (A_START, at(A_START, PACE_S)), str(base["1"]))
 check("is_champion_equitation needs both words",
