@@ -1325,7 +1325,7 @@
   "guid": "26ee2b42-bde4-4feb-978e-b45200d578d6",
   "type": "UNDERSADDLE",
   "division": "ASB",
-  "entries": "31"
+  "entries": "32"
  },
  {
   "num": "193",
@@ -1798,14 +1798,6 @@
   "type": "UNDERSADDLE",
   "division": "ASB",
   "entries": "32"
- },
- {
-  "num": "104.2",
-  "name": "Amateur Five Gaited Stallion/Gelding Section 2",
-  "guid": "7f699988-e843-46a5-9296-b4b100f9ca3f",
-  "type": "UNDERSADDLE",
-  "division": "ASB",
-  "entries": "2"
  },
  {
   "num": "114.1",
