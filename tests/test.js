@@ -195,6 +195,48 @@ setTimeout(() => {
   const f0 = Date.UTC(2026, 7, 25, 23, 15) / 1000;   // 7:15 PM on show day (EDT)
   check("fmtShowTime: show-zone wall clock", w.fmtShowTime(f0) === "7:15 PM", w.fmtShowTime(f0));
 
+  // (12) manual "here" pacing helpers (synthetic classes; the page's own fns)
+  const Pn = (num, at) => ({ num, at });
+  const pv = (cls, pin) => typeof w.pinValidity === "function" && w.pinValidity(cls, pin);
+  const shOf = (cls, pin) => typeof w.pinShifts === "function" ? w.pinShifts(cls, pin) : null;
+  check("pinValidity: valid when nothing at/after the pin has results",
+        pv([C("1", 900, 910), C("2", 910, 920)], Pn("1", T0)) === true);
+  check("pinValidity: done class before the pin is fine",
+        pv([C("1", 900, 910, true), C("2", 910, 920)], Pn("2", T0)) === true);
+  check("pinValidity: pinned class done -> invalid",
+        pv([C("1", 900, 910, true), C("2", 910, 920)], Pn("1", T0)) === false);
+  check("pinValidity: done class after the pin -> invalid",
+        pv([C("1", 900, 910), C("2", 910, 920, true)], Pn("1", T0)) === false);
+  check("pinValidity: done class on a later day -> invalid",
+        pv([C("1", 900, 910, false, "August 25"), C("2", 920, 930, true, "August 26")], Pn("1", T0)) === false);
+  check("pinValidity: unknown class -> invalid",
+        pv([C("1", 900, 910)], Pn("9", T0)) === false);
+  check("pinShifts: null for an invalid pin",
+        shOf([C("1", 900, 910)], Pn("9", T0)) === null);
+  {
+    // pin the "awaiting results" class 2 back to now: its session tail shifts
+    const cls = [C("1", 900, 910), C("2", 910, 920), C("3", 920, 930)];
+    const sh = shOf(cls, Pn("2", T0));
+    const want = T0 - 910 * 1000;
+    check("pinShifts: pinned class's window starts at now", !!sh && sh["2"] === want);
+    check("pinShifts: later same-session class gets the same shift", !!sh && sh["3"] === want);
+    check("pinShifts: earlier same-session class unshifted", !!sh && sh["1"] == null);
+    check("onNow with pin: the pinned awaiting class is on now",
+          !!w.onNowCls(cls, T0, sh) && w.onNowCls(cls, T0, sh).n === "2");
+    check("onNow with pin: the walk continues at the usual pace",
+          (() => { const c = w.onNowCls(cls, T0 + 11000, sh); return !!c && c.n === "3"; })());
+    check("pending with pin: tail class is future, not awaiting",
+          w.isPendingCls(cls[2], T0 + 5000, sh) === false);
+    const pl = w.classPill(cls[1], T0, "2", sh);
+    check("classPill with pin: pinned class shows on now",
+          !!pl && pl.tag === "cnow" && pl.clsNow === true && pl.text.indexOf("on now") === 0);
+  }
+  {
+    const cls = [C("1", 900, 910, false, "August 25"), C("2", 5000, 5010, false, "August 26")];
+    const sh = shOf(cls, Pn("1", T0));
+    check("pinShifts: other session unshifted", !!sh && sh["2"] == null);
+  }
+
   // (8) past days auto-collapsed (pinned Aug 25)
   const dayOf = d => [...doc.querySelectorAll("main .day")].find(el => el.querySelector("h2").textContent.includes(d));
   const ipd = d => typeof w.isPastDay === "function" && w.isPastDay(d, new w.Date(2026, 7, 25));
@@ -423,6 +465,89 @@ setTimeout(() => {
     if (HOT_NUM && !fInRp) expectedDivs.add(HOT.div);
     const expectedN = DATA.classes.filter(c => norm(c.div) === rp).length + (HOT_NUM && !fInRp ? 1 : 0);
     check("division filter works", classes5 === expectedN && divsShown.size === expectedDivs.size && [...expectedDivs].every(x => divsShown.has(x)), [...divsShown].join() + " / " + classes5);
+
+    // ---------- (12) manual "here" pacing: chip, pin, reset, override ----------
+    const PINNABLE = DATA.classes.filter(c => !isDone(c) && c.ps != null).length;
+    const pinDom = makeDom({ beforeParse: wt => { pinDate(wt); wt.__TICK_MS = 50; } });
+    const wp = pinDom.window, dp = wp.document;
+    wp.addEventListener("error", e => { console.log("WINDOW ERROR (pin):", e.message); failures++; });
+    check("pin: 'here' chip on every not-done class with a window",
+          dp.querySelectorAll("main .chere").length === PINNABLE,
+          "got " + dp.querySelectorAll("main .chere").length + " vs " + PINNABLE);
+    check("pin: no chip on done classes",
+          dp.querySelectorAll("main .cls.done .chere").length === 0,
+          "got " + dp.querySelectorAll("main .cls.done .chere").length);
+    const paceBtn = dp.querySelector("#paceBtn");
+    check("pin: reset button present, disabled without a pin",
+          !!paceBtn && paceBtn.disabled === true);
+    // synthetic payload so the interaction is deterministic no matter how far
+    // the real show has advanced (the pinned clock day may be fully settled)
+    const SYN = () => JSON.parse(JSON.stringify([
+      {n:"1", name:"Alpha", div:"Roadster Pony", wk:"Tuesday", day:"August 25", per:"Morning", time:"9:00 a.m.", ps:900, pe:910, e:[["1","H1","R1","T1","O1","1",null]]},
+      {n:"2", name:"Beta",  div:"Roadster Pony", wk:"Tuesday", day:"August 25", per:"Morning", time:"9:00 a.m.", ps:910, pe:920, e:[["2","H2","R2","T2","O2","2",null]]},
+      {n:"3", name:"Gamma", div:"Roadster Pony", wk:"Tuesday", day:"August 25", per:"Morning", time:"9:00 a.m.", ps:920, pe:930, e:[["3","H3","R3","T3","O3","3",null]]},
+      {n:"4", name:"Delta", div:"Roadster Pony", wk:"Tuesday", day:"August 25", per:"Morning", time:"9:00 a.m.", ps:930, pe:940, e:[["4","H4","R4","T4","O4","4",null]]},
+    ]));
+    const synPayload = cls => ({ asof: DATA.asof, h: DATA.h, classes: cls });
+    wp.applyDataUpdate(synPayload(SYN()));
+    check("pin: chips on all synthetic classes", dp.querySelectorAll("main .chere").length === 4,
+          "got " + dp.querySelectorAll("main .chere").length);
+    const chipOf = n => { const c = dp.querySelector('main .cls[data-num="' + n + '"]'); return c && c.querySelector(".chere"); };
+    const c2 = chipOf("2");
+    check("pin: chip found on class 2", !!c2);
+    if (c2) c2.click();
+    const storedPin = JSON.parse(wp.localStorage.getItem("wchs2026.pin.v1") || "null");
+    check("pin: click stores {num, at}",
+          !!storedPin && storedPin.num === "2" && Math.abs(storedPin.at - PIN_MS) < 60000,
+          JSON.stringify(storedPin));
+    const card2 = dp.querySelector('main .cls[data-num="2"]');
+    check("pin: pinned card is the live class",
+          !!card2 && card2.classList.contains("now") && !!card2.querySelector(".cnow"));
+    check("pin: chip marked active on the pinned card", !!chipOf("2") && chipOf("2").classList.contains("on"));
+    check("pin: reset button enabled with a pin", !!paceBtn && paceBtn.disabled === false);
+    // the walk advances at the usual pace: just past class 2's window, class 3
+    // is on now and class 2 is awaiting
+    wp.__advance(11000);
+    wp.refreshStatus();
+    const card3 = dp.querySelector('main .cls[data-num="3"]');
+    check("pin: next class goes on now after the pace walk",
+          !!card3 && card3.classList.contains("now") && !!card3.querySelector(".cnow"));
+    check("pin: pinned class is awaiting after its window",
+          !!card2 && !card2.classList.contains("now") && !!card2.querySelector(".cpend"));
+    // manual reset
+    if (paceBtn) paceBtn.click();
+    check("pin: reset clears the stored pin", wp.localStorage.getItem("wchs2026.pin.v1") == null);
+    check("pin: reset disables the button", !!paceBtn && paceBtn.disabled === true);
+    check("pin: reset restores the normal model (no live class)",
+          dp.querySelectorAll("main .cls.now").length === 0,
+          "got " + dp.querySelectorAll("main .cls.now").length);
+
+    // persistence: a fresh load with the stored pin
+    const pinDom2 = makeDom({ beforeParse: wt => {
+      pinDate(wt);
+      wt.localStorage.setItem("wchs2026.pin.v1", JSON.stringify({ num: "2", at: PIN_MS }));
+    }});
+    const wp2 = pinDom2.window, dp2 = wp2.document;
+    wp2.addEventListener("error", e => { console.log("WINDOW ERROR (pin2):", e.message); failures++; });
+    wp2.applyDataUpdate(synPayload(SYN()));
+    const card2b = dp2.querySelector('main .cls[data-num="2"]');
+    check("pin: stored pin active on fresh load",
+          !!card2b && card2b.classList.contains("now") && !!card2b.querySelector(".cnow"));
+    check("pin: reset button enabled for the stored pin",
+          (() => { const b = dp2.querySelector("#paceBtn"); return !!b && b.disabled === false; })());
+    // results past the pin drop it: the show has advanced, the pace is stale
+    const syn3 = SYN();
+    syn3.find(c => c.n === "3").e[0][6] = "1";
+    wp2.applyDataUpdate(synPayload(syn3));
+    const card2c = dp2.querySelector('main .cls[data-num="2"]');
+    check("pin: results past the pin drop it",
+          !!card2c && !card2c.classList.contains("now") && !card2c.querySelector(".cnow"));
+    check("pin: reset button disabled after the override",
+          (() => { const b = dp2.querySelector("#paceBtn"); return !!b && b.disabled === true; })());
+    const toastEl = dp2.querySelector("#toast");
+    check("pin: override toast mentions the class",
+          !!toastEl && toastEl.classList.contains("show") && toastEl.textContent.includes("class 2"),
+          toastEl ? toastEl.textContent : "missing");
 
     // ---------- (1) mobile default: filters collapsed ----------
     const dom3 = makeDom({

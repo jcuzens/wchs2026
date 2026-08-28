@@ -211,6 +211,9 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .ccount { color: var(--muted); font-size: 12.5px; flex: none; }
 .call { font-size: 12px; padding: 2px 8px; border: 1px solid var(--chip-border); background: var(--accent-soft); color: var(--accent); border-radius: 8px; cursor: pointer; flex: none; }
 .call:active { background: var(--chip-press); }
+.chere { color: var(--muted); border: 1px solid var(--line); background: var(--surface); border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; cursor: pointer; }
+.chere:active { background: var(--accent-soft); }
+.chere.on { background: #f59e0b; border-color: #f59e0b; color: #fff; font-weight: 600; }
 .chev { flex: none; color: var(--muted); font-size: 11px; transition: transform .15s; }
 .cls.open .chev { transform: rotate(90deg); }
 .cls-entries { display: none; border-top: 1px solid var(--line); }
@@ -240,7 +243,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 }
 @media print {
   :root, html.dark { --ink: #1a1a2e; --muted: #6b7280; --line: #e5e7eb; --accent: #1e40af; --accent-soft: #eff6ff; --gold: #b45309; --bg: #fff; --surface: #fff; --chip-border: #bfdbfe; --chip-press: #dbeafe; --done-bg: #d1fae5; --done-border: #6ee7b7; --done-ink: #15803d; --done-tint: #f0fdf4; --done-tint-border: #bbf7d0; --now-bg: #fffbeb; --now-line: #f59e0b; --toast-bg: #1a1a2e; --toast-ink: #fff; }
-  header .actions, aside, #toast, .chev, .dchev, .call, .ring { display: none !important; }
+  header .actions, aside, #toast, .chev, .dchev, .call, .chere, .ring { display: none !important; }
   .day .day-body { display: block !important; }
   #printHead { display: block; margin-bottom: 14px; }
   #printHead h1 { font-size: 16pt; margin: 0 0 2px; }
@@ -273,6 +276,7 @@ main { padding: 12px 14px 60px; max-width: 900px; }
     <button class="primary" id="printBtn">Print</button>
     <button id="copyBtn">Copy link</button>
     <button id="clearBtn">Clear selection</button>
+    <button id="paceBtn" disabled>Reset pace</button>
   </div>
 </header>
 <div id="layout">
@@ -308,6 +312,23 @@ const view = { filtersOpen: null, scope: false, doneHidden: false, theme: null }
   } catch(e){}
 })();
 function saveView(){ try { localStorage.setItem(VIEW_KEY, JSON.stringify(view)); } catch(e){} }
+
+// ---- manual "here" pacing: the user pins the live class. The pinned
+// class's session is re-anchored so the pinned class starts at the pin time
+// and the rest of the session walks forward at the usual pace. Results at or
+// after the pin (live or official) drop the pin; a header button resets it.
+const PIN_KEY = "wchs2026.pin.v1";
+let pin = null;
+(function loadPin(){
+  try {
+    const v = JSON.parse(localStorage.getItem(PIN_KEY) || "null");
+    if (v && typeof v.num === "string" && typeof v.at === "number") pin = v;
+  } catch(e){}
+})();
+function savePin(p){
+  pin = p;
+  try { p ? localStorage.setItem(PIN_KEY, JSON.stringify(p)) : localStorage.removeItem(PIN_KEY); } catch(e){}
+}
 
 function norm(s){ return (s||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim(); }
 
@@ -412,7 +433,10 @@ function buildSchedule(){
 }
 // ---- predicted-pace status (unit-tested)
 // ps/pe are UTC epoch seconds predicted at build time (refresh/predict.py);
-// official placings always beat the model.
+// official placings always beat the model. A "here" pin re-anchors the
+// pinned class's session tail (pinShifts) so the pinned class starts at the
+// pin time and the walk continues at the usual pace; results at/after the
+// pin drop it.
 function displayOrderOf(cls){
   const byDay = new Map();
   for (const c of cls){
@@ -429,23 +453,50 @@ function displayOrderOf(cls){
   }
   return out;
 }
-function onNowCls(classes, nowMs){
-  let best = null;
+function pinValidity(classes, p){
+  if (!p || !p.num) return false;
+  const order = displayOrderOf(classes);
+  let i = -1;
+  for (let j = 0; j < order.length; j++) if (order[j].n === p.num){ i = j; break; }
+  if (i < 0) return false;
+  for (let j = i; j < order.length; j++) if (isDone(order[j])) return false;
+  return true;
+}
+// Uniform shift (ms) of the pinned session's tail — the pin and every later
+// class in the same session; null when the pin is stale or has no window.
+function pinShifts(classes, p){
+  if (!pinValidity(classes, p)) return null;
+  const pc = classes.find(c => c.n === p.num);
+  if (!pc || pc.ps == null || pc.pe == null) return null;
+  const shift = p.at - pc.ps * 1000;
+  const out = {};
+  let started = false;
+  for (const c of displayOrderOf(classes)){
+    if (c.n === p.num) started = true;
+    if (started && c.day === pc.day && c.per === pc.per && c.time === pc.time && c.ps != null)
+      out[c.n] = shift;
+  }
+  return out;
+}
+function onNowCls(classes, nowMs, shifts){
+  let best = null, bestPs = null;
   for (const c of classes){
     if (isDone(c) || c.ps == null || c.pe == null) continue;
-    if (c.ps * 1000 <= nowMs && nowMs < c.pe * 1000 && (!best || c.ps > best.ps)) best = c;
+    const ps = c.ps * 1000 + (shifts && shifts[c.n] || 0);
+    if (ps <= nowMs && nowMs < c.pe * 1000 + (shifts && shifts[c.n] || 0)
+        && (best == null || ps > bestPs)){ best = c; bestPs = ps; }
   }
   return best;
 }
-function upNextCls(classes, nowMs){
-  const on = onNowCls(classes, nowMs);
+function upNextCls(classes, nowMs, shifts){
+  const on = onNowCls(classes, nowMs, shifts);
   if (on) return on;
   for (const c of displayOrderOf(classes))
-    if (!isDone(c) && c.ps != null && c.ps * 1000 > nowMs) return c;
+    if (!isDone(c) && c.ps != null && c.ps * 1000 + (shifts && shifts[c.n] || 0) > nowMs) return c;
   return null;
 }
-function isPendingCls(c, nowMs){
-  return !isDone(c) && c.pe != null && nowMs >= c.pe * 1000;
+function isPendingCls(c, nowMs, shifts){
+  return !isDone(c) && c.pe != null && nowMs >= c.pe * 1000 + (shifts && shifts[c.n] || 0);
 }
 const SHOW_TZ = "America/New_York";
 function fmtShowTime(epochSec){
@@ -455,15 +506,18 @@ function fmtShowTime(epochSec){
 }
 // {tag, text, title, clsNow} for a card's predicted-status pill; null when
 // the card has none (done classes, or a future class outside its window).
-function classPill(c, nowMs, hotNum){
+function classPill(c, nowMs, hotNum, shifts){
   if (isDone(c)) return null;
+  const sh = (shifts && shifts[c.n] || 0) / 1000;
+  const ps = c.ps == null ? null : c.ps + sh;
+  const pe = c.pe == null ? null : c.pe + sh;
   if (c.n === hotNum){
-    if (c.ps != null && c.ps * 1000 <= nowMs && nowMs < c.pe * 1000)
-      return {tag:"cnow", text:"on now \u00b7 est " + fmtShowTime(c.pe), title:"", clsNow:true};
-    return {tag:"cnow", text:"up next \u00b7 est " + fmtShowTime(c.ps), title:"", clsNow:true};
+    if (ps != null && ps * 1000 <= nowMs && nowMs < pe * 1000)
+      return {tag:"cnow", text:"on now \u00b7 est " + fmtShowTime(pe), title:"", clsNow:true};
+    return {tag:"cnow", text:"up next \u00b7 est " + fmtShowTime(ps), title:"", clsNow:true};
   }
-  if (isPendingCls(c, nowMs))
-    return {tag:"cpend", text:"awaiting results", title:"est done " + fmtShowTime(c.pe) + " (predicted)", clsNow:false};
+  if (isPendingCls(c, nowMs, shifts))
+    return {tag:"cpend", text:"awaiting results", title:"est done " + fmtShowTime(pe) + " (predicted)", clsNow:false};
   return null;
 }
 
@@ -547,14 +601,33 @@ function makeGroup(key, label, names, plainList){
   return g;
 }
 
+let lastPinNum = null;
+function notePin(num){
+  if (lastPinNum && !num) toast("Results are ahead of class " + lastPinNum + " \u2014 back to predicted pace");
+  lastPinNum = num;
+}
+function applyPaceBtn(active){
+  const b = $("#paceBtn");
+  if (b) b.disabled = !active;
+}
+function setPin(num){
+  if (!num) lastPinNum = null;   // a manual reset is not the results override
+  savePin(num ? {num: num, at: Date.now()} : null);
+  renderSchedule();
+  if (num) toast("Paced from class " + num + " \u2014 reset any time");
+}
 function renderSchedule(){
   const main = $("#schedule");
   main.textContent = "";
   const days = buildSchedule();
   const on = active();
   const nowMs = Date.now();
-  const hot = upNextCls(DATA.classes, nowMs);
+  const shifts = pin ? pinShifts(DATA.classes, pin) : null;
+  notePin(shifts ? pin.num : null);
+  applyPaceBtn(!!shifts);
+  const hot = upNextCls(DATA.classes, nowMs, shifts);
   const hotNum = hot ? hot.n : null;
+  const pinNum = shifts ? pin.num : null;
   let rendered = 0;
   for (const d of days){
     const secs = [...d.sessions.entries()].sort((a,b)=>(PER_ORDER[a[0]]??9)-(PER_ORDER[b[0]]??9));
@@ -587,7 +660,7 @@ function renderSchedule(){
       for (const c of vis.slice().sort((a,b)=>parseFloat(a.n)-parseFloat(b.n))){
         const m = matched.includes(c);
         rendered++;
-        sEl.appendChild(makeClass(c, m, hotNum));
+        sEl.appendChild(makeClass(c, m, hotNum, pinNum, shifts));
       }
       body.appendChild(sEl);
     }
@@ -599,7 +672,7 @@ function renderSchedule(){
   if (!rendered){
     main.appendChild(el("div","fnote","Nothing matches your selection. Try removing a filter."));
   }
-  main.appendChild(el("div","footnote",'"est" times are predictions from an average class pace (~10 min); actual order may vary.'));
+  main.appendChild(el("div","footnote",'"est" times are predictions from an average class pace (~10 min); actual order may vary. Tap "here" on a class to pace the schedule from where you are.'));
   const sub = $("#phSub");
   if (sub){
     const parts = FIELDS.filter(f=>state[f.key].size).map(f=>f.label+": "+[...state[f.key]].map(k=>namesDisp(f.key,k)).join(", "));
@@ -609,7 +682,7 @@ function renderSchedule(){
 }
 function namesDisp(key,k){ const m = NAMES[key] && NAMES[key][k]; return m ? m.d : k; }
 
-function makeClass(c, isMatch, hotNum){
+function makeClass(c, isMatch, hotNum, pinNum, shifts){
   const isHot = c.n === hotNum;
   const on = active();
   const scr = new Set(c.sc || []);
@@ -652,7 +725,7 @@ function makeClass(c, isMatch, hotNum){
       window.open(c.card, "_blank", "noopener");
     });
   }
-  const pill = classPill(c, Date.now(), hotNum);
+  const pill = classPill(c, Date.now(), hotNum, shifts);
   if (pill){
     const p = el("span", pill.tag, pill.text);
     if (pill.title) p.title = pill.title;
@@ -663,6 +736,12 @@ function makeClass(c, isMatch, hotNum){
     lv.appendChild(el("span","clivedot"));
     lv.appendChild(document.createTextNode("live"));
     head.appendChild(lv);
+  }
+  if (!isDone(c) && c.ps != null){
+    const hh = el("span","chere" + (c.n === pinNum ? " on" : ""), "here");
+    hh.title = c.n === pinNum ? "The clock runs from this class \u2014 use Reset pace to clear" : "Pace the schedule from this class";
+    hh.addEventListener("click", ev => { ev.stopPropagation(); setPin(c.n); });
+    head.appendChild(hh);
   }
   head.appendChild(el("span","cdiv", c.div));
   const call = canToggle ? el("span","call") : null;
@@ -744,6 +823,7 @@ $("#filtersBtn").addEventListener("click", () => {
 });
 $("#doneBtn").addEventListener("click", () => { view.doneHidden = !view.doneHidden; saveView(); applyDoneBtn(); renderSchedule(); });
 $("#scopeBtn").addEventListener("click", () => { view.scope = !view.scope; saveView(); applyScopeBtn(); renderSchedule(); });
+$("#paceBtn").addEventListener("click", () => setPin(null));
 
 // ---- buttons
 $("#printBtn").addEventListener("click", ()=>window.print());
@@ -879,13 +959,14 @@ let tickTimer = null;
 function refreshStatus(){
   if (focusInBody()) return;   // deferred; the next tick picks it up
   const nowMs = Date.now();
-  const hot = upNextCls(DATA.classes, nowMs);
+  const shifts = pin ? pinShifts(DATA.classes, pin) : null;
+  const hot = upNextCls(DATA.classes, nowMs, shifts);
   const hotNum = hot ? hot.n : null;
   const byNum = new Map(DATA.classes.map(c => [c.n, c]));
   for (const card of document.querySelectorAll("#schedule .cls")){
     const c = byNum.get(card.dataset.num);
     if (!c) continue;
-    const want = classPill(c, nowMs, hotNum);
+    const want = classPill(c, nowMs, hotNum, shifts);
     const wantNow = !!(want && want.clsNow);
     if (card.classList.contains("now") !== wantNow) card.classList.toggle("now", wantNow);
     const cur = card.querySelector(".cnow, .cpend");
@@ -896,7 +977,7 @@ function refreshStatus(){
     const p = el("span", want.tag, want.text);
     if (want.title) p.title = want.title;
     const head = card.querySelector(".cls-head");
-    head.insertBefore(p, head.querySelector(".clive") || head.querySelector(".cdiv"));
+    head.insertBefore(p, head.querySelector(".clive") || head.querySelector(".chere") || head.querySelector(".cdiv"));
   }
 }
 function scheduleTick(){

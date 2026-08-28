@@ -205,6 +205,23 @@ exit when all classes are settled).
   "awaiting results" client-side on the user's clock and ticks every 60 s
   in place. **Official placings always beat the model.** The model never
   reads wall-clock time, so the asof policy is untouched.
+- **Manual "here" pacing (client-only, no payload/build change):** every
+  not-done class with a window renders a small `here` chip in its card
+  header. Clicking it stores `{num, at}` in localStorage
+  (`wchs2026.pin.v1`) and re-anchors that class's session: `pinShifts`
+  computes a uniform ms shift of the pinned session's tail (the pin and
+  every later class in the same day/per/time slot) so the pinned class
+  starts at the click time `at` and the rest walks forward at the usual
+  pace; the pinned class may even be one the model already passed
+  ("awaiting results") — the whole tail goes back to it. The header
+  "Reset pace" button clears the pin. The pin is **dropped automatically
+  the moment any class at or after it (schedule order) has live or
+  official placings** — `pinValidity` re-checks on every render/tick, so
+  results always take over. All pin state is per-browser localStorage;
+  it is never in the payload or URL, and none of it touches the asof
+  policy. Pure helpers: `pinValidity`, `pinShifts`; the pace fns
+  (`onNowCls`, `upNextCls`, `isPendingCls`, `classPill`) take an optional
+  `shifts` map (null → the normal model).
 - **asof policy: the "Updated" stamp changes only when the data
   actually changes** (in `index.html`, `payload.json` and `check.json`).
   The
@@ -274,8 +291,8 @@ EOF
 
 The jsdom smoke suite (filters, context/done toggles, day collapse,
 per-class show-all, entry numbers, persistence, mobile default,
-live-update polling) lives in `tests/test.js` and runs against the
-freshly built `index.html`:
+live-update polling, manual "here" pacing) lives in `tests/test.js` and
+runs against the freshly built `index.html`:
 
 ```bash
 npm --prefix tests test
