@@ -68,6 +68,7 @@ python3 refresh/build_page.py               # data -> index.html + payload.json 
 python3 refresh/build_page.py --ui-only     # UI/template change: reuses the payload (and asof) already in index.html
 python3 refresh/fetch_live.py               # live scores fetch -> refresh/live.json
 python3 refresh/parse_live.py               # fold live.json into refresh/live_cache.json
+python3 refresh/fetch_scorecards.py         # judge scorecards index (Drive) -> refresh/scorecards.json
 bash refresh/refresh_upcoming.sh               # one 4-hour scratch-refresh cycle, manually (cron: 0 */4 * * *)
 npm --prefix tests install                  # once; jsdom dev-only dependency
 npm --prefix tests test                     # page smoke suite (runs against the built index.html)
@@ -80,6 +81,7 @@ python3 tests/test_check.py                 # verifies check.json follows the as
 python3 tests/test_live.py                  # live protocol/parse/merge tests (fixtures)
 python3 tests/test_class_list.py            # live class list: master-grid parse + update semantics
 python3 tests/test_parse_entries.py         # entry-page parse (page label wins, section slot inheritance)
+python3 tests/test_scorecards.py            # scorecards: Drive folder parse + payload card merge (fixtures)
 bash refresh/refresh_cron.sh                # one full cron cycle, manually
 git add index.html payload.json check.json && git commit -m "Refresh entries <date>" && git push
 ```
@@ -133,7 +135,10 @@ unsettled classes; settled classes' pages already contain every scratch
 they will ever have (they were re-fetched when their results posted).
 Stale (presumed skipped) classes are excluded, same rule as the frontier.
 It shares `cron.lock` and `cron.log` with the 8-minute job, so the two
-never run at once; an overlapping run just skips.
+never run at once; an overlapping run just skips. It also refreshes the
+**judge scorecard index** (`fetch_scorecards.py`), so this run publishes
+when a new scorecard PDF lands even if nothing else changed (no early
+exit when all classes are settled).
 
 ## Architecture
 
@@ -174,9 +179,22 @@ never run at once; an overlapping run just skips.
   those rows with a pink background + strikethrough. No separate source
   or fetcher — the 4-hour upcoming refresh (above) is the only new
   moving part.
+- **Judge scorecards:** the show posts one judge scorecard PDF per class
+  in a public Google Drive folder, named `CLASS N.pdf` (split sections
+  included, e.g. `10.1`). `fetch_scorecards.py` lists the folder page
+  (plain GET, no key or session — the rows carry `data-id="FILEID"` and
+  the name in the title aria-label) into `refresh/scorecards.json`
+  (`{"fetched":..., "cards": {"N": "FILEID"}}`); `build_page.py` stamps
+  matching payload classes with `"card": "https://drive.google.com/file/d/<id>/view"`
+  and the page renders a `scorecard ↗` chip in the class card header
+  (a span with stopPropagation, since an `<a>` can't live inside the
+  `<button>` head; it opens the Drive PDF viewer in a new tab). Refreshed
+  by the 4-hour upcoming job; a fetch failure or a parse that finds zero
+  cards never overwrites a good cache, so the page degrades to no chips.
 - **Predicted pace:** `refresh/predict.py` is a pure per-session pace
   model (10.125 min/class — 13.5 cut 25% on 2026-08-26 after observed
-  classes ran short — plus 25 min champion equitation; constants in that
+  classes ran short — plus 45 min champion equitation, raised from 25 on
+  2026-08-27 after the senior championship ran long; constants in that
   file). The session holding the newest live observation is the "hot"
   session, shifted so that class's predicted end matches it (positive
   shift capped at +180 min). The build stamps each payload class with
@@ -195,7 +213,7 @@ never run at once; an overlapping run just skips.
   stamp.
 - `data.json`, `entries/`, `jar.txt`, `fetchlist.txt`, `refreshlist.txt`,
   `cron.log`, `cron.lock`, `live.json`, `live_cache.json`,
-  `tests/node_modules/` are git-ignored
+  `scorecards.json`, `tests/node_modules/` are git-ignored
   intermediates. Never commit them.
 - **Class number is the join key** across all data sources. Sub-classes
   use `x.y` numbering (e.g. `45.1`) and inherit the parent's schedule
@@ -308,3 +326,9 @@ their scratches; only unsettled classes need periodic re-fetching (the
 
 **Stay dependency-free:** the page must remain one HTML file with no
 external requests, and the pipeline must remain Python stdlib + curl.
+
+**The Drive folder is public but fragile:** `fetch_scorecards.py` parses
+the human-rendered folder page (file-row `data-id` + title aria-label),
+not an API. If Google changes the markup, the parse finds zero cards and
+the fetcher keeps the old `scorecards.json` (zero-card guard) — the page
+degrades to no chips; fix the regexes, don't wipe the cache.

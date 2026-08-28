@@ -64,6 +64,18 @@ else:
             if c["n"] in live_fresh:
                 c["live"] = live_fresh[c["n"]]
 
+    # Judge scorecards (git-ignored intermediate): the show posts one PDF per
+    # class in a public Google Drive folder, named CLASS N.pdf; classes with
+    # a posted card get a "card" link the page renders in the card header.
+    # Missing/empty file -> exactly today's page.
+    try:
+        cards = json.load(open(os.path.join(HERE, 'scorecards.json'))).get("cards", {})
+    except (OSError, ValueError):
+        cards = {}
+    for c in classes:
+        if c["n"] in cards:
+            c["card"] = "https://drive.google.com/file/d/%s/view" % cards[c["n"]]
+
     # Predicted windows: per-session pace model + hot-session anchor from
     # the live cache's first-seen timestamps. Pure function of
     # (classes, cache) — the asof policy is untouched (same inputs ->
@@ -193,6 +205,8 @@ main { padding: 12px 14px 60px; max-width: 900px; }
 .cnum { font-weight: 700; color: var(--accent); flex: none; font-size: 13.5px; min-width: 34px; }
 .cname { flex: 1; font-weight: 600; }
 .cdone { color: var(--done-ink); background: var(--done-tint); border: 1px solid var(--done-tint-border); border-radius: 6px; font-size: 11px; padding: 1px 6px; flex: none; }
+.cscard { color: var(--accent); background: var(--accent-soft); border: 1px solid var(--chip-border); border-radius: 6px; font-size: 11px; font-weight: 600; padding: 1px 6px; flex: none; cursor: pointer; }
+.cscard:active { background: var(--chip-press); }
 .cdiv { color: var(--muted); font-size: 11.5px; border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; flex: none; }
 .ccount { color: var(--muted); font-size: 12.5px; flex: none; }
 .call { font-size: 12px; padding: 2px 8px; border: 1px solid var(--chip-border); background: var(--accent-soft); color: var(--accent); border-radius: 8px; cursor: pointer; flex: none; }
@@ -630,6 +644,14 @@ function makeClass(c, isMatch, hotNum){
   head.appendChild(el("span","cnum", c.n));
   head.appendChild(el("span","cname", c.name));
   if (isDone(c)) head.appendChild(el("span","cdone","done ✓"));
+  if (c.card){
+    const sc = el("span","cscard","scorecard \u2197");
+    head.appendChild(sc);
+    sc.addEventListener("click", ev => {
+      ev.stopPropagation();
+      window.open(c.card, "_blank", "noopener");
+    });
+  }
   const pill = classPill(c, Date.now(), hotNum);
   if (pill){
     const p = el("span", pill.tag, pill.text);

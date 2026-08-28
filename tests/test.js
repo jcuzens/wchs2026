@@ -274,6 +274,42 @@ setTimeout(() => {
     check("scratch DOM checks skipped (no scratches in payload)", true, "no class has sc; nothing to render");
   }
 
+  // ---------- scorecard links (judge scorecards posted to Google Drive) ----------
+  const CARD_CLS = DATA.classes.filter(c => c.card);
+  check("payload classes with scorecards render a chip",
+        CARD_CLS.length === 0 ||
+        doc.querySelectorAll("main .cscard").length === CARD_CLS.length,
+        "payload " + CARD_CLS.length + " vs dom " + doc.querySelectorAll("main .cscard").length);
+  if (CARD_CLS.length){
+    const scDom = makeDom({ beforeParse: w2 => {
+      pinDate(w2);
+      w2.__opened = [];
+      w2.open = (u, t, o) => { w2.__opened.push([u, t, o]); };
+    }});
+    const wsc = scDom.window, dsc = wsc.document;
+    wsc.addEventListener("error", e => { console.log("WINDOW ERROR (scard):", e.message); failures++; });
+    const first = CARD_CLS[0];
+    const cardEl = [...dsc.querySelectorAll("main .cls")].find(x => x.querySelector(".cnum").textContent === first.n);
+    const chip = cardEl && cardEl.querySelector(".cscard");
+    check("scorecard chip sits in its class card header", !!chip && !!chip.closest(".cls-head"), first.n);
+    check("scorecard chip text", !!chip && chip.textContent.trim() === "scorecard \u2197", chip ? JSON.stringify(chip.textContent) : "missing");
+    if (chip){
+      chip.click();
+      check("scorecard click opens the Drive PDF in a new tab",
+            wsc.__opened.length === 1 && wsc.__opened[0][0] === first.card && wsc.__opened[0][1] === "_blank",
+            JSON.stringify(wsc.__opened));
+      check("scorecard click does not open the class card", !cardEl.classList.contains("open"));
+    }
+    check("chips only on classes with card data",
+          [...dsc.querySelectorAll("main .cscard")].every(n => {
+            const num = n.closest(".cls").querySelector(".cnum").textContent;
+            return CARD_CLS.some(c => c.n === num);
+          }));
+    check("scorecard chip declares its own color", /\.cscard\s*\{[^}]*color[^}]*\}/.test(css));
+  } else {
+    check("scorecard DOM checks skipped (no cards in payload)", true, "no class has card; nothing to render");
+  }
+
   // ---------- dark mode toggle ----------
   const tbtn = doc.getElementById("themeBtn");
   check("theme button present", !!tbtn);

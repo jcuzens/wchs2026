@@ -7,6 +7,10 @@
 # whole upcoming schedule. refresh_cron.sh (8-minute) keeps only the
 # frontier + lookahead fresh; this pass covers the rest.
 #
+# Also refreshes the judge scorecard index (fetch_scorecards.py, public
+# Google Drive folder): when a new card appears the payload changes, so
+# the run publishes even with nothing else to do.
+#
 #   cron: 0 */4 * * *  <repo>/refresh/refresh_upcoming.sh
 #
 # Same lock/log/safety as refresh_cron.sh: a run that overlaps the 8-minute
@@ -36,6 +40,11 @@ fi
 cd "$HERE" || die "cannot cd to $HERE"
 git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1 || die "not a git repo"
 
+# --- judge scorecards (public Google Drive folder; failure never blocks) ---
+# One PDF per class, named CLASS N.pdf. New cards change the payload, so a
+# scorecard-only run still reaches the build + publish below.
+python3 fetch_scorecards.py || log "WARNING: scorecards fetch failed (cache retained)"
+
 # --- fetch phase
 nfiles=$(ls entries/ 2>/dev/null | wc -l)
 total=$(python3 -c "import json; print(len(json.load(open('classes.json'))))")
@@ -46,13 +55,14 @@ if [ "$nfiles" -lt 50 ]; then
 else
   python3 select_frontier.py upcoming > "$LIST"
   if [ ! -s "$LIST" ]; then
-    log "nothing upcoming (all classes settled); nothing to do"
-    log "=== upcoming refresh done ==="
-    exit 0
+    # No unsettled classes left, but scorecards can still post for settled
+    # ones, so fall through to build + publish instead of exiting.
+    log "nothing upcoming (all classes settled); building anyway (scorecards)"
+  else
+    log "upcoming: $(tr '\n' ' ' < "$LIST")"
+    bash fetch_entries.sh "$LIST" || log "WARNING: upcoming fetch had failures"
+    python3 parse_entries.py >/dev/null
   fi
-  log "upcoming: $(tr '\n' ' ' < "$LIST")"
-  bash fetch_entries.sh "$LIST" || log "WARNING: upcoming fetch had failures"
-  python3 parse_entries.py >/dev/null
 fi
 
 # --- safety: refuse to publish a catastrophic data loss

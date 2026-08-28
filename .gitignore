@@ -11,4 +11,5 @@ refresh/cron.log
 refresh/cron.lock
 refresh/live.json
 refresh/live_cache.json
+refresh/scorecards.json
 refresh/__pycache__/
