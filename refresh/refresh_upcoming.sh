@@ -13,9 +13,11 @@
 #
 #   cron: 0 */4 * * *  <repo>/refresh/refresh_upcoming.sh
 #
-# Same lock/log/safety as refresh_cron.sh: a run that overlaps the 8-minute
-# job (or another upcoming run) skips. The first run after deploy is the
-# one-time "big refresh" of all unsettled classes.
+# Same lock/log/safety as refresh_cron.sh. At the 4-hour boundaries both
+# crons fire in the same second, so instead of skipping on a held lock this
+# job waits (the 8-minute run finishes in ~30 s) and then proceeds —
+# otherwise its scorecard pass would be skipped every time. The first run
+# after deploy is the one-time "big refresh" of all unsettled classes.
 set -u
 export PATH=/usr/local/bin:/usr/bin:/bin
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -30,10 +32,11 @@ die() { log "ERROR: $*"; log "=== upcoming refresh aborted ==="; exit 1; }
 
 log "=== upcoming refresh start (pid $$) ==="
 
-# one run at a time, sharing the 8-minute job's lock
+# one run at a time, sharing the 8-minute job's lock; wait for a running
+# job instead of skipping (see header: the 4-hour boundaries collide)
 exec 9>"$LOCK"
-if ! flock -n 9; then
-  log "previous run still going, skipping"
+if ! flock -w 180 9; then
+  log "previous run still going after 180 s, skipping"
   exit 0
 fi
 

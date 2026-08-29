@@ -135,7 +135,11 @@ unsettled classes; settled classes' pages already contain every scratch
 they will ever have (they were re-fetched when their results posted).
 Stale (presumed skipped) classes are excluded, same rule as the frontier.
 It shares `cron.lock` and `cron.log` with the 8-minute job, so the two
-never run at once; an overlapping run just skips. It also refreshes the
+never run at once. Both crons fire in the same second at every 4-hour
+boundary (4h marks are multiples of 8 min), so the upcoming job waits up
+to 3 min (`flock -w 180`) for the running job to finish instead of
+skipping — without that wait its scorecard pass was being skipped at
+every boundary; the 8-minute job still skips fast. It also refreshes the
 **judge scorecard index** (`fetch_scorecards.py`), so this run publishes
 when a new scorecard PDF lands even if nothing else changed (no early
 exit when all classes are settled).
