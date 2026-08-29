@@ -67,14 +67,40 @@ else:
     # Judge scorecards (git-ignored intermediate): the show posts one PDF per
     # class in a public Google Drive folder, named CLASS N.pdf; classes with
     # a posted card get a "card" link the page renders in the card header.
-    # Missing/empty file -> exactly today's page.
+    # The judges' names drift from the live class list ("CLASS 128-1.pdf"
+    # for plain class 128; "CLASS 104.pdf" for section 104.1 after a split
+    # removed the parent number), so keys are resolved against the current
+    # classes before stamping — exact numbers always win. Missing/empty
+    # file -> exactly today's page.
     try:
         cards = json.load(open(os.path.join(HERE, 'scorecards.json'))).get("cards", {})
     except (OSError, ValueError):
         cards = {}
+    known = {c["n"] for c in classes}
+
+    def card_key(k):
+        if k in known:
+            return k
+        m = re.match(r'^(\d+)-(\d+)$', k)
+        if m:
+            if m.group(1) + "." + m.group(2) in known:
+                return m.group(1) + "." + m.group(2)
+            if m.group(1) in known:
+                return m.group(1)
+        if re.match(r'^\d+$', k):
+            if k + ".1" in known:
+                return k + ".1"
+            secs = sorted(x for x in known if x.startswith(k + "."))
+            if len(secs) == 1:
+                return secs[0]
+        return k
+
+    lookup = {}
+    for k in sorted(cards, key=lambda k: k not in known):
+        lookup.setdefault(card_key(k), cards[k])
     for c in classes:
-        if c["n"] in cards:
-            c["card"] = "https://drive.google.com/file/d/%s/view" % cards[c["n"]]
+        if c["n"] in lookup:
+            c["card"] = "https://drive.google.com/file/d/%s/view" % lookup[c["n"]]
 
     # Predicted windows: per-session pace model + hot-session anchor from
     # the live cache's first-seen timestamps. Pure function of

@@ -46,6 +46,17 @@ check("parse: empty page -> empty dict", fs.parse_folder_html("<html></html>") =
 check("parse: name match is case-insensitive",
       fs.parse_folder_html(entry("e" * 33, "class 2.pdf")).get("2") == "e" * 33)
 
+# The judges also post "CLASS N-K.pdf" (hyphen) for plain classes. The
+# fetcher keeps the raw key; build_page.py resolves it against the current
+# class list.
+HYF = ('<html><body><div class="flip-entry">' +
+       entry("f" * 33, "CLASS 128-1.pdf") +
+       entry("g" * 33, "CLASS 207-2.pdf") +
+       '</div></body></html>')
+hc = fs.parse_folder_html(HYF)
+check("parse: hyphen variant CLASS N-K.pdf is captured as raw key",
+      hc == {"128-1": "f" * 33, "207-2": "g" * 33}, json.dumps(hc))
+
 # ---- main(): fetch failure / empty parse must not wipe a good cache ----
 tmp = tempfile.mkdtemp(prefix="wchs-sc-")
 out = os.path.join(tmp, "scorecards.json")
@@ -108,6 +119,23 @@ tC = sandbox({"999.9": "ZIDX"})
 check("build: card for an unknown class is a no-op",
       all("card" not in c for c in
           json.load(open(os.path.join(tC, "payload.json")))["classes"]))
+
+# Judge name drift vs the live class list: "128-1" for plain class 128,
+# "63-1" for section 63.1 (parent gone), "104" for section 104.1 (parent
+# gone). build_page.py resolves these; exact numbers always win.
+tD = sandbox({"128-1": "ZH1", "63-1": "ZH2", "104": "ZH3"})
+plD = json.load(open(os.path.join(tD, "payload.json")))
+byD = {c["n"]: c for c in plD["classes"]}
+check("build: hyphen card maps to plain class (128-1 -> 128)",
+      byD.get("128", {}).get("card") == "https://drive.google.com/file/d/ZH1/view")
+check("build: hyphen card maps to section when parent is gone (63-1 -> 63.1)",
+      byD.get("63.1", {}).get("card") == "https://drive.google.com/file/d/ZH2/view")
+check("build: parent name maps to surviving section (104 -> 104.1)",
+      byD.get("104.1", {}).get("card") == "https://drive.google.com/file/d/ZH3/view")
+check("build: hyphen aliases don't leak onto siblings (63.2, 207)",
+      "card" not in byD.get("63.2", {}) and "card" not in byD.get("207", {}))
+check("build: only the three resolved classes get cards",
+      sorted(n for n, c in byD.items() if "card" in c) == ["104.1", "128", "63.1"])
 
 plj = os.path.join(tB, "payload.json")
 idx = os.path.join(tB, "index.html")

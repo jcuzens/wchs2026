@@ -185,7 +185,14 @@ exit when all classes are settled).
   moving part.
 - **Judge scorecards:** the show posts one judge scorecard PDF per class
   in a public Google Drive folder, named `CLASS N.pdf` (split sections
-  included, e.g. `10.1`). `fetch_scorecards.py` lists the folder via the
+  included, e.g. `10.1`). The judges' names drift from the live class
+  list: `CLASS N-K.pdf` (hyphen) for plain classes, and a plain
+  `CLASS N.pdf` for a class whose parent number a later split removed
+  (e.g. `CLASS 104.pdf` for section `104.1`). The fetcher keeps such
+  keys raw; `build_page.py` resolves them against the current classes
+  before stamping — `N-K` → section `N.K` if it exists, else plain `N`;
+  plain `N` → its surviving section (`.1` first, else the only one);
+  exact numbers always win. `fetch_scorecards.py` lists the folder via the
   legacy **embeddedfolderview** endpoint (plain GET, no key or session;
   the main `/drive/folders/` page lazy-loads and only serves the first ~50
   rows in its initial HTML) — every entry is an

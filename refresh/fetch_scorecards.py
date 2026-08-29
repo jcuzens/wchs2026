@@ -6,9 +6,12 @@ file rows in its initial HTML, so we use the legacy embeddedfolderview
 endpoint instead: a plain GET returns EVERY entry in one plain page, each
 entry an <a href="https://drive.google.com/file/d/FILEID/view..."> wrapping
 a flip-entry-title with the file name. Names matching CLASS N.pdf
-(N = x or x.y, split sections included) map to class numbers. Writes
-refresh/scorecards.json: {"fetched": "<local time>",
-"cards": {"12": "FILEID", "12.1": "FILEID"}}.
+(N = x or x.y, split sections included) map to class numbers; the judges
+also post "CLASS N-K.pdf" (hyphen) for plain classes, which is kept as the
+raw key "N-K" — build_page.py resolves such keys against the current class
+list (N-K -> section N.K if it exists, else plain N; plain parent name of a
+split class -> its surviving section). Writes refresh/scorecards.json:
+{"fetched": "<local time>", "cards": {"12": "FILEID", "12.1": "FILEID"}}.
 
 On any failure exits non-zero and leaves scorecards.json untouched, so the
 page degrades to no scorecard links. A parse that finds zero cards never
@@ -32,7 +35,7 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 ENTRY_RE = re.compile(
     r'<a href="https://drive\.google\.com/file/d/([A-Za-z0-9_-]{10,})/view[^"]*"'
     r'[^>]*>.*?flip-entry-title">([^<]*)</div>', re.S)
-CARD_RE = re.compile(r'^CLASS\s+(\d+(?:\.\d+)?)\.pdf$', re.I)
+CARD_RE = re.compile(r'^CLASS\s+(\d+(?:[.-]\d+)?)\.pdf$', re.I)
 
 
 def parse_folder_html(html):
